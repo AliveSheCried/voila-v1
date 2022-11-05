@@ -1,0 +1,33 @@
+{
+  "name": "voila",
+  "version": "1.0.0",
+  "description": "Prototype attempt 1; connect graphQL server to Truelayer API, starting with Payouts before extending to account & identity information and transaction history",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "nodemon src/index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AliveSheCried/voila-v1.git"
+  },
+  "keywords": [
+    "GraphQL",
+    "Open",
+    "Banking",
+    "Truelayer"
+  ],
+  "author": "Robert Hood",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AliveSheCried/voila-v1/issues"
+  },
+  "homepage": "https://github.com/AliveSheCried/voila-v1#readme",
+  "dependencies": {
+    "apollo-datasource-rest": "^3.7.0",
+    "apollo-server": "^3.11.1",
+    "dotenv": "^16.0.3",
+    "graphql": "^16.6.0",
+    "nodemon": "^2.0.20"
+  }
+}
