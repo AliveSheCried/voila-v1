@@ -1,15 +1,5 @@
-const { gql } = require("apollo-server");
-
-const typeDefs = gql`
-  type Query {
-    "Return list of merchant accounts"
-    merchantAccounts: [MerchantAccounts]!
-
-    "Return individual merchant account"
-    merchantAccountDetail(id: ID!): MerchantAccountDetail!
-  }
-
-  ###Interfaces
+export const typeDef = `
+###Interfaces
   interface MerchantAccount {
     id: ID!
     currency: String!
@@ -50,24 +40,4 @@ const typeDefs = gql`
     iban: String
   }
 
-  ###Mutations
-  # Mutation type to get access_token
-  type Mutation {
-    generateAccessToken(
-      client_id: String!
-      client_secret: String!
-      scope: String!
-      grant_type: String!
-    ): AccessToken
-  }
-
-  "Access token received from Truelayer"
-  type AccessToken {
-    access_token: ID!
-    expires_in: String!
-    token_type: String!
-    scope: String!
-  }
 `;
-
-module.exports = typeDefs;

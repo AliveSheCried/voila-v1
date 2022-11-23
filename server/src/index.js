@@ -1,15 +1,20 @@
 require("dotenv").config();
 const { ApolloServer } = require("apollo-server");
-const TruelayerAuthAPI = require("./datasources/trueLayer_api");
+const TrueLayerAuthAPI = require("./datasources/trueAuthLayer_api");
+const TrueLayerAPI = require("./datasources/trueLayer_api");
 const typeDefs = require("./schema/schema");
 const resolvers = require("./schema/resolvers");
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: ({ req }) => {
+    return { token: req.headers.authorization };
+  },
   dataSources: () => {
     return {
-      truelayerAuthAPI: new TruelayerAuthAPI(),
+      trueLayerAuthAPI: new TrueLayerAuthAPI(),
+      trueLayerAPI: new TrueLayerAPI(),
     };
   },
 });

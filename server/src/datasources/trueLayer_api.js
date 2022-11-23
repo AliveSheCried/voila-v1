@@ -1,20 +1,21 @@
 const { RESTDataSource } = require("apollo-datasource-rest");
 
-class TruelayerAuthAPI extends RESTDataSource {
+class TrueLayerAPI extends RESTDataSource {
   constructor() {
     super();
-    this.baseURL = "https://auth.truelayer-sandbox.com";
+    this.baseURL = "https://api.truelayer-sandbox.com";
   }
 
   //methods
-  generateAccessToken() {
-    return this.post(`/connect/token`, {
-      client_id: process.env.CLIENT_ID,
-      client_secret: process.env.CLIENT_SECRET,
-      scope: "payments",
-      grant_type: "client_credentials",
+  getMerchantAccounts(token) {
+    return this.get(`/merchant-accounts`, null, {
+      headers: { authorization: `Bearer ${token}` },
     });
+  }
+
+  getMerchantAccountDetail(id) {
+    return this.get(`/merchant-accounts/${id}`);
   }
 }
 
-module.exports = TruelayerAuthAPI;
+module.exports = TrueLayerAPI;
