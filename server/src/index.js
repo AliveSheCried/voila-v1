@@ -1,9 +1,10 @@
-require("dotenv").config();
-const { ApolloServer } = require("apollo-server");
-const TrueLayerAuthAPI = require("./datasources/trueAuthLayer_api");
-const TrueLayerAPI = require("./datasources/trueLayer_api");
-const typeDefs = require("./schema/schema");
-const resolvers = require("./schema/resolvers");
+import dotenv from "dotenv";
+dotenv.config();
+import { ApolloServer } from "apollo-server";
+import { TrueLayerAuthAPI } from "./datasources/trueAuthLayer_api.js";
+import { TrueLayerAPI } from "./datasources/trueLayer_api.js";
+import typeDefs from "./schema/schema.js";
+import resolvers from "./schema/resolvers.js";
 
 const server = new ApolloServer({
   typeDefs,

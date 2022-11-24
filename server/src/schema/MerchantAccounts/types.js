@@ -1,4 +1,4 @@
-export const typeDef = `
+const types = `
 ###Interfaces
   interface MerchantAccount {
     id: ID!
@@ -39,5 +39,6 @@ export const typeDef = `
     account_number: String
     iban: String
   }
-
 `;
+
+export default types;

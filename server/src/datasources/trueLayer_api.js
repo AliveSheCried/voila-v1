@@ -1,6 +1,6 @@
-const { RESTDataSource } = require("apollo-datasource-rest");
+import { RESTDataSource } from "apollo-datasource-rest";
 
-class TrueLayerAPI extends RESTDataSource {
+export class TrueLayerAPI extends RESTDataSource {
   constructor() {
     super();
     this.baseURL = "https://api.truelayer-sandbox.com";
@@ -17,5 +17,3 @@ class TrueLayerAPI extends RESTDataSource {
     return this.get(`/merchant-accounts/${id}`);
   }
 }
-
-module.exports = TrueLayerAPI;

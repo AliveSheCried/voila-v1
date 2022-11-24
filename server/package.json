@@ -4,9 +4,10 @@
   "description": "Prototype attempt 1; connect graphQL server to Truelayer API, starting with Payouts before extending to account & identity information and transaction history",
   "main": "src/index.js",
   "scripts": {
-    "start": "nodemon src/index",
+    "start": "nodemon --experimental-modules --es-module-specifier-resolution=node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AliveSheCried/voila-v1.git"
