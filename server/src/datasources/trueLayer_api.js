@@ -6,14 +6,27 @@ export class TrueLayerAPI extends RESTDataSource {
     this.baseURL = "https://api.truelayer-sandbox.com";
   }
 
-  //methods
+  /* 
+  *************************
+  Methods section
+  *************************  
+  */
+  //merchantAccount methods
+
   getMerchantAccounts(token) {
     return this.get(`/merchant-accounts`, null, {
       headers: { authorization: `Bearer ${token}` },
     });
   }
 
-  getMerchantAccountDetail(id) {
-    return this.get(`/merchant-accounts/${id}`);
+  getMerchantAccountDetail(id, token) {
+    return this.get(`/merchant-accounts/${id}`, null, {
+      headers: {
+        accept: "application/json; charset=UTF-8",
+        authorization: `Bearer ${token}`,
+      },
+    });
   }
+
+  //dataApi methods
 }

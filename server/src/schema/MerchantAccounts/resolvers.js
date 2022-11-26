@@ -1,14 +1,4 @@
 const queries = {
-  // //interface __resolveType
-  // MerchantAccount: {
-  //   __resolveType(MerchantAccount) {
-  //     if (MerchantAccount.items) {
-  //       return "Merchant accounts";
-  //     }
-  //     return "Merchant account detail";
-  //   },
-  // },
-
   //Queries
   //Get all merchant accounts
   merchantAccounts: async (_, __, { token, dataSources }) => {
@@ -38,9 +28,9 @@ const queries = {
   },
 
   //get individual merchant account detail
-  merchantAccountDetail: async (_, { id }, { dataSources }) => {
+  merchantAccountDetail: async (_, { id }, { token, dataSources }) => {
     const responseData =
-      await dataSources.trueLayerAPI.getMerchantAccountDetail(id);
+      await dataSources.trueLayerAPI.getMerchantAccountDetail(id, token);
 
     return {
       id: responseData.id,
