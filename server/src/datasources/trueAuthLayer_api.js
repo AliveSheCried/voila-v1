@@ -7,12 +7,14 @@ export class TrueLayerAuthAPI extends RESTDataSource {
   }
 
   //methods
-  generateAccessToken() {
+  generateAccessToken(scope, grant_type, redirect_uri, code) {
     return this.post(`/connect/token`, {
       client_id: process.env.CLIENT_ID,
       client_secret: process.env.CLIENT_SECRET,
-      scope: "payments",
-      grant_type: "client_credentials",
+      scope: scope ? scope : "",
+      grant_type: grant_type,
+      redirect_uri: redirect_uri ? redirect_uri : "",
+      code: code ? code : "",
     });
   }
 }

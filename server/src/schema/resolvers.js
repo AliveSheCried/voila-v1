@@ -1,4 +1,5 @@
 import { MerchantAccount } from "./MerchantAccounts/index.js";
+import { BankAccount } from "./BankAccount/index.js";
 import { AuthToken } from "./AuthToken/index.js";
 
 const resolvers = {
@@ -15,6 +16,7 @@ const resolvers = {
 
   Query: {
     ...MerchantAccount.resolvers.queries,
+    ...BankAccount.resolvers.queries,
   },
 
   Mutation: {

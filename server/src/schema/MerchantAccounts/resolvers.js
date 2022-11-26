@@ -29,8 +29,10 @@ const queries = {
 
   //get individual merchant account detail
   merchantAccountDetail: async (_, { id }, { token, dataSources }) => {
-    const responseData =
-      await dataSources.trueLayerAPI.getMerchantAccountDetail(id, token);
+    const responseData = await dataSources.trueLayerAPI.getMerchantAccount(
+      id,
+      token
+    );
 
     return {
       id: responseData.id,

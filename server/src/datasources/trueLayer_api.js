@@ -19,7 +19,7 @@ export class TrueLayerAPI extends RESTDataSource {
     });
   }
 
-  getMerchantAccountDetail(id, token) {
+  getMerchantAccount(id, token) {
     return this.get(`/merchant-accounts/${id}`, null, {
       headers: {
         accept: "application/json; charset=UTF-8",
@@ -29,4 +29,23 @@ export class TrueLayerAPI extends RESTDataSource {
   }
 
   //dataApi methods
+  getBankAccounts(token) {
+    return this.get("/data/v1/accounts", null, {
+      headers: {
+        accept: "application/json; charset=UTF-8",
+        authorization: `Bearer ${token}`,
+        "X-PSU-IP": "190.190.190.0",
+      },
+    });
+  }
+
+  getBankAccount(id, token) {
+    return this.get(`/data/v1/accounts/${id}`, null, {
+      headers: {
+        accept: "application/json; charset=UTF-8",
+        authorization: `Bearer ${token}`,
+        "X-PSU-IP": "190.190.190.0",
+      },
+    });
+  }
 }

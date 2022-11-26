@@ -1,5 +1,5 @@
 const types = `
-###Interfaces
+###Interface
   interface MerchantAccount {
     id: ID!
     currency: String!
