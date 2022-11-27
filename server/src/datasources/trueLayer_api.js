@@ -30,22 +30,81 @@ export class TrueLayerAPI extends RESTDataSource {
 
   //dataApi methods
   getBankAccounts(token) {
-    return this.get("/data/v1/accounts", null, {
+    return this.get("/data/v1/accounts&async=true", null, {
       headers: {
         accept: "application/json; charset=UTF-8",
         authorization: `Bearer ${token}`,
-        "X-PSU-IP": "190.190.190.0",
       },
     });
   }
 
   getBankAccount(id, token) {
-    return this.get(`/data/v1/accounts/${id}`, null, {
+    return this.get(`/data/v1/accounts/${id}&async=true`, null, {
       headers: {
         accept: "application/json; charset=UTF-8",
         authorization: `Bearer ${token}`,
-        "X-PSU-IP": "190.190.190.0",
       },
     });
+  }
+
+  getBankAccountBalance(id, token) {
+    return this.get(`/data/v1/accounts/${id}/balance?async=true`, null, {
+      headers: {
+        accept: "application/json; charset=UTF-8",
+        authorization: `Bearer ${token}`,
+      },
+    });
+  }
+
+  getBankAccountTransactions(id, token, fromDate, toDate) {
+    return this.get(
+      `/data/v1/accounts/${id}/transactions?to=${toDate}&from=${fromDate}&async=true`,
+      null,
+      {
+        headers: {
+          accept: "application/json; charset=UTF-8",
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  }
+
+  getBankAccountPendingTransactions(id, token) {
+    return this.get(
+      `/data/v1/accounts/${id}/transactions/pending&async=true`,
+      null,
+      {
+        headers: {
+          accept: "application/json; charset=UTF-8",
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  }
+
+  getBankAccountDirectDebits(id, token) {
+    return this.get(
+      `/data/v1/accounts/${id}/transactions/direct_debits&async=true`,
+      null,
+      {
+        headers: {
+          accept: "application/json; charset=UTF-8",
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  }
+
+  getBankAccountStandingOrders(id, token) {
+    return this.get(
+      `/data/v1/accounts/${id}/transactions/standing_orders&async=true`,
+      null,
+      {
+        headers: {
+          accept: "application/json; charset=UTF-8",
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
   }
 }
