@@ -28,7 +28,7 @@ const queries = {
   },
 
   //get individual merchant account detail
-  merchantAccountDetail: async (_, { id }, { token, dataSources }) => {
+  merchantAccount: async (_, { id }, { token, dataSources }) => {
     const responseData = await dataSources.trueLayerAPI.getMerchantAccount(
       id,
       token
@@ -51,6 +51,21 @@ const queries = {
         }
       ),
     };
+  },
+
+  //get transactions from merchant account by id
+  merchantAccountTransactions: async (
+    _,
+    { id, fromDate, toDate },
+    { token, dataSources }
+  ) => {
+    const responseData =
+      await dataSources.trueLayerAPI.getMerchantAccountTransactions(
+        id,
+        token,
+        fromDate,
+        toDate
+      );
   },
 };
 

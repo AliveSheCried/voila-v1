@@ -1,7 +1,10 @@
 export const queries = `
     "Return list of merchant accounts"
-    merchantAccounts: [MerchantAccounts]!
+    merchantAccounts: [MerchantAccount]!
 
     "Return individual merchant account"
-    merchantAccountDetail(id: ID!): MerchantAccountDetail!
+    merchantAccount(id: ID!): MerchantAccount!
+
+    "Return transactions from individual merchant account"
+    merchantAccountTransactions: [MerchantAccountTransactions!]
 `;

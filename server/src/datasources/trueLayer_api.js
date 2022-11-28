@@ -28,6 +28,19 @@ export class TrueLayerAPI extends RESTDataSource {
     });
   }
 
+  getMerchantAccountTransactions(id, token, fromDate, toDate) {
+    return this.get(
+      `merchant-accounts/${id}/transactions?from=${fromDate}&to=${toDate}`,
+      null,
+      {
+        headers: {
+          accept: "application/json; charset=UTF-8",
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  }
+
   //dataApi methods
   getBankAccounts(token) {
     return this.get("/data/v1/accounts&async=true", null, {
