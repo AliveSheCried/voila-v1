@@ -43,7 +43,7 @@ export class TrueLayerAPI extends RESTDataSource {
 
   //dataApi methods
   getBankAccounts(token) {
-    return this.get("/data/v1/accounts&async=true", null, {
+    return this.get("/data/v1/accounts", null, {
       headers: {
         accept: "application/json; charset=UTF-8",
         authorization: `Bearer ${token}`,
@@ -52,7 +52,7 @@ export class TrueLayerAPI extends RESTDataSource {
   }
 
   getBankAccount(id, token) {
-    return this.get(`/data/v1/accounts/${id}&async=true`, null, {
+    return this.get(`/data/v1/accounts/${id}`, null, {
       headers: {
         accept: "application/json; charset=UTF-8",
         authorization: `Bearer ${token}`,
@@ -61,7 +61,7 @@ export class TrueLayerAPI extends RESTDataSource {
   }
 
   getBankAccountBalance(id, token) {
-    return this.get(`/data/v1/accounts/${id}/balance?async=true`, null, {
+    return this.get(`/data/v1/accounts/${id}/balance`, null, {
       headers: {
         accept: "application/json; charset=UTF-8",
         authorization: `Bearer ${token}`,
@@ -71,7 +71,7 @@ export class TrueLayerAPI extends RESTDataSource {
 
   getBankAccountTransactions(id, token, fromDate, toDate) {
     return this.get(
-      `/data/v1/accounts/${id}/transactions?to=${toDate}&from=${fromDate}&async=true`,
+      `/data/v1/accounts/${id}/transactions?to=${toDate}&from=${fromDate}`,
       null,
       {
         headers: {
@@ -83,41 +83,36 @@ export class TrueLayerAPI extends RESTDataSource {
   }
 
   getBankAccountPendingTransactions(id, token) {
-    return this.get(
-      `/data/v1/accounts/${id}/transactions/pending&async=true`,
-      null,
-      {
-        headers: {
-          accept: "application/json; charset=UTF-8",
-          authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    return this.get(`/data/v1/accounts/${id}/transactions/pending`, null, {
+      headers: {
+        accept: "application/json; charset=UTF-8",
+        authorization: `Bearer ${token}`,
+      },
+    });
   }
 
   getBankAccountDirectDebits(id, token) {
-    return this.get(
-      `/data/v1/accounts/${id}/transactions/direct_debits&async=true`,
-      null,
-      {
-        headers: {
-          accept: "application/json; charset=UTF-8",
-          authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    return this.get(`/data/v1/accounts/${id}/direct_debits`, null, {
+      headers: {
+        accept: "application/json; charset=UTF-8",
+        authorization: `Bearer ${token}`,
+      },
+    });
   }
 
   getBankAccountStandingOrders(id, token) {
-    return this.get(
-      `/data/v1/accounts/${id}/transactions/standing_orders&async=true`,
-      null,
-      {
-        headers: {
-          accept: "application/json; charset=UTF-8",
-          authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    return this.get(`/data/v1/accounts/${id}/standing_orders`, null, {
+      headers: {
+        accept: "application/json; charset=UTF-8",
+        authorization: `Bearer ${token}`,
+      },
+    });
   }
 }
+
+// const options = {
+//   method: "GET",
+//   headers: { accept: "application/json; charset=UTF-8" },
+// };
+
+//https://api.truelayer-sandbox.com/merchant-accounts/e1eff241-77d7-490d-aef4-d2701d68f90a/transactions?from=2021-11-01T13%3A13%3A40Z&to=2022-12-06T20%3A24%3A26.055Z

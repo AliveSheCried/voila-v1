@@ -17,8 +17,8 @@ const types = `
     id: ID!
     currency: String!
     account_identifiers: [AccountIdentifier]
-    available_balance: String!
-    current_balance: String!
+    available_balance: String
+    current_balance: String
     account_holder_name: String
   }
 
@@ -41,7 +41,7 @@ const types = `
 
 
   "Merchant account payment type; consists of Transaction interface + fields specific to merchant account payments"
-  type MerchantAccountPayment implements Transacton {
+  type MerchantAccountPayment implements Transaction {
     #Fields from Transaction
     type: String!
     id: ID!
@@ -99,9 +99,8 @@ const types = `
     user_id: ID!
   }
 
-  "Remitter sub-type for external payment payment type"
+  "Payer sub-type for external payment payment type"
   type Remitter {
-    account_holder_name: String!
     account_holder_name: String!
     account_identifier: AccountIdentifier!
     account_identifiers: [AccountIdentifier!]

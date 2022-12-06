@@ -46,7 +46,7 @@ type BankAccountTransaction {
     transaction_id: String!
     provider_transaction_id: String!
     normalised_provider_transaction_id: String!
-    running_balance: RunningBalance!
+    running_balance: RunningBalance
     meta: Meta
 }
 
@@ -55,9 +55,9 @@ type DirectDebit {
     direct_debit_id: String!
     timestamp: String!
     name: String!
-    status: String!
+    status: String
     previous_payment_amount: Float
-    currency: String!
+    currency: String
     meta: Meta
 }
 
@@ -79,8 +79,8 @@ type StandingOrder {
 
 "Balance of account at the time of transaction"
 type RunningBalance {
-    currency: String!
-    amount: Float!    
+    currency: String
+    amount: Float   
 }
 
 "Transaction metadata"
@@ -88,6 +88,7 @@ type Meta {
     provider_transaction_category: String 
     provider_account_id: String
     provider_mandate_identification: String
+    provider_standing_order_id: String
 }
 
 `;

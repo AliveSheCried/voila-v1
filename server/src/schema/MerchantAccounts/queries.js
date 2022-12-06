@@ -6,5 +6,5 @@ export const queries = `
     merchantAccount(id: ID!): MerchantAccount!
 
     "Return transactions from individual merchant account"
-    merchantAccountTransactions: [MerchantAccountTransactions!]
+    merchantAccountTransactions(id: ID!, fromDate: String!, toDate: String!): [MerchantAccountTransactions!]
 `;

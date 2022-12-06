@@ -5,14 +5,36 @@ import { AuthToken } from "./AuthToken/index.js";
 const resolvers = {
   //interface __resolveType
   //this should be in the MerchantAccounts resolver but get an error - to be revisited
-  // MerchantAccount: {
-  //   __resolveType(MerchantAccount) {
-  //     if (MerchantAccount.items) {
-  //       return "Merchant accounts";
-  //     }
-  //     return "Merchant account detail";
-  //   },
-  // },
+  Transaction: {
+    __resolveType(transaction, context, info) {
+      if (transaction.payout_id) {
+        return "Payout";
+      }
+      if (transaction.payment_id) {
+        return "MerchantAccountPayment";
+      }
+      if (transaction.remitter) {
+        return "ExternalPayment";
+      }
+    },
+  },
+
+  //this should be in the MerchantAccounts resolver but get an error - to be revisited
+  //union resolveType
+  MerchantAccountTransactions: {
+    __resolveType(obj, context, info) {
+      if (obj.type === "payout") {
+        return "Payout";
+      }
+      if (obj.type === "merchant_account_payment") {
+        return "MerchantAccountPayment";
+      }
+      if (obj.type === "external_payment") {
+        return "ExternalPayment";
+      }
+      return null;
+    },
+  },
 
   Query: {
     ...MerchantAccount.resolvers.queries,

@@ -1,12 +1,18 @@
 const queries = {
   /* 
-**********************
+*********************************************
 Bank account meta data queries
-**********************
+*********************************************
 */
   //Get all bank accounts
   bankAccounts: async (_, __, { token, dataSources }) => {
     const responseData = await dataSources.trueLayerAPI.getBankAccounts(token);
+
+    ///code to review
+
+    // const value = data.map(el=>
+    //   Object.fromEntries(Object.entries(el).map(([k, v]) => [k, Object.values(v)[0]]))
+    // );
 
     const bankAccounts = responseData.results.map((account) => {
       return {
@@ -58,9 +64,9 @@ Bank account meta data queries
   },
 
   /* 
-**********************
+*********************************************
 Bank account data related queries
-**********************
+*********************************************
 */
   // Retrieve account balance
   bankAccountBalance: async (_, { id }, { token, dataSources }) => {
@@ -98,7 +104,7 @@ Bank account data related queries
         description: transaction.description,
         transaction_type: transaction.transaction_type,
         transaction_category: transaction.transaction_category,
-        transaction_classificaton: transaction.tran.map((item) => item),
+        transaction_classificaton: transaction.transaction_classificaton, //an array, .map doesn't work  -- .map((item) => item)
         amount: transaction.amount,
         currency: transaction.currency,
         transaction_id: transaction.transaction_id,
@@ -133,7 +139,7 @@ Bank account data related queries
         description: transaction.description,
         transaction_type: transaction.transaction_type,
         transaction_category: transaction.transaction_category,
-        transaction_classificaton: transaction.tran.map((item) => item),
+        //transaction_classificaton: transaction.tran.map((item) => item),
         amount: transaction.amount,
         currency: transaction.currency,
         transaction_id: transaction.transaction_id,
