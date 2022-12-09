@@ -5,15 +5,23 @@ const queries = {
     const responseData = await dataSources.trueLayerAPI.getMerchantAccounts(
       token
     );
-    const merchantAccounts = responseData.items.map((merchantAcc) => {
-      return {
-        id: merchantAcc.id,
-        currency: merchantAcc.currency,
-        account_identifiers: merchantAcc.account_identifiers,
-        available_balance: merchantAcc.available_balance_in_minor,
-        current_balance: merchantAcc.current_balance_in_minor,
-      };
-    });
+
+    //Orignal code
+
+    // const merchantAccounts = responseData.items.map((merchantAcc) => {
+    //   return {
+    //     id: merchantAcc.id,
+    //     currency: merchantAcc.currency,
+    //     account_identifiers: merchantAcc.account_identifiers,
+    //     available_balance: merchantAcc.available_balance_in_minor,
+    //     current_balance: merchantAcc.current_balance_in_minor,
+    //   };
+    // });
+
+    const merchantAccounts = responseData.items.reduce((acc, current) => [
+      acc,
+      current,
+    ]);
 
     return merchantAccounts;
   },
