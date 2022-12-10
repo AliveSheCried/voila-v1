@@ -5,8 +5,6 @@ const mutations = {
     { dataSources }
   ) => {
     const response = await dataSources.trueLayerAuthAPI.generateAccessToken(
-      // client_id,
-      //client_secret,
       scope,
       grant_type,
       redirect_uri,
