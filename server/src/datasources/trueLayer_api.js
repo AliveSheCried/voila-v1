@@ -1,4 +1,6 @@
 import { RESTDataSource } from "apollo-datasource-rest";
+import { uuid } from "uuidv4";
+import { tlSigning } from "truelayer-signing";
 
 export class TrueLayerAPI extends RESTDataSource {
   constructor() {
@@ -105,6 +107,50 @@ export class TrueLayerAPI extends RESTDataSource {
       headers: {
         accept: "application/json; charset=UTF-8",
         authorization: `Bearer ${token}`,
+      },
+    });
+  }
+
+  //MerchantAccountPayout methods
+  createMerchantAccountPayout(
+    iban,
+    reference,
+    account_holder_name,
+    merchant_account_id,
+    amount_in_minor,
+    token
+  ) {
+    const kid = process.env.KID;
+    const privateKeyPem = process.env.PRIVATE_KEY;
+    const idKey = uuid();
+    const body = {
+      beneficiary: {
+        type: "external_account",
+        account_identifier: { type: "iban", iban },
+        reference,
+        account_holder_name,
+      },
+      merchant_account_id,
+      amount_in_minor,
+    };
+
+    const tlSignature = tlSigning.sign({
+      kid,
+      privateKeyPem,
+      method: "POST",
+      path: "/payouts",
+      headers: {
+        "Idempotency-Key": idKey,
+      },
+      body,
+    });
+
+    return this.post(`/payouts`, body, {
+      headers: {
+        authorization: `Bearer ${token}`,
+        "Idempotency-Key": idKey,
+        "Tl-Signature": tlSignature,
+        "content-type": "application/json; charset=UTF-8",
       },
     });
   }
