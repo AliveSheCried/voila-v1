@@ -1,3 +1,4 @@
+import { MerchantAccountPayout } from "./MerchantAccountPayout/index.js";
 import { MerchantAccount } from "./MerchantAccounts/index.js";
 import { BankAccount } from "./BankAccount/index.js";
 import { AuthToken } from "./AuthToken/index.js";
@@ -37,11 +38,13 @@ const resolvers = {
   },
 
   Query: {
+    ...MerchantAccountPayout.resolvers.queries,
     ...MerchantAccount.resolvers.queries,
     ...BankAccount.resolvers.queries,
   },
 
   Mutation: {
+    ...MerchantAccountPayout.resolvers.mutations,
     ...AuthToken.resolvers.mutations,
   },
 };

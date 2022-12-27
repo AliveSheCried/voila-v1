@@ -1,6 +1,6 @@
 import { RESTDataSource } from "apollo-datasource-rest";
-import { uuid } from "uuidv4";
-import { tlSigning } from "truelayer-signing";
+import { v4 as uuidv4 } from "uuid";
+import tlSigning from "truelayer-signing";
 
 export class TrueLayerAPI extends RESTDataSource {
   constructor() {
@@ -113,25 +113,31 @@ export class TrueLayerAPI extends RESTDataSource {
 
   //MerchantAccountPayout methods
   createMerchantAccountPayout(
-    iban,
     reference,
     account_holder_name,
     merchant_account_id,
     amount_in_minor,
+    currency,
+    account_identifier,
     token
   ) {
     const kid = process.env.KID;
-    const privateKeyPem = process.env.PRIVATE_KEY;
-    const idKey = uuid();
+    if (!kid) throw new Error("Missing env var KID");
+
+    const privateKeyPem = process.env.PRIVATE_KEY.replace(/\\n/g, "\n");
+    if (!privateKeyPem) throw new Error("Missing env var PRIVATE_KEY");
+
+    const idKey = uuidv4();
     const body = {
       beneficiary: {
         type: "external_account",
-        account_identifier: { type: "iban", iban },
+        account_identifier: account_identifier,
         reference,
         account_holder_name,
       },
-      merchant_account_id,
       amount_in_minor,
+      merchant_account_id,
+      currency,
     };
 
     const tlSignature = tlSigning.sign({
@@ -142,11 +148,12 @@ export class TrueLayerAPI extends RESTDataSource {
       headers: {
         "Idempotency-Key": idKey,
       },
-      body,
+      body: JSON.stringify(body),
     });
 
     return this.post(`/payouts`, body, {
       headers: {
+        accept: "application/json; charset=UTF-8",
         authorization: `Bearer ${token}`,
         "Idempotency-Key": idKey,
         "Tl-Signature": tlSignature,
@@ -154,11 +161,13 @@ export class TrueLayerAPI extends RESTDataSource {
       },
     });
   }
+
+  getPayoutDetail(id, token) {
+    return this.get(`/payouts/${id}`, null, {
+      headers: {
+        accept: "application/json; charset=UTF-8",
+        authorization: `Bearer ${token}`,
+      },
+    });
+  }
 }
-
-// const options = {
-//   method: "GET",
-//   headers: { accept: "application/json; charset=UTF-8" },
-// };
-
-//https://api.truelayer-sandbox.com/merchant-accounts/e1eff241-77d7-490d-aef4-d2701d68f90a/transactions?from=2021-11-01T13%3A13%3A40Z&to=2022-12-06T20%3A24%3A26.055Z
