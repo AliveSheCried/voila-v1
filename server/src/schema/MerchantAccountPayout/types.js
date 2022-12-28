@@ -8,16 +8,18 @@ const types = `
 
   "Payout detail returned when querying using ID"  
     type Payout {
-      payoutId: PayoutId!
-      merchant_account_id: String!
+      id: ID!
+      merchant_account_id: ID!
       pay_amount_in_minor: Int!
       currency: String!
       beneficiary: Beneficiary!
-      scheme_id: String!
+      scheme_id: String
       status: String!
       created_at: String!
       authorized_at: String
       executed_at: String
+      failed_at: String
+      failure_reason: String
   }
 
   "ID returned from Payout API when creating Payout; used to get payout detail"
