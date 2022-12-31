@@ -21,7 +21,7 @@ type AccountNumber {
 "Provider - Bank where account is held"
 type Provider {
     display_name: String!
-    provider_id: String!
+    provider_id: ID!
     logo_uri: String
 }
 
@@ -44,7 +44,7 @@ type BankAccountTransaction {
     amount: Float!
     currency: String!
     transaction_id: String!
-    provider_transaction_id: String!
+    provider_transaction_id: ID!
     normalised_provider_transaction_id: String!
     running_balance: RunningBalance
     meta: Meta
@@ -52,7 +52,7 @@ type BankAccountTransaction {
 
 "List of direct debits for an account"
 type DirectDebit {
-    direct_debit_id: String!
+    direct_debit_id: ID!
     timestamp: String!
     name: String!
     status: String
@@ -86,7 +86,7 @@ type RunningBalance {
 "Transaction metadata"
 type Meta {
     provider_transaction_category: String 
-    provider_account_id: String
+    provider_account_id: ID
     provider_mandate_identification: String
     provider_standing_order_id: String
 }
