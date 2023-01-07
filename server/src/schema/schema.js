@@ -1,8 +1,8 @@
 import { gql } from "apollo-server";
-import { MerchantAccountPayout } from "./MerchantAccountPayout/index.js";
-import { MerchantAccount } from "./MerchantAccounts/index.js";
-import { BankAccount } from "./BankAccount/index.js";
-import { AuthToken } from "./AuthToken/index.js";
+import { MerchantAccountPayout } from "./TrueLayer/MerchantAccountPayout/index.js";
+import { MerchantAccount } from "./TrueLayer/MerchantAccounts/index.js";
+import { BankAccount } from "./TrueLayer/BankAccount/index.js";
+import { AuthToken } from "./TrueLayer/AuthToken/index.js";
 
 const typeDefs = gql`
   ${MerchantAccountPayout.types}
