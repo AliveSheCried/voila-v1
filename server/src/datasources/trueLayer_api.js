@@ -1,4 +1,4 @@
-import { RESTDataSource } from "apollo-datasource-rest";
+import { RESTDataSource } from "@apollo/datasource-rest";
 import { v4 as uuidv4 } from "uuid";
 import tlSigning from "truelayer-signing";
 
@@ -16,99 +16,121 @@ export class TrueLayerAPI extends RESTDataSource {
   //merchantAccount methods
 
   getMerchantAccounts(token) {
-    return this.get(`/merchant-accounts`, null, {
-      headers: { authorization: `Bearer ${token}` },
-    });
-  }
-
-  getMerchantAccount(id, token) {
-    return this.get(`/merchant-accounts/${id}`, null, {
+    const options = {
+      method: "GET",
       headers: {
         accept: "application/json; charset=UTF-8",
         authorization: `Bearer ${token}`,
       },
-    });
+    };
+
+    return this.get(`/merchant-accounts`, options);
+  }
+
+  getMerchantAccount(id, token) {
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json; charset=UTF-8",
+        authorization: `Bearer ${token}`,
+      },
+    };
+    return this.get(`/merchant-accounts/${id}`, options);
   }
 
   getMerchantAccountTransactions(id, token, fromDate, toDate) {
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json; charset=UTF-8",
+        authorization: `Bearer ${token}`,
+      },
+    };
     return this.get(
       `merchant-accounts/${id}/transactions?from=${fromDate}&to=${toDate}`,
-      null,
-      {
-        headers: {
-          accept: "application/json; charset=UTF-8",
-          authorization: `Bearer ${token}`,
-        },
-      }
+      options
     );
   }
 
   //dataApi methods
   getBankAccounts(token) {
-    return this.get("/data/v1/accounts", null, {
+    const options = {
+      method: "GET",
       headers: {
         accept: "application/json; charset=UTF-8",
         authorization: `Bearer ${token}`,
       },
-    });
+    };
+    return this.get("/data/v1/accounts", options);
   }
 
   getBankAccount(id, token) {
-    return this.get(`/data/v1/accounts/${id}`, null, {
+    const options = {
+      method: "GET",
       headers: {
         accept: "application/json; charset=UTF-8",
         authorization: `Bearer ${token}`,
       },
-    });
+    };
+    return this.get(`/data/v1/accounts/${id}`, options);
   }
 
   getBankAccountBalance(id, token) {
-    return this.get(`/data/v1/accounts/${id}/balance`, null, {
+    const options = {
+      method: "GET",
       headers: {
         accept: "application/json; charset=UTF-8",
         authorization: `Bearer ${token}`,
       },
-    });
+    };
+    return this.get(`/data/v1/accounts/${id}/balance`, options);
   }
 
   getBankAccountTransactions(id, token, fromDate, toDate) {
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json; charset=UTF-8",
+        authorization: `Bearer ${token}`,
+      },
+    };
     return this.get(
       `/data/v1/accounts/${id}/transactions?to=${toDate}&from=${fromDate}`,
-      null,
-      {
-        headers: {
-          accept: "application/json; charset=UTF-8",
-          authorization: `Bearer ${token}`,
-        },
-      }
+      options
     );
   }
 
   getBankAccountPendingTransactions(id, token) {
-    return this.get(`/data/v1/accounts/${id}/transactions/pending`, null, {
+    const options = {
+      method: "GET",
       headers: {
         accept: "application/json; charset=UTF-8",
         authorization: `Bearer ${token}`,
       },
-    });
+    };
+    return this.get(`/data/v1/accounts/${id}/transactions/pending`, options);
   }
 
   getBankAccountDirectDebits(id, token) {
-    return this.get(`/data/v1/accounts/${id}/direct_debits`, null, {
+    const options = {
+      method: "GET",
       headers: {
         accept: "application/json; charset=UTF-8",
         authorization: `Bearer ${token}`,
       },
-    });
+    };
+    return this.get(`/data/v1/accounts/${id}/direct_debits`, options);
   }
 
   getBankAccountStandingOrders(id, token) {
-    return this.get(`/data/v1/accounts/${id}/standing_orders`, null, {
+    const options = {
+      method: "GET",
       headers: {
         accept: "application/json; charset=UTF-8",
         authorization: `Bearer ${token}`,
       },
-    });
+    };
+    return this.get(`/data/v1/accounts/${id}/standing_orders`, options);
   }
 
   //MerchantAccountPayout methods
@@ -151,7 +173,8 @@ export class TrueLayerAPI extends RESTDataSource {
       body: JSON.stringify(body),
     });
 
-    return this.post(`/payouts`, body, {
+    const options = {
+      method: "POST",
       headers: {
         accept: "application/json; charset=UTF-8",
         authorization: `Bearer ${token}`,
@@ -159,15 +182,20 @@ export class TrueLayerAPI extends RESTDataSource {
         "Tl-Signature": tlSignature,
         "content-type": "application/json; charset=UTF-8",
       },
-    });
+      body,
+    };
+
+    return this.post(`/payouts`, options);
   }
 
   getPayoutDetail(id, token) {
-    return this.get(`/payouts/${id}`, null, {
+    const options = {
+      method: "GET",
       headers: {
         accept: "application/json; charset=UTF-8",
         authorization: `Bearer ${token}`,
       },
-    });
+    };
+    return this.get(`/payouts/${id}`, options);
   }
 }
