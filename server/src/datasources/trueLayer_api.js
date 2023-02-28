@@ -1,11 +1,23 @@
 import { RESTDataSource } from "@apollo/datasource-rest";
-import { v4 as uuidv4 } from "uuid";
 import tlSigning from "truelayer-signing";
+import { v4 as uuidv4 } from "uuid";
 
 export class TrueLayerAPI extends RESTDataSource {
   constructor() {
     super();
     this.baseURL = "https://api.truelayer-sandbox.com";
+  }
+
+  // Common options function
+  getOptions(token, additionalHeaders = {}) {
+    return {
+      method: "GET",
+      headers: {
+        accept: "application/json; charset=UTF-8",
+        authorization: `Bearer ${token}`,
+        ...additionalHeaders,
+      },
+    };
   }
 
   /* 
@@ -16,36 +28,17 @@ export class TrueLayerAPI extends RESTDataSource {
   //merchantAccount methods
 
   getMerchantAccounts(token) {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json; charset=UTF-8",
-        authorization: `Bearer ${token}`,
-      },
-    };
-
+    const options = this.getOptions(token);
     return this.get(`/merchant-accounts`, options);
   }
 
   getMerchantAccount(id, token) {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json; charset=UTF-8",
-        authorization: `Bearer ${token}`,
-      },
-    };
+    const options = this.getOptions(token);
     return this.get(`/merchant-accounts/${id}`, options);
   }
 
   getMerchantAccountTransactions(id, token, fromDate, toDate) {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json; charset=UTF-8",
-        authorization: `Bearer ${token}`,
-      },
-    };
+    const options = this.getOptions(token);
     return this.get(
       `merchant-accounts/${id}/transactions?from=${fromDate}&to=${toDate}`,
       options
@@ -54,46 +47,22 @@ export class TrueLayerAPI extends RESTDataSource {
 
   //dataApi methods
   getBankAccounts(token) {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json; charset=UTF-8",
-        authorization: `Bearer ${token}`,
-      },
-    };
+    const options = this.getOptions(token);
     return this.get("/data/v1/accounts", options);
   }
 
   getBankAccount(id, token) {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json; charset=UTF-8",
-        authorization: `Bearer ${token}`,
-      },
-    };
+    const options = this.getOptions(token);
     return this.get(`/data/v1/accounts/${id}`, options);
   }
 
   getBankAccountBalance(id, token) {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json; charset=UTF-8",
-        authorization: `Bearer ${token}`,
-      },
-    };
+    const options = this.getOptions(token);
     return this.get(`/data/v1/accounts/${id}/balance`, options);
   }
 
   getBankAccountTransactions(id, token, fromDate, toDate) {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json; charset=UTF-8",
-        authorization: `Bearer ${token}`,
-      },
-    };
+    const options = this.getOptions(token);
     return this.get(
       `/data/v1/accounts/${id}/transactions?to=${toDate}&from=${fromDate}`,
       options
@@ -101,35 +70,17 @@ export class TrueLayerAPI extends RESTDataSource {
   }
 
   getBankAccountPendingTransactions(id, token) {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json; charset=UTF-8",
-        authorization: `Bearer ${token}`,
-      },
-    };
+    const options = this.getOptions(token);
     return this.get(`/data/v1/accounts/${id}/transactions/pending`, options);
   }
 
   getBankAccountDirectDebits(id, token) {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json; charset=UTF-8",
-        authorization: `Bearer ${token}`,
-      },
-    };
+    const options = this.getOptions(token);
     return this.get(`/data/v1/accounts/${id}/direct_debits`, options);
   }
 
   getBankAccountStandingOrders(id, token) {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json; charset=UTF-8",
-        authorization: `Bearer ${token}`,
-      },
-    };
+    const options = this.getOptions(token);
     return this.get(`/data/v1/accounts/${id}/standing_orders`, options);
   }
 
@@ -189,13 +140,7 @@ export class TrueLayerAPI extends RESTDataSource {
   }
 
   getPayoutDetail(id, token) {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json; charset=UTF-8",
-        authorization: `Bearer ${token}`,
-      },
-    };
+    const options = this.getOptions(token);
     return this.get(`/payouts/${id}`, options);
   }
 }
