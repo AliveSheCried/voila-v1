@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id         String   @id @default(uuid())
+  username   String   @db.VarChar(30)
+  first_name String   @db.VarChar(30)
+  last_name  String   @db.VarChar(30)
+  email      String?  @unique
+  tokens     tokens[]
+}
+
+model tokens {
+  id             String    @id @default(uuid())
+  credentials_id String    @unique
+  refresh_token  String?   @unique
+  created_at     DateTime? @db.Date
+  refreshed_at   DateTime? @db.Date
+  provider_id    String?
+  user_id        String
+  assets         assets[]
+  users          users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  assetsId       String?
+}
+
+model assets {
+  id           String         @id @default(uuid())
+  account_id   String         @unique
+  user_id      String
+  asset_type   String
+  accounts     accounts[]
+  tokens       tokens         @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  transactions transactions[]
+}
+
+model transactions {
+  id                         String   @id @unique
+  asset_id                   String
+  transaction_id             String   @unique
+  transaction_amount         Decimal  @db.Decimal(15, 6)
+  transaction_description    String?
+  transaction_date           DateTime @db.Date
+  transaction_currency       String   @db.VarChar(3)
+  transaction_classification String   @db.VarChar(30)
+  transaction_category       String   @db.VarChar(30)
+  assets                     assets   @relation(fields: [asset_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model accounts {
+  id             String  @id @unique
+  asset_id       String
+  account_type   String  @db.VarChar(30)
+  display_name   String
+  description    String?
+  currency       String  @db.VarChar(3)
+  account_number String?
+  iban           String? @db.VarChar(34)
+  swift          String? @db.VarChar(11)
+  branch_number  String? @db.VarChar(30)
+  bank_id        String
+  assets         assets  @relation(fields: [asset_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  banks          banks   @relation(fields: [bank_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model banks {
+  id        String     @id @default(uuid())
+  bank_name String     @db.VarChar(255)
+  accounts  accounts[]
+}

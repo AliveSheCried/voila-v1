@@ -1,7 +1,7 @@
+import { AuthToken } from "./TrueLayer/AuthToken/index.js";
+import { BankAccount } from "./TrueLayer/BankAccount/index.js";
 import { MerchantAccountPayout } from "./TrueLayer/MerchantAccountPayout/index.js";
 import { MerchantAccount } from "./TrueLayer/MerchantAccounts/index.js";
-import { BankAccount } from "./TrueLayer/BankAccount/index.js";
-import { AuthToken } from "./TrueLayer/AuthToken/index.js";
 
 const resolvers = {
   //interface __resolveType
