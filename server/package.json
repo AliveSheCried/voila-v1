@@ -43,6 +43,6 @@
     "uuidv4": "^6.2.13"
   },
   "devDependencies": {
-    "prisma": "^4.11.0"
+    "prisma": "^4.12.0"
   }
 }

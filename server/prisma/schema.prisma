@@ -8,7 +8,7 @@ datasource db {
 }
 
 //add customer table to store customer details; will link to users table where customer_id in users table will be the id key in customer table
-model customer {
+model customers {
   id                  String   @id @default(uuid())
   name                String   @db.VarChar(255)
   phone               String?  @unique
@@ -28,40 +28,40 @@ model customer {
 
 //user table linked to customer table where a user can only belong to one customer
 model users {
-  id          String           @id @default(uuid())
-  username    String           @db.VarChar(30)
-  first_name  String           @db.VarChar(30)
-  last_name   String           @db.VarChar(30)
-  email       String?          @unique
+  id          String            @id @default(uuid())
+  username    String            @db.VarChar(30)
+  first_name  String            @db.VarChar(30)
+  last_name   String            @db.VarChar(30)
+  email       String?           @unique
   customer_id String
-  created_at  DateTime         @default(now())
-  updated_at  DateTime         @updatedAt
+  created_at  DateTime          @default(now())
+  updated_at  DateTime          @updatedAt
   password    String
-  user_types  user_user_type[]
+  user_types  user_user_types[]
   tokens      tokens[]
-  customers   customer         @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  customers   customers         @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 //intermediate table to link users and user_type tables
-model user_user_type {
-  id         Int       @id @default(autoincrement())
-  user_id    String
-  user_type  String
-  users      users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user_types user_type @relation(fields: [user_type], references: [type], onDelete: NoAction, onUpdate: NoAction)
+model user_user_types {
+  id           Int        @id @default(autoincrement())
+  user_id      String
+  user_type_id Int
+  users        users      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user_types   user_types @relation(fields: [user_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 //user_type table; a user can be more than one type
-model user_type {
-  id             Int              @id @default(autoincrement())
-  type           String           @unique @db.VarChar(30)
+model user_types {
+  id             Int               @id @default(autoincrement())
+  type           String            @unique @db.VarChar(30)
   description    String
-  created_at     DateTime         @default(now())
-  updated_at     DateTime         @updatedAt
-  user_user_type user_user_type[]
+  created_at     DateTime          @default(now())
+  updated_at     DateTime          @updatedAt
+  user_user_type user_user_types[]
 }
 
-//tokens table linked to users table where a user can have multiple tokens
+//tokens table linked to users table where a user can have multiple tokens; also linked to providers table where a token can only belong to one provider
 model tokens {
   id              String    @id @default(uuid())
   credentials_id  String    @unique
@@ -178,7 +178,7 @@ model accounts {
   providers      providers @relation(fields: [provider_id], references: [provider_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-//providers table linked to accounts table where an account can only belong to one bank
+//providers table linked to accounts table where an account can only belong to one bank; also linked to tokens table where a token can only belong to one bank
 model providers {
   id           Int        @id @default(autoincrement())
   provider_id  String     @unique
