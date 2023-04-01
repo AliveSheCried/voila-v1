@@ -20,8 +20,8 @@ model customer {
   tax_identifier      String?
   registration_number String?
   website             String?
-  created_at          DateTime @db.Date
-  updated_at          DateTime @db.Date
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
   industry            String?
   users               users[]
 }
@@ -34,8 +34,8 @@ model users {
   last_name   String           @db.VarChar(30)
   email       String?          @unique
   customer_id String
-  created_at  DateTime         @db.Date
-  updated_at  DateTime         @db.Date
+  created_at  DateTime         @default(now())
+  updated_at  DateTime         @updatedAt
   password    String
   user_types  user_user_type[]
   tokens      tokens[]
@@ -56,23 +56,27 @@ model user_type {
   id             Int              @id @default(autoincrement())
   type           String           @unique @db.VarChar(30)
   description    String
-  created_at     DateTime         @db.Date
-  updated_at     DateTime         @db.Date
+  created_at     DateTime         @default(now())
+  updated_at     DateTime         @updatedAt
   user_user_type user_user_type[]
 }
 
 //tokens table linked to users table where a user can have multiple tokens
 model tokens {
-  id             String    @id @default(uuid())
-  credentials_id String    @unique
-  refresh_token  String?   @unique
-  created_at     DateTime? @db.Date
-  refreshed_at   DateTime? @db.Date
-  provider_id    String?
-  user_id        String
-  assets         assets[]
-  users          users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  assetsId       String?
+  id              String    @id @default(uuid())
+  credentials_id  String    @unique
+  access_token    String    @unique
+  refresh_token   String?   @unique
+  access_expires  DateTime  @db.Date
+  refresh_expires DateTime  @db.Date
+  created_at      DateTime  @default(now())
+  refreshed_at    DateTime  @updatedAt
+  provider_id     String
+  user_id         String
+  assets          assets[]
+  users           users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  providers       providers @relation(fields: [provider_id], references: [provider_id], onDelete: NoAction, onUpdate: NoAction)
+  assetsId        String?
 }
 
 //assets table linked to tokens table where a user can have multiple tokens
@@ -88,38 +92,101 @@ model assets {
 
 //transactions table linked to assets table where an asset can have multiple transactions
 model transactions {
-  id                         String   @id @unique
-  asset_id                   String
-  transaction_id             String   @unique
-  transaction_amount         Decimal  @db.Decimal(15, 6)
-  transaction_description    String?
-  transaction_date           DateTime @db.Date
-  transaction_currency       String   @db.VarChar(3)
-  transaction_classification String   @db.VarChar(30)
-  transaction_category       String   @db.VarChar(30)
-  assets                     assets   @relation(fields: [asset_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id                String          @id @unique
+  asset_id          String
+  transaction_id    String          @unique
+  currency          String          @db.VarChar(3)
+  amount_in_minor   Decimal         @db.Decimal(15, 6)
+  status            String          @db.VarChar(30)
+  created_at        DateTime        @db.Date
+  executed_at       DateTime?       @db.Date
+  settled_at        DateTime?       @db.Date
+  transaction_type  String          @db.VarChar(30)
+  reference         String?
+  context_code      String?
+  payout_id         String?
+  payment_id        String?
+  beneficiary_id    String
+  payment_source_id String
+  remitter_id       String?
+  beneficiary       beneficiaries   @relation(fields: [beneficiary_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  payment_sources   payment_sources @relation(fields: [payment_source_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  assets            assets          @relation(fields: [asset_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  remitters         remitters?      @relation(fields: [remitter_id], references: [id])
+  remitterId        String?
+}
+
+//beneficiaries table linked to transactions table where a beneficiary can have multiple transactions
+model beneficiaries {
+  id                   String                 @id @unique
+  type                 String                 @db.VarChar(30)
+  account_holder_name  String
+  transactions         transactions[]
+  accounts_identifiers accounts_identifiers[]
+}
+
+//accounts indentifiers table linked to beneficiaries table where a beneficiary can have multiple accounts; also linked to payment sources table
+model accounts_identifiers {
+  id                String          @id @default(uuid())
+  type              String          @db.VarChar(30)
+  account_number    String?
+  iban              String?         @db.VarChar(34)
+  swift             String?         @db.VarChar(11)
+  branch_number     String?         @db.VarChar(30)
+  created_at        DateTime        @default(now())
+  updated_at        DateTime        @updatedAt
+  beneficiary_id    String
+  payment_source_id String
+  beneficiaries     beneficiaries   @relation(fields: [beneficiary_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  payment_sources   payment_sources @relation(fields: [payment_source_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+//payment sources table linked to accounts identifiers table where an account identifier can have  1 payment source;
+model payment_sources {
+  id                   String                 @id @default(uuid())
+  account_holder_name  String
+  created_at           DateTime               @default(now())
+  updated_at           DateTime               @updatedAt
+  accounts_identifiers accounts_identifiers[]
+  transactions         transactions[]
+}
+
+//remitter table linked to transactions table where a remitter can have multiple transactions
+model remitters {
+  id                  String         @id @default(uuid())
+  account_holder_name String
+  transactions        transactions[]
 }
 
 //accounts table linked to assets table where an asset can have multiple accounts
 model accounts {
-  id             String  @id @unique
+  id             String    @id @unique
+  account_id     String    @unique
   asset_id       String
-  account_type   String  @db.VarChar(30)
+  account_type   String    @db.VarChar(30)
   display_name   String
   description    String?
-  currency       String  @db.VarChar(3)
+  currency       String    @db.VarChar(3)
   account_number String?
-  iban           String? @db.VarChar(34)
-  swift          String? @db.VarChar(11)
-  branch_number  String? @db.VarChar(30)
-  bank_id        String
-  assets         assets  @relation(fields: [asset_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  banks          banks   @relation(fields: [bank_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  iban           String?   @db.VarChar(34)
+  swift          String?   @db.VarChar(11)
+  branch_number  String?   @db.VarChar(30)
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+  provider_id    String
+  assets         assets    @relation(fields: [asset_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  providers      providers @relation(fields: [provider_id], references: [provider_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-//banks table linked to accounts table where an account can only belong to one bank
-model banks {
-  id        String     @id @default(uuid())
-  bank_name String     @db.VarChar(255)
-  accounts  accounts[]
+//providers table linked to accounts table where an account can only belong to one bank
+model providers {
+  id           Int        @id @default(autoincrement())
+  provider_id  String     @unique
+  name         String     @db.VarChar(255)
+  accounts     accounts[]
+  tokens       tokens[]
+  logo_url     String?
+  display_name String?
+  created_at   DateTime   @default(now())
+  updated_at   DateTime   @updatedAt
 }
