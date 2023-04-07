@@ -1,19 +1,23 @@
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+import pkg from "body-parser";
+import cors from "cors";
 import express from "express";
 import http from "http";
-import cors from "cors";
-import pkg from "body-parser";
 const { json } = pkg;
 
 //imports not related to Apollo / Express packages
 import dotenv from "dotenv";
-dotenv.config();
-import { TrueLayerAuthAPI } from "./datasources/trueAuthLayer_api.js";
-import { TrueLayerAPI } from "./datasources/trueLayer_api.js";
-import typeDefs from "./schema/schema.js";
+import {
+  TLAccessTokenAPI,
+  TLDataAPI,
+  TLMerchantAccountAPI,
+  TLPayoutAPI,
+} from "./datasources/trueLayer/index.js";
 import resolvers from "./schema/resolvers.js";
+import typeDefs from "./schema/schema.js";
+dotenv.config();
 
 /////imports end
 const app = express();
@@ -38,8 +42,10 @@ app.use(
       return {
         token,
         dataSources: {
-          trueLayerAuthAPI: new TrueLayerAuthAPI({ cache, token }),
-          trueLayerAPI: new TrueLayerAPI({ cache, token }),
+          tlAccessTokenAPI: new TLAccessTokenAPI({ cache, token }),
+          tlDataAPI: new TLDataAPI({ cache, token }),
+          tlMerchantAccountAPI: new TLMerchantAccountAPI({ cache, token }),
+          tlPayoutAPI: new TLPayoutAPI({ cache, token }),
         },
       };
     },
