@@ -1,4 +1,4 @@
-export const queries = `
+const queries = `
     "Return list of merchant accounts"
     merchantAccounts: [MerchantAccount]!
 
@@ -8,3 +8,5 @@ export const queries = `
     "Return transactions from individual merchant account"
     merchantAccountTransactions(id: ID!, fromDate: String!, toDate: String!): [MerchantAccountTransactions!]
 `;
+
+export default queries;
