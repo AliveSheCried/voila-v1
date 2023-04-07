@@ -1,13 +1,13 @@
 import queries from "./queries.js";
-import resolverMerchantAccount from "./resolverMerchantAccount.js";
-import resolverMerchantAccounts from "./resolverMerchantAccounts.js";
-import resolverMerchantAccountTransactions from "./resolverMerchantAccountTransactions.js";
+import merchantAccount from "./resolverMerchantAccount.js";
+import merchantAccounts from "./resolverMerchantAccounts.js";
+import merchantAccountTransactions from "./resolverMerchantAccountTransactions.js";
 import types from "./types.js";
 
 const resolvers = {
-  ...resolverMerchantAccount,
-  ...resolverMerchantAccounts,
-  ...resolverMerchantAccountTransactions,
+  ...merchantAccount,
+  ...merchantAccounts,
+  ...merchantAccountTransactions,
 };
 
 export const MerchantAccount = { queries, resolvers, types };

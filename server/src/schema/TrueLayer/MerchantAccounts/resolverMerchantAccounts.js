@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 //Get all merchant accounts
-const resolverMerchantAccounts = async (_, __, { token, dataSources }) => {
+const merchantAccounts = async (_, __, { token, dataSources }) => {
   //check database for merchant accounts
   //this needs more thought - Truelayer assumes 1 customer is accessing i.e. there is no customer ID in the URL. Park for now.
 
@@ -69,4 +69,4 @@ const resolverMerchantAccounts = async (_, __, { token, dataSources }) => {
   return merchantAccountsClient;
 };
 
-export default resolverMerchantAccounts;
+export default merchantAccounts;

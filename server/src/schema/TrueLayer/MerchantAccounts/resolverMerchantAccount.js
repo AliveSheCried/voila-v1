@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 //get individual merchant account detail using ID
-const resolverMerchantAccount = async (_, { id }, { token, dataSources }) => {
+const merchantAccount = async (_, { id }, { token, dataSources }) => {
   //check database for merchant account
   const merchantAccountDb = await prisma.accounts.findUnique({
     where: { id: id },
@@ -61,4 +61,4 @@ const resolverMerchantAccount = async (_, { id }, { token, dataSources }) => {
   return responseData;
 };
 
-export default resolverMerchantAccount;
+export default merchantAccount;

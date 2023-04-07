@@ -2,7 +2,7 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-const resolverMerchantAccountTransactions = async (
+const merchantAccountTransactions = async (
   _,
   { id, fromDate, toDate },
   { token, dataSources }
@@ -38,4 +38,4 @@ const resolverMerchantAccountTransactions = async (
   return transactions;
 };
 
-export default resolverMerchantAccountTransactions;
+export default merchantAccountTransactions;
