@@ -1,5 +1,5 @@
 //Retrieve account transctions
-const bankAccountTransactions = async (
+export const bankAccountTransactions = async (
   _,
   { id, fromDate, toDate },
   { token, dataSources }
@@ -19,7 +19,7 @@ const bankAccountTransactions = async (
 };
 
 //Retrieve account pending transactions
-const bankAccountPendingTransactions = async (
+export const bankAccountPendingTransactions = async (
   _,
   { id },
   { token, dataSources }
@@ -33,5 +33,3 @@ const bankAccountPendingTransactions = async (
 
   return pendingTransactions;
 };
-
-export default { bankAccountTransactions, bankAccountPendingTransactions };

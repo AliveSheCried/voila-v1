@@ -1,5 +1,5 @@
 import { RESTDataSource } from "@apollo/datasource-rest";
-import { handleAPIRequest } from "../../helpers/handleAPIRequest";
+import { handleAPIRequest } from "../../helpers/handleAPIRequest.js";
 
 export class TLAccessTokenAPI extends RESTDataSource {
   constructor() {

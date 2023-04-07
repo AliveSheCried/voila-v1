@@ -6,6 +6,7 @@ export async function handleAPIRequest(
   method = "GET",
   data = null
 ) {
+  console.log(dataSource, endpoint, token, method, data);
   // Common options function
   const getOptions = (additionalHeaders = {}) => {
     return {

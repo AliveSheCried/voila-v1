@@ -10,10 +10,10 @@ const { json } = pkg;
 //imports not related to Apollo / Express packages
 import dotenv from "dotenv";
 import {
-  TLAccessTokenAPI,
-  TLDataAPI,
-  TLMerchantAccountAPI,
-  TLPayoutAPI,
+  tlAccessTokenAPI,
+  tlDataAPI,
+  tlMerchantAccountAPI,
+  tlPayoutAPI,
 } from "./datasources/trueLayer/index.js";
 import resolvers from "./schema/resolvers.js";
 import typeDefs from "./schema/schema.js";
@@ -42,10 +42,12 @@ app.use(
       return {
         token,
         dataSources: {
-          tlAccessTokenAPI: new TLAccessTokenAPI({ cache, token }),
-          tlDataAPI: new TLDataAPI({ cache, token }),
-          tlMerchantAccountAPI: new TLMerchantAccountAPI({ cache, token }),
-          tlPayoutAPI: new TLPayoutAPI({ cache, token }),
+          trueLayer: {
+            accessTokenAPI: new tlAccessTokenAPI({ cache, token }),
+            dataAPI: new tlDataAPI({ cache, token }),
+            merchantAccountAPI: new tlMerchantAccountAPI({ cache, token }),
+            payoutAPI: new tlPayoutAPI({ cache, token }),
+          },
         },
       };
     },
