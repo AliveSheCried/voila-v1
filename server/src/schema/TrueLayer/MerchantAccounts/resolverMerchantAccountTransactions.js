@@ -38,4 +38,4 @@ const merchantAccountTransactions = async (
   return transactions;
 };
 
-export default merchantAccountTransactions;
+export default { merchantAccountTransactions };

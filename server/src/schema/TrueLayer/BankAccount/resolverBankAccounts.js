@@ -5,7 +5,7 @@ Bank account meta data queries
 */
 
 //Get all bank accounts
-export const bankAccounts = async (_, __, { token, dataSources }) => {
+const bankAccounts = async (_, __, { token, dataSources }) => {
   const responseData = await dataSources.trueLayerAPI.getBankAccounts(token);
 
   const bankAccounts = responseData.results.map((account) => account);
@@ -14,8 +14,13 @@ export const bankAccounts = async (_, __, { token, dataSources }) => {
 };
 
 //Get specific bank account with id
-export const bankAccount = async (_, { id }, { token, dataSources }) => {
+const bankAccount = async (_, { id }, { token, dataSources }) => {
   const responseData = await dataSources.trueLayerAPI.getBankAccount(id, token);
 
   return responseData.results[0];
+};
+
+export const bankAccountResolvers = {
+  bankAccounts,
+  bankAccount,
 };

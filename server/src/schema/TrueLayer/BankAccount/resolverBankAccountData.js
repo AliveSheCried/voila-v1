@@ -5,7 +5,7 @@ Bank account meta data related queries
 */
 
 // Retrieve account balance
-export const bankAccountBalance = async (_, { id }, { token, dataSources }) => {
+const bankAccountBalance = async (_, { id }, { token, dataSources }) => {
   const responseData = await dataSources.trueLayerAPI.getBankAccountBalance(
     id,
     token
@@ -15,11 +15,7 @@ export const bankAccountBalance = async (_, { id }, { token, dataSources }) => {
 };
 
 // Retrieve account direct debits
-export const bankAccountDirectDebits = async (
-  _,
-  { id },
-  { token, dataSources }
-) => {
+const bankAccountDirectDebits = async (_, { id }, { token, dataSources }) => {
   const responseData =
     await dataSources.trueLayerAPI.getBankAccountDirectDebits(id, token);
 
@@ -29,11 +25,7 @@ export const bankAccountDirectDebits = async (
 };
 
 // Retrieve account standing orders
-export const bankAccountStandingOrders = async (
-  _,
-  { id },
-  { token, dataSources }
-) => {
+const bankAccountStandingOrders = async (_, { id }, { token, dataSources }) => {
   const responseData =
     await dataSources.trueLayerAPI.getBankAccountStandingOrders(id, token);
 
@@ -42,4 +34,10 @@ export const bankAccountStandingOrders = async (
   );
 
   return standingOrders;
+};
+
+export const bankAccountDataResolvers = {
+  bankAccountBalance,
+  bankAccountDirectDebits,
+  bankAccountStandingOrders,
 };

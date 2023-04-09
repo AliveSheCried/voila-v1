@@ -7,4 +7,4 @@ const payoutDetail = async (_, { id }, { token, dataSources }) => {
   return responseData;
 };
 
-export default payoutDetail;
+export default { payoutDetail };

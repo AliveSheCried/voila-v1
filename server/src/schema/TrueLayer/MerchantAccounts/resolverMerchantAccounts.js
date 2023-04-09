@@ -69,4 +69,4 @@ const merchantAccounts = async (_, __, { token, dataSources }) => {
   return merchantAccountsClient;
 };
 
-export default merchantAccounts;
+export default { merchantAccounts };

@@ -23,10 +23,19 @@ dotenv.config();
 const app = express();
 const httpServer = http.createServer(app);
 
+console.log("resolvers", resolvers);
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: ({ req }) => {
+    // You can add more context properties here if needed
+    return {
+      token: req.headers.authorization || "",
+    };
+  },
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  introspection: true,
+  playground: true,
 });
 
 await server.start();

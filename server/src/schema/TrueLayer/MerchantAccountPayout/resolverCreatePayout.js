@@ -24,4 +24,4 @@ const createPayoutExternalAccount = async (
   return responseData;
 };
 
-export default createPayoutExternalAccount;
+export default { createPayoutExternalAccount };
