@@ -6,19 +6,34 @@ import cors from "cors";
 import express from "express";
 import http from "http";
 const { json } = pkg;
+//debugging import
+//import { gql } from "apollo-server";
 
 //imports not related to Apollo / Express packages
 import dotenv from "dotenv";
 import {
-  tlAccessTokenAPI,
-  tlDataAPI,
-  tlMerchantAccountAPI,
-  tlPayoutAPI,
+  TLAccessTokenAPI as tlAccessTokenAPI,
+  TLDataAPI as tlDataAPI,
+  TLMerchantAccountAPI as tlMerchantAccountAPI,
+  TLPayoutAPI as tlPayoutAPI,
 } from "./datasources/trueLayer/index.js";
 import resolvers from "./schema/resolvers.js";
 import typeDefs from "./schema/schema.js";
 dotenv.config();
 
+//debugging code
+// const typeDefs = gql`
+//   type Query {
+//     hello: String
+//   }
+// `;
+
+// const resolvers = {
+//   Query: {
+//     hello: () => "Hello, world!",
+//   },
+// };
+//debugging code end
 /////imports end
 const app = express();
 const httpServer = http.createServer(app);
@@ -27,6 +42,7 @@ console.log("resolvers", resolvers);
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  // added this to pass token to resolvers (on advice from ChatGPT-4)
   context: ({ req }) => {
     // You can add more context properties here if needed
     return {
@@ -35,7 +51,11 @@ const server = new ApolloServer({
   },
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   introspection: true,
-  playground: true,
+  playground: {
+    settings: {
+      "schema.polling.enable": true,
+    },
+  },
 });
 
 await server.start();
