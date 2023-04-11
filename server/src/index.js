@@ -34,11 +34,12 @@ dotenv.config();
 //   },
 // };
 //debugging code end
+
 /////imports end
 const app = express();
 const httpServer = http.createServer(app);
 
-console.log("resolvers", resolvers);
+//console.log("resolvers", resolvers);
 const server = new ApolloServer({
   typeDefs,
   resolvers,
