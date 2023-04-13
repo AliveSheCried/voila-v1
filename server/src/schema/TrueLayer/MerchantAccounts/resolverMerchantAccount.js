@@ -19,10 +19,8 @@ const merchantAccount = async (_, { id }, { token, dataSources }) => {
   */
 
   //get merchant account from TrueLayer
-  const responseData = await dataSources.trueLayerAPI.getMerchantAccount(
-    id,
-    token
-  );
+  const responseData =
+    await dataSources.tlMerchantAccountAPI.getMerchantAccount(id, token);
 
   /*
   Temporary comment out of database elements while I test the data source.

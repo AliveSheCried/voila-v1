@@ -8,22 +8,22 @@ const merchantAccountTransactions = async (
   { token, dataSources }
 ) => {
   // Decode the fromDate and toDate values
-  const decodedFromDate = decodeURIComponent(fromDate);
-  const decodedToDate = decodeURIComponent(toDate);
+  // const decodedFromDate = decodeURIComponent(fromDate);
+  // const decodedToDate = decodeURIComponent(toDate);
 
   //check database for transactions within date range supplied
-  const transactionsDb = await prisma.transactions.findMany({
-    where: { transaction_date: { gte: decodedFromDate, lte: decodedToDate } },
-  });
+  // const transactionsDb = await prisma.transactions.findMany({
+  //   where: { transaction_date: { gte: decodedFromDate, lte: decodedToDate } },
+  // });
 
   // If transactions for the requested range are found in the database, return them
-  if (transactionsDb && transactionsDb.length > 0) {
-    return transactionsDb;
-  }
+  // if (transactionsDb && transactionsDb.length > 0) {
+  //   return transactionsDb;
+  // }
 
   //get transactions from TrueLayer
   const responseData =
-    await dataSources.trueLayerAPI.getMerchantAccountTransactions(
+    await dataSources.tlMerchantAccountAPI.getMerchantAccountTransactions(
       id,
       token,
       fromDate,
@@ -32,8 +32,6 @@ const merchantAccountTransactions = async (
 
   //Convert received data to schema array of transaction objects
   const transactions = responseData.items.map((transaction) => transaction);
-
-  console.log(transactions);
 
   return transactions;
 };
