@@ -6,8 +6,6 @@ import cors from "cors";
 import express from "express";
 import http from "http";
 const { json } = pkg;
-//debugging import
-//import { gql } from "apollo-server";
 
 //imports not related to Apollo / Express packages
 import dotenv from "dotenv";
@@ -21,31 +19,14 @@ import resolvers from "./schema/resolvers.js";
 import typeDefs from "./schema/schema.js";
 dotenv.config();
 
-//debugging code
-// const typeDefs = gql`
-//   type Query {
-//     hello: String
-//   }
-// `;
-
-// const resolvers = {
-//   Query: {
-//     hello: () => "Hello, world!",
-//   },
-// };
-//debugging code end
-
-/////imports end
+////imports end
 const app = express();
 const httpServer = http.createServer(app);
 
-//console.log("resolvers", resolvers);
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  // added this to pass token to resolvers (on advice from ChatGPT-4)
   context: ({ req }) => {
-    // You can add more context properties here if needed
     return {
       token: req.headers.authorization || "",
     };
@@ -58,7 +39,6 @@ const server = new ApolloServer({
     },
   },
 });
-
 await server.start();
 
 app.use(
@@ -72,12 +52,10 @@ app.use(
       return {
         token,
         dataSources: {
-          trueLayer: {
-            accessTokenAPI: new tlAccessTokenAPI({ cache, token }),
-            dataAPI: new tlDataAPI({ cache, token }),
-            merchantAccountAPI: new tlMerchantAccountAPI({ cache, token }),
-            payoutAPI: new tlPayoutAPI({ cache, token }),
-          },
+          tlAccessTokenAPI: new tlAccessTokenAPI({ cache, token }),
+          tlDataAPI: new tlDataAPI({ cache, token }),
+          tlMerchantAccountAPI: new tlMerchantAccountAPI({ cache, token }),
+          tlPayoutAPI: new tlPayoutAPI({ cache, token }),
         },
       };
     },

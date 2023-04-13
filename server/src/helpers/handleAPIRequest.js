@@ -6,22 +6,19 @@ export async function handleAPIRequest(
   method = "GET",
   data = null
 ) {
-  console.log(dataSource, endpoint, token, method, data);
+  console.log(endpoint);
   // Common options function
-  const getOptions = (additionalHeaders = {}) => {
+  const getOptions = (token) => {
     return {
       method: method,
       headers: {
         accept: "application/json; charset=UTF-8",
         authorization: `Bearer ${token}`,
-        ...additionalHeaders,
       },
     };
   };
 
-  const options = getOptions(token, {
-    "Content-Type": "application/json",
-  });
+  const options = getOptions(token);
 
   if (method === "POST" && data) {
     options.method = "POST";
@@ -31,6 +28,8 @@ export async function handleAPIRequest(
     };
     options.body = data.body;
   }
+
+  console.log(endpoint, options);
 
   const response = await dataSource.fetch(endpoint, options);
 

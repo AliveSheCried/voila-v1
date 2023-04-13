@@ -4,6 +4,9 @@ const prisma = new PrismaClient();
 
 //get individual merchant account detail using ID
 const merchantAccount = async (_, { id }, { token, dataSources }) => {
+  /*
+  Temporary comment out of database elements while I test the data source.
+
   //check database for merchant account
   const merchantAccountDb = await prisma.accounts.findUnique({
     where: { id: id },
@@ -13,6 +16,7 @@ const merchantAccount = async (_, { id }, { token, dataSources }) => {
   if (merchantAccountDb) {
     return merchantAccountDb;
   }
+  */
 
   //get merchant account from TrueLayer
   const responseData = await dataSources.trueLayerAPI.getMerchantAccount(
@@ -20,6 +24,8 @@ const merchantAccount = async (_, { id }, { token, dataSources }) => {
     token
   );
 
+  /*
+  Temporary comment out of database elements while I test the data source.
   //Convert received date to schema object
   const merchantAccount = {
     id: responseData.id,
@@ -56,6 +62,7 @@ const merchantAccount = async (_, { id }, { token, dataSources }) => {
     // handle the error here, for example:
     throw new Error("Could not create merchant account", error);
   }
+  */
 
   //In this instance, responseData is the shape required by the schema.
   return responseData;

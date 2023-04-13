@@ -1,6 +1,6 @@
 ///////Prisma
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+// import { PrismaClient } from "@prisma/client";
+// const prisma = new PrismaClient();
 
 //Get all merchant accounts
 const merchantAccounts = async (_, __, { token, dataSources }) => {
@@ -8,20 +8,22 @@ const merchantAccounts = async (_, __, { token, dataSources }) => {
   //this needs more thought - Truelayer assumes 1 customer is accessing i.e. there is no customer ID in the URL. Park for now.
 
   //get merchant accounts from TrueLayer
-  let merchantAccountsClient;
-  try {
-    //$transaction method provided by Prisma to execute a sequence of database operations as a single transaction
-    await prisma.$transaction(async () => {
-      const responseData = await dataSources.trueLayerAPI.getMerchantAccounts(
-        token
-      );
+  // let merchantAccountsClient;
+  //try {
+  //$transaction method provided by Prisma to execute a sequence of database operations as a single transaction
 
-      //Convert received data to schema object using reducer; originally extracted directly e.g. {id: merchantAc.id}
-      merchantAccountsClient = responseData.items.reduce((acc, current) => [
-        acc,
-        current,
-      ]);
+  // await prisma.$transaction(async () => {
+  const responseData =
+    await dataSources.tlMerchantAccountAPI.getMerchantAccounts(token);
 
+  //Convert received data to schema object using reducer; originally extracted directly e.g. {id: merchantAc.id}
+  const merchantAccountsClient = responseData.items.reduce((acc, current) => [
+    acc,
+    current,
+  ]);
+
+  /*
+  Temporary comment out of database elements while I test the data source.
       //convert array of flattened objects to database format
       const merchantAccountsDb = merchantAccountsClient.map((element) => {
         return {
@@ -61,10 +63,12 @@ const merchantAccounts = async (_, __, { token, dataSources }) => {
         // handle the error here, for example:
         throw new Error("Could not create merchant account", error);
       }
-    });
-  } catch (error) {
-    console.log(error);
-  }
+      */
+  //   });
+  // } catch (error) {
+  //   console.log(error);
+  // }
+
   //return data to client
   return merchantAccountsClient;
 };
