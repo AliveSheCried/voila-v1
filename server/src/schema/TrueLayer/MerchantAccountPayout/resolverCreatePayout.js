@@ -11,7 +11,7 @@ const createPayoutExternalAccount = async (
   { token, dataSources }
 ) => {
   const responseData =
-    await dataSources.trueLayerAPI.createMerchantAccountPayout(
+    await dataSources.tlPayoutAPI.createMerchantAccountPayout(
       reference,
       account_holder_name,
       merchant_account_id,

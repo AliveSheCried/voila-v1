@@ -13,7 +13,6 @@ export class TLMerchantAccountAPI extends RESTDataSource {
   *************************  
   */
 
-  /////old code for debugging
   // Common options function
   getOptions(token, additionalHeaders = {}) {
     return {
@@ -29,8 +28,6 @@ export class TLMerchantAccountAPI extends RESTDataSource {
   //get all merchant accounts
   async getMerchantAccounts(token) {
     try {
-      // const endpoint = `/merchant-accounts`;
-      // return await handleAPIRequest(this, endpoint, token);
       const options = this.getOptions(token);
       return await this.get(`/merchant-accounts`, options);
     } catch (error) {
@@ -42,10 +39,7 @@ export class TLMerchantAccountAPI extends RESTDataSource {
   //get merchant account by id
   async getMerchantAccount(id, token) {
     try {
-      // const endpoint = `/merchant-accounts/${id}`;
-      // return await handleAPIRequest(this, endpoint, token);
       const options = this.getOptions(token);
-      console.log(options);
       return await this.get(`/merchant-accounts/${id}`, options);
     } catch (error) {
       console.error(`Error: ${error.message}`);
@@ -56,8 +50,6 @@ export class TLMerchantAccountAPI extends RESTDataSource {
   //get merchant account transactions for specified date range and account id
   async getMerchantAccountTransactions(id, token, fromDate, toDate) {
     try {
-      // const endpoint = `/merchant-accounts/${id}/transactions?from=${fromDate}&to=${toDate}`;
-      // return await handleAPIRequest(this, endpoint, token);
       const options = this.getOptions(token);
       return await this.get(
         `merchant-accounts/${id}/transactions?from=${fromDate}&to=${toDate}`,

@@ -108,6 +108,7 @@ export class TrueLayerAPI extends RESTDataSource {
     if (!privateKeyPem) throw new Error("Missing env var PRIVATE_KEY");
 
     const idKey = uuidv4();
+
     const body = {
       beneficiary: {
         type: "external_account",

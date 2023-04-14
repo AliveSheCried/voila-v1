@@ -1,6 +1,6 @@
 import { RESTDataSource } from "@apollo/datasource-rest";
-import { handleAPIRequest } from "../../helpers/handleAPIRequest.js";
-
+import tlSigning from "truelayer-signing";
+import { v4 as uuidv4 } from "uuid";
 export class TLPayoutAPI extends RESTDataSource {
   constructor() {
     super();
@@ -14,6 +14,18 @@ export class TLPayoutAPI extends RESTDataSource {
   DOCS: https://docs.truelayer.com/docs/payouts-and-refunds
   *************************  
   */
+
+  //Common options function
+  getOptions(token, additionalHeaders = {}) {
+    return {
+      method: "GET",
+      headers: {
+        accept: "application/json; charset=UTF-8",
+        authorization: `Bearer ${token}`,
+        ...additionalHeaders,
+      },
+    };
+  }
 
   async createMerchantAccountPayout(
     reference,
@@ -32,43 +44,43 @@ export class TLPayoutAPI extends RESTDataSource {
 
     const idKey = uuidv4();
 
-    const tlSignature = tlSigning.sign({
-      kid,
-      privateKeyPem,
-      method: "POST",
-      path: "/payouts",
-      headers: {
-        "Idempotency-Key": idKey,
+    const body = {
+      beneficiary: {
+        type: "external_account",
+        account_identifier: account_identifier,
+        reference,
+        account_holder_name,
       },
-      body: JSON.stringify(body),
-    });
+      amount_in_minor,
+      merchant_account_id,
+      currency,
+    };
 
     try {
-      const endpoint = `/payouts`;
-      const headers = {
-        accept: "application/json; charset=UTF-8",
-        authorization: `Bearer ${token}`,
-        "Idempotency-Key": idKey,
-        "Tl-Signature": tlSignature,
-        "content-type": "application/json; charset=UTF-8",
-      };
-      const body = JSON.stringify({
-        beneficiary: {
-          type: "external_account",
-          account_identifier: account_identifier,
-          reference,
-          account_holder_name,
+      const tlSignature = tlSigning.sign({
+        kid,
+        privateKeyPem,
+        method: "POST",
+        path: "/payouts",
+        headers: {
+          "Idempotency-Key": idKey,
         },
-        amount_in_minor,
-        merchant_account_id,
-        currency,
+        body: JSON.stringify(body),
       });
-      const data = {
-        headers: headers,
-        body: body,
+
+      const options = {
+        method: "POST",
+        headers: {
+          accept: "application/json; charset=UTF-8",
+          authorization: `Bearer ${token}`,
+          "Idempotency-Key": idKey,
+          "Tl-Signature": tlSignature,
+          "content-type": "application/json; charset=UTF-8",
+        },
+        body,
       };
 
-      return await handleAPIRequest(this, endpoint, token, "POST", data);
+      return await this.post(`/payouts`, options);
     } catch (error) {
       console.error(`Error: ${error.message}`);
       throw error;
@@ -77,8 +89,8 @@ export class TLPayoutAPI extends RESTDataSource {
 
   async getPayoutDetail(id, token) {
     try {
-      const endpoint = `/payouts/${id}`;
-      return await handleAPIRequest(this, endpoint, token);
+      const options = this.getOptions(token);
+      return this.get(`/payouts/${id}`, options);
     } catch (error) {
       console.error(`Error: ${error.message}`);
       throw error;

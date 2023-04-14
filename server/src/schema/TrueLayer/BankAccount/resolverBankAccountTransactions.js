@@ -4,13 +4,12 @@ const bankAccountTransactions = async (
   { id, fromDate, toDate },
   { token, dataSources }
 ) => {
-  const responseData =
-    await dataSources.trueLayerAPI.getBankAccountTransactions(
-      id,
-      token,
-      fromDate,
-      toDate
-    );
+  const responseData = await dataSources.tlDataAPI.getBankAccountTransactions(
+    id,
+    token,
+    fromDate,
+    toDate
+  );
 
   //Convert received data to schema array of transaction objects
   const transactions = responseData.results.map((transaction) => transaction);
@@ -25,7 +24,7 @@ const bankAccountPendingTransactions = async (
   { token, dataSources }
 ) => {
   const responseData =
-    await dataSources.trueLayerAPI.getBankAccountPendingTransactions(id, token);
+    await dataSources.tlDataAPI.getBankAccountPendingTransactions(id, token);
 
   const pendingTransactions = responseData.results.map(
     (transaction) => transaction

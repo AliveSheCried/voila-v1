@@ -1,5 +1,4 @@
 import { RESTDataSource } from "@apollo/datasource-rest";
-import { handleAPIRequest } from "../../helpers/handleAPIRequest.js";
 
 export class TLDataAPI extends RESTDataSource {
   constructor() {
@@ -15,10 +14,22 @@ export class TLDataAPI extends RESTDataSource {
   *************************  
   */
 
+  //Common options function
+  getOptions(token, additionalHeaders = {}) {
+    return {
+      method: "GET",
+      headers: {
+        accept: "application/json; charset=UTF-8",
+        authorization: `Bearer ${token}`,
+        ...additionalHeaders,
+      },
+    };
+  }
+
   async getBankAccounts(token) {
     try {
-      const endpoint = `/data/v1/accounts`;
-      return await handleAPIRequest(this, endpoint, token);
+      const options = this.getOptions(token);
+      return await this.get("/data/v1/accounts", options);
     } catch (error) {
       console.error(`Error: ${error.message}`);
       throw error;
@@ -27,8 +38,8 @@ export class TLDataAPI extends RESTDataSource {
 
   async getBankAccount(id, token) {
     try {
-      const endpoint = `/data/v1/accounts/${id}`;
-      return await handleAPIRequest(this, endpoint, token);
+      const options = this.getOptions(token);
+      return await this.get(`/data/v1/accounts/${id}`, options);
     } catch (error) {
       console.error(`Error: ${error.message}`);
       throw error;
@@ -37,8 +48,8 @@ export class TLDataAPI extends RESTDataSource {
 
   async getBankAccountBalance(id, token) {
     try {
-      const endpoint = `/data/v1/accounts/${id}/balance`;
-      return await handleAPIRequest(this, endpoint, token);
+      const options = this.getOptions(token);
+      return await this.get(`/data/v1/accounts/${id}/balance`, options);
     } catch (error) {
       console.error(`Error: ${error.message}`);
       throw error;
@@ -47,8 +58,11 @@ export class TLDataAPI extends RESTDataSource {
 
   async getBankAccountTransactions(id, token, fromDate, toDate) {
     try {
-      const endpoint = `/data/v1/accounts/${id}/transactions?from=${fromDate}&to=${toDate}`;
-      return await handleAPIRequest(this, endpoint, token);
+      const options = this.getOptions(token);
+      return await this.get(
+        `/data/v1/accounts/${id}/transactions?to=${toDate}&from=${fromDate}`,
+        options
+      );
     } catch (error) {
       console.error(`Error: ${error.message}`);
       throw error;
@@ -57,8 +71,11 @@ export class TLDataAPI extends RESTDataSource {
 
   async getBankAccountPendingTransactions(id, token) {
     try {
-      const endpoint = `/data/v1/accounts/${id}/transactions/pending`;
-      return await handleAPIRequest(this, endpoint, token);
+      const options = this.getOptions(token);
+      return await this.get(
+        `/data/v1/accounts/${id}/transactions/pending`,
+        options
+      );
     } catch (error) {
       console.error(`Error: ${error.message}`);
       throw error;
@@ -67,8 +84,8 @@ export class TLDataAPI extends RESTDataSource {
 
   async getBankAccountDirectDebits(id, token) {
     try {
-      const endpoint = `/data/v1/accounts/${id}/direct_debits`;
-      return await handleAPIRequest(this, endpoint, token);
+      const options = this.getOptions(token);
+      return await this.get(`/data/v1/accounts/${id}/direct_debits`, options);
     } catch (error) {
       console.error(`Error: ${error.message}`);
       throw error;
@@ -77,8 +94,8 @@ export class TLDataAPI extends RESTDataSource {
 
   async getBankAccountStandingOrders(id, token) {
     try {
-      const endpoint = `/data/v1/accounts/${id}/standing_orders`;
-      return await handleAPIRequest(this, endpoint, token);
+      const options = this.getOptions(token);
+      return await this.get(`/data/v1/accounts/${id}/standing_orders`, options);
     } catch (error) {
       console.error(`Error: ${error.message}`);
       throw error;

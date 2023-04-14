@@ -6,7 +6,7 @@ Bank account meta data related queries
 
 // Retrieve account balance
 const bankAccountBalance = async (_, { id }, { token, dataSources }) => {
-  const responseData = await dataSources.trueLayerAPI.getBankAccountBalance(
+  const responseData = await dataSources.tlDataAPI.getBankAccountBalance(
     id,
     token
   );
@@ -16,8 +16,10 @@ const bankAccountBalance = async (_, { id }, { token, dataSources }) => {
 
 // Retrieve account direct debits
 const bankAccountDirectDebits = async (_, { id }, { token, dataSources }) => {
-  const responseData =
-    await dataSources.trueLayerAPI.getBankAccountDirectDebits(id, token);
+  const responseData = await dataSources.tlDataAPI.getBankAccountDirectDebits(
+    id,
+    token
+  );
 
   const directDebits = responseData.results.map((directDebit) => directDebit);
 
@@ -26,8 +28,10 @@ const bankAccountDirectDebits = async (_, { id }, { token, dataSources }) => {
 
 // Retrieve account standing orders
 const bankAccountStandingOrders = async (_, { id }, { token, dataSources }) => {
-  const responseData =
-    await dataSources.trueLayerAPI.getBankAccountStandingOrders(id, token);
+  const responseData = await dataSources.tlDataAPI.getBankAccountStandingOrders(
+    id,
+    token
+  );
 
   const standingOrders = responseData.results.map(
     (standingOrders) => standingOrders
