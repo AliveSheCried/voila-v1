@@ -1,4 +1,5 @@
 import { RESTDataSource } from "@apollo/datasource-rest";
+import { handleAPIRequest } from "../../helpers/handleAPIRequest.js";
 
 export class TLMerchantAccountAPI extends RESTDataSource {
   constructor() {
@@ -13,27 +14,9 @@ export class TLMerchantAccountAPI extends RESTDataSource {
   *************************  
   */
 
-  // Common options function
-  getOptions(token, additionalHeaders = {}) {
-    return {
-      method: "GET",
-      headers: {
-        accept: "application/json; charset=UTF-8",
-        authorization: `Bearer ${token}`,
-        ...additionalHeaders,
-      },
-    };
-  }
-
   //get all merchant accounts
   async getMerchantAccounts(token) {
-    try {
-      const options = this.getOptions(token);
-      return await this.get(`/merchant-accounts`, options);
-    } catch (error) {
-      console.error(`Error: ${error.message}`);
-      throw error;
-    }
+    return await handleAPIRequest("/merchant-accounts", token);
   }
 
   //get merchant account by id

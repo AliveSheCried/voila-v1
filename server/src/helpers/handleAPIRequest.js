@@ -1,48 +1,28 @@
-//handle GET & POST requests function
+import fetch from "node-fetch";
+
 export async function handleAPIRequest(
-  dataSource,
   endpoint,
-  token = null,
-  method = "GET",
-  data = null
+  token,
+  additionalHeaders = {}
 ) {
-  console.log(endpoint);
-  // Common options function
-  const getOptions = (token) => {
-    return {
-      method: method,
+  try {
+    const options = {
+      method: "GET",
       headers: {
         accept: "application/json; charset=UTF-8",
         authorization: `Bearer ${token}`,
+        ...additionalHeaders,
       },
     };
-  };
-
-  const options = getOptions(token);
-
-  if (method === "POST" && data) {
-    options.method = "POST";
-    options.headers = {
-      ...options.headers,
-      ...data.headers,
-    };
-    options.body = data.body;
+    const response = await fetch(
+      `https://api.truelayer-sandbox.com/${endpoint}`,
+      options
+    );
+    const responseData = await response.json();
+    console.log(responseData);
+    return responseData;
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+    throw error;
   }
-
-  console.log(endpoint, options);
-
-  const response = await dataSource.fetch(endpoint, options);
-
-  if (!response.ok) {
-    let message = `Error making ${method} request to ${endpoint}: ${response.status}`;
-
-    try {
-      const error = await response.json();
-      message += ` - ${error.error_description}`;
-    } catch (error) {}
-
-    throw new Error(message);
-  }
-
-  return response.json();
 }

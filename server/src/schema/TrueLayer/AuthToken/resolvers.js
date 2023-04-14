@@ -4,7 +4,7 @@ const mutations = {
     { scope, grant_type, redirect_uri, code },
     { dataSources }
   ) => {
-    const responseData = await dataSources.trueLayerAuthAPI.generateAccessToken(
+    const responseData = await dataSources.tlAccessTokenAPI.generateAccessToken(
       scope,
       grant_type,
       redirect_uri,
