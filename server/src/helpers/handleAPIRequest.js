@@ -1,5 +1,3 @@
-import fetch from "node-fetch";
-
 export async function handleAPIRequest(
   endpoint,
   token,
@@ -14,10 +12,12 @@ export async function handleAPIRequest(
         ...additionalHeaders,
       },
     };
-    const response = await fetch(
-      `https://api.truelayer-sandbox.com/${endpoint}`,
-      options
-    );
+    // const response = await fetch(
+    //   `https://api.truelayer-sandbox.com/${endpoint}`,
+    //   options
+    // );
+
+    const response = await dataSource.fetch(endpoint, options);
     const responseData = await response.json();
     console.log(responseData);
     return responseData;
