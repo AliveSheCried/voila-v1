@@ -1,4 +1,5 @@
 import { RESTDataSource } from "@apollo/datasource-rest";
+import { handleAPIRequest } from "../../helpers/handleAPIRequest.js";
 
 export class TLDataAPI extends RESTDataSource {
   constructor() {
@@ -14,91 +15,51 @@ export class TLDataAPI extends RESTDataSource {
   *************************  
   */
 
-  //Common options function
-  getOptions(token, additionalHeaders = {}) {
-    return {
-      method: "GET",
-      headers: {
-        accept: "application/json; charset=UTF-8",
-        authorization: `Bearer ${token}`,
-        ...additionalHeaders,
-      },
-    };
-  }
-
   async getBankAccounts(token) {
-    try {
-      const options = this.getOptions(token);
-      return await this.get("/data/v1/accounts", options);
-    } catch (error) {
-      console.error(`Error: ${error.message}`);
-      throw error;
-    }
+    return await handleAPIRequest(this, `/data/v1/accounts`, token);
   }
 
   async getBankAccount(id, token) {
-    try {
-      const options = this.getOptions(token);
-      return await this.get(`/data/v1/accounts/${id}`, options);
-    } catch (error) {
-      console.error(`Error: ${error.message}`);
-      throw error;
-    }
+    return await handleAPIRequest(this, `/data/v1/accounts/${id}`, token);
   }
 
   async getBankAccountBalance(id, token) {
-    try {
-      const options = this.getOptions(token);
-      return await this.get(`/data/v1/accounts/${id}/balance`, options);
-    } catch (error) {
-      console.error(`Error: ${error.message}`);
-      throw error;
-    }
+    return await handleAPIRequest(
+      this,
+      `/data/v1/accounts/${id}/balance`,
+      token
+    );
   }
 
   async getBankAccountTransactions(id, token, fromDate, toDate) {
-    try {
-      const options = this.getOptions(token);
-      return await this.get(
-        `/data/v1/accounts/${id}/transactions?to=${toDate}&from=${fromDate}`,
-        options
-      );
-    } catch (error) {
-      console.error(`Error: ${error.message}`);
-      throw error;
-    }
+    return await handleAPIRequest(
+      this,
+      `/data/v1/accounts/${id}/transactions?to=${toDate}&from=${fromDate}`,
+      token
+    );
   }
 
   async getBankAccountPendingTransactions(id, token) {
-    try {
-      const options = this.getOptions(token);
-      return await this.get(
-        `/data/v1/accounts/${id}/transactions/pending`,
-        options
-      );
-    } catch (error) {
-      console.error(`Error: ${error.message}`);
-      throw error;
-    }
+    return await handleAPIRequest(
+      this,
+      `/data/v1/accounts/${id}/transactions/pending`,
+      token
+    );
   }
 
   async getBankAccountDirectDebits(id, token) {
-    try {
-      const options = this.getOptions(token);
-      return await this.get(`/data/v1/accounts/${id}/direct_debits`, options);
-    } catch (error) {
-      console.error(`Error: ${error.message}`);
-      throw error;
-    }
+    return await handleAPIRequest(
+      this,
+      `/data/v1/accounts/${id}/direct_debits`,
+      token
+    );
   }
 
   async getBankAccountStandingOrders(id, token) {
-    try {
-      const options = this.getOptions(token);
-      return await this.get(`/data/v1/accounts/${id}/standing_orders`, options);
-    } catch (error) {
-      console.error(`Error: ${error.message}`);
-      throw error;
-    }
+    return await handleAPIRequest(
+      this,
+      `/data/v1/accounts/${id}/standing_orders`,
+      token
+    );
   }
 }

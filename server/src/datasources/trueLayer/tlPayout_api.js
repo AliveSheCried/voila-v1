@@ -17,18 +17,6 @@ export class TLPayoutAPI extends RESTDataSource {
   *************************  
   */
 
-  //Common options function
-  getOptions(token, additionalHeaders = {}) {
-    return {
-      method: "GET",
-      headers: {
-        accept: "application/json; charset=UTF-8",
-        authorization: `Bearer ${token}`,
-        ...additionalHeaders,
-      },
-    };
-  }
-
   async createMerchantAccountPayout(
     reference,
     account_holder_name,
@@ -75,14 +63,10 @@ export class TLPayoutAPI extends RESTDataSource {
       "content-type": "application/json; charset=UTF-8",
     };
 
-    return await handleAPIRequest(
-      this,
-      `/payouts`,
-      token,
-      "POST",
-      options,
-      body
-    );
+    return await handleAPIRequest(this, `/payouts`, token, "POST", {
+      ...options,
+      body,
+    });
   }
 
   async getPayoutDetail(id, token) {
