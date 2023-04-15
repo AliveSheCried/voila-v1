@@ -1,26 +1,30 @@
 export async function handleAPIRequest(
+  dataSource,
   endpoint,
   token,
-  additionalHeaders = {}
+  method = "GET",
+  additionalHeaders = {},
+  body = {}
 ) {
+  console.log(body);
   try {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json; charset=UTF-8",
-        authorization: `Bearer ${token}`,
-        ...additionalHeaders,
-      },
+    const headers = {
+      accept: "application/json; charset=UTF-8",
+      ...additionalHeaders,
+      authorization: `Bearer ${token}`,
     };
-    // const response = await fetch(
-    //   `https://api.truelayer-sandbox.com/${endpoint}`,
-    //   options
-    // );
+
+    const options = {
+      method: method,
+      headers: headers,
+      body: JSON.stringify(body),
+    };
+
+    console.log(endpoint, options);
 
     const response = await dataSource.fetch(endpoint, options);
-    const responseData = await response.json();
-    console.log(responseData);
-    return responseData;
+
+    return response;
   } catch (error) {
     console.error(`Error: ${error.message}`);
     throw error;

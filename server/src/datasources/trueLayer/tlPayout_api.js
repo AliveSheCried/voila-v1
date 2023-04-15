@@ -1,6 +1,8 @@
 import { RESTDataSource } from "@apollo/datasource-rest";
 import tlSigning from "truelayer-signing";
 import { v4 as uuidv4 } from "uuid";
+import { handleAPIRequest } from "../../helpers/handleAPIRequest.js";
+
 export class TLPayoutAPI extends RESTDataSource {
   constructor() {
     super();
@@ -56,44 +58,34 @@ export class TLPayoutAPI extends RESTDataSource {
       currency,
     };
 
-    try {
-      const tlSignature = tlSigning.sign({
-        kid,
-        privateKeyPem,
-        method: "POST",
-        path: "/payouts",
-        headers: {
-          "Idempotency-Key": idKey,
-        },
-        body: JSON.stringify(body),
-      });
+    const tlSignature = tlSigning.sign({
+      kid,
+      privateKeyPem,
+      method: "POST",
+      path: "/payouts",
+      headers: {
+        "Idempotency-Key": idKey,
+      },
+      body: JSON.stringify(body),
+    });
 
-      const options = {
-        method: "POST",
-        headers: {
-          accept: "application/json; charset=UTF-8",
-          authorization: `Bearer ${token}`,
-          "Idempotency-Key": idKey,
-          "Tl-Signature": tlSignature,
-          "content-type": "application/json; charset=UTF-8",
-        },
-        body,
-      };
+    const options = {
+      "Idempotency-Key": idKey,
+      "Tl-Signature": tlSignature,
+      "content-type": "application/json; charset=UTF-8",
+    };
 
-      return await this.post(`/payouts`, options);
-    } catch (error) {
-      console.error(`Error: ${error.message}`);
-      throw error;
-    }
+    return await handleAPIRequest(
+      this,
+      `/payouts`,
+      token,
+      "POST",
+      options,
+      body
+    );
   }
 
   async getPayoutDetail(id, token) {
-    try {
-      const options = this.getOptions(token);
-      return this.get(`/payouts/${id}`, options);
-    } catch (error) {
-      console.error(`Error: ${error.message}`);
-      throw error;
-    }
+    return await handleAPIRequest(this, `/payouts/${id}`, token);
   }
 }

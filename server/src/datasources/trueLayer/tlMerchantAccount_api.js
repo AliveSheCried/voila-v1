@@ -16,31 +16,20 @@ export class TLMerchantAccountAPI extends RESTDataSource {
 
   //get all merchant accounts
   async getMerchantAccounts(token) {
-    return await handleAPIRequest("/merchant-accounts", token);
+    return await handleAPIRequest(this, "/merchant-accounts", token);
   }
 
   //get merchant account by id
   async getMerchantAccount(id, token) {
-    try {
-      const options = this.getOptions(token);
-      return await this.get(`/merchant-accounts/${id}`, options);
-    } catch (error) {
-      console.error(`Error: ${error.message}`);
-      throw error;
-    }
+    return await handleAPIRequest(this, `/merchant-accounts/${id}`, token);
   }
 
   //get merchant account transactions for specified date range and account id
   async getMerchantAccountTransactions(id, token, fromDate, toDate) {
-    try {
-      const options = this.getOptions(token);
-      return await this.get(
-        `merchant-accounts/${id}/transactions?from=${fromDate}&to=${toDate}`,
-        options
-      );
-    } catch (error) {
-      console.error(`Error: ${error.message}`);
-      throw error;
-    }
+    return await handleAPIRequest(
+      this,
+      `merchant-accounts/${id}/transactions?from=${fromDate}&to=${toDate}`,
+      token
+    );
   }
 }
