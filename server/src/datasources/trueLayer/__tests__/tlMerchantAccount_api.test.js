@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { TLMerchantAccountAPI } from "./tlMerchantAccount_api";
+import { TLMerchantAccountAPI } from "../tlMerchantAccount_api.js";
 
 const mock = new MockAdapter(axios);
 

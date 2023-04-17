@@ -1,10 +1,12 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { TLPayoutAPI } from "./tlPayout_api";
+import { TLPayoutAPI } from "../tlPayout_api.js";
 
 const mock = new MockAdapter(axios);
 
 describe("TLPayoutAPI", () => {
+  jest.mock("truelayer-signing"); // Mock the signing module
+
   const tlPayoutAPI = new TLPayoutAPI();
   const token = "test-token";
   const baseURL = "https://api.truelayer-sandbox.com";
