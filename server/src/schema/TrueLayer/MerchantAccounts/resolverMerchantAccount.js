@@ -1,69 +1,36 @@
 ///////Prisma
 import { PrismaClient } from "@prisma/client";
+import { mapMerchantAccountData } from "../../../helpers/tl/resolverHelpers/merchantAccounts/merchantAccounts.js";
 const prisma = new PrismaClient();
 
 //get individual merchant account detail using ID
 const merchantAccount = async (_, { id }, { token, dataSources }) => {
-  /*
-  Temporary comment out of database elements while I test the data source.
-
-  //check database for merchant account
-  const merchantAccountDb = await prisma.accounts.findUnique({
-    where: { id: id },
-  });
-
-  //if merchant account exists in database, return it
-  if (merchantAccountDb) {
-    return merchantAccountDb;
-  }
-  */
-
-  //get merchant account from TrueLayer
-  const responseData =
-    await dataSources.tlMerchantAccountAPI.getMerchantAccount(id, token);
-
-  /*
-  Temporary comment out of database elements while I test the data source.
-  //Convert received date to schema object
-  const merchantAccount = {
-    id: responseData.id,
-    //temp value - no idea how to get an ID from a separate table while creating the data object.
-    asset_id: "fa658832-ee6c-478b-a7d1-0967f399b50a",
-    account_type: "TL_MA",
-    currency: responseData.currency,
-    display_name: responseData.account_holder_name,
-    account_number:
-      responseData.account_identifiers.find(
-        (item) => item.type === "sort_code_account_number"
-      )?.account_number || null,
-    iban:
-      responseData.account_identifiers.find((item) => item.type === "iban")
-        ?.iban || null,
-    //temp value; merchant account data structure doesn't include
-    swift: null,
-    //temp value; at present only caters for UK account types
-    branch_number:
-      responseData.account_identifiers.find(
-        (item) => item.type === "sort_code_account_number"
-      )?.sort_code || null,
-    //temp value; as above.
-    bank_id: "f9980c7a-bc02-4f7e-9b7e-7e9a0ef569b3",
-  };
-  // console.log(merchantAccount);
-
-  //create merchant account in database
+  //try catch block to handle errors
   try {
-    await prisma.accounts.create({
-      data: merchantAccount,
-    });
-  } catch (error) {
-    // handle the error here, for example:
-    throw new Error("Could not create merchant account", error);
-  }
-  */
+    //get updated merchant account data from TrueLayer
+    const responseData =
+      await dataSources.tlMerchantAccountAPI.getMerchantAccount(id, token);
 
-  //In this instance, responseData is the shape required by the schema.
-  return responseData;
+    console.log(responseData);
+
+    // Map the merchant account data to the database schema using the helper function
+    const { accountData } = mapMerchantAccountData(responseData);
+
+    // Upsert the account record
+    const updatedMerchantAccount = await prisma.accounts.update({
+      where: { account_id: id },
+      data: {
+        available_balance_in_minor: accountData.available_balance_in_minor,
+        current_balance_in_minor: accountData.current_balance_in_minor,
+      },
+      //create: accountData,
+      include: { account_identifiers: true },
+    });
+
+    return updatedMerchantAccount;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export default { merchantAccount };

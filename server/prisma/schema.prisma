@@ -118,37 +118,40 @@ model transactions {
 
 //beneficiaries table linked to transactions table where a beneficiary can have multiple transactions
 model beneficiaries {
-  id                   String                 @id @unique
-  type                 String                 @db.VarChar(30)
-  account_holder_name  String
-  transactions         transactions[]
-  accounts_identifiers accounts_identifiers[]
+  id                  String         @id @unique
+  type                String         @db.VarChar(30)
+  account_holder_name String
+  transactions        transactions[]
+  // account_identifiers account_identifiers[]
 }
 
 //accounts indentifiers table linked to beneficiaries table where a beneficiary can have multiple accounts; also linked to payment sources table
-model accounts_identifiers {
-  id                String          @id @default(uuid())
-  type              String          @db.VarChar(30)
+model account_identifiers {
+  id                String    @id @default(uuid())
+  parent_account_id String    @unique
+  type              String    @db.VarChar(30)
   account_number    String?
-  iban              String?         @db.VarChar(34)
-  swift             String?         @db.VarChar(11)
-  branch_number     String?         @db.VarChar(30)
-  created_at        DateTime        @default(now())
-  updated_at        DateTime        @updatedAt
-  beneficiary_id    String
-  payment_source_id String
-  beneficiaries     beneficiaries   @relation(fields: [beneficiary_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  payment_sources   payment_sources @relation(fields: [payment_source_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  iban              String?   @db.VarChar(34)
+  swift             String?   @db.VarChar(11)
+  branch_number     String?   @db.VarChar(30)
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @updatedAt
+  accounts          accounts? @relation(fields: [parent_account_id], references: [id])
+  //beneficiary_id    String
+  //payment_source_id String
+
+  //beneficiaries     beneficiaries   @relation(fields: [beneficiary_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  //payment_sources   payment_sources @relation(fields: [payment_source_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 //payment sources table linked to accounts identifiers table where an account identifier can have  1 payment source;
 model payment_sources {
-  id                   String                 @id @default(uuid())
-  account_holder_name  String
-  created_at           DateTime               @default(now())
-  updated_at           DateTime               @updatedAt
-  accounts_identifiers accounts_identifiers[]
-  transactions         transactions[]
+  id                  String         @id @default(uuid())
+  account_holder_name String
+  created_at          DateTime       @default(now())
+  updated_at          DateTime       @updatedAt
+  //account_identifiers account_identifiers[]
+  transactions        transactions[]
 }
 
 //remitter table linked to transactions table where a remitter can have multiple transactions
@@ -160,22 +163,20 @@ model remitters {
 
 //accounts table linked to assets table where an asset can have multiple accounts
 model accounts {
-  id             String    @id @unique
-  account_id     String    @unique
-  asset_id       String
-  account_type   String    @db.VarChar(30)
-  display_name   String
-  description    String?
-  currency       String    @db.VarChar(3)
-  account_number String?
-  iban           String?   @db.VarChar(34)
-  swift          String?   @db.VarChar(11)
-  branch_number  String?   @db.VarChar(30)
-  created_at     DateTime  @default(now())
-  updated_at     DateTime  @updatedAt
-  provider_id    String
-  assets         assets    @relation(fields: [asset_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  providers      providers @relation(fields: [provider_id], references: [provider_id], onDelete: NoAction, onUpdate: NoAction)
+  id                         String               @id @unique
+  account_id                 String               @unique
+  asset_id                   String
+  display_name               String
+  description                String?
+  currency                   String               @db.VarChar(3)
+  available_balance_in_minor Decimal              @default(0) @db.Decimal(15, 6)
+  current_balance_in_minor   Decimal              @default(0) @db.Decimal(15, 6)
+  created_at                 DateTime             @default(now())
+  updated_at                 DateTime             @updatedAt
+  provider_id                String
+  assets                     assets               @relation(fields: [asset_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  providers                  providers            @relation(fields: [provider_id], references: [provider_id], onDelete: NoAction, onUpdate: NoAction)
+  account_identifiers        account_identifiers?
 }
 
 //providers table linked to accounts table where an account can only belong to one bank; also linked to tokens table where a token can only belong to one bank
