@@ -128,7 +128,7 @@ model beneficiaries {
 //accounts indentifiers table linked to beneficiaries table where a beneficiary can have multiple accounts; also linked to payment sources table
 model account_identifiers {
   id                String    @id @default(uuid())
-  parent_account_id String    @unique
+  parent_account_id String
   type              String    @db.VarChar(30)
   account_number    String?
   iban              String?   @db.VarChar(34)
@@ -142,6 +142,8 @@ model account_identifiers {
 
   //beneficiaries     beneficiaries   @relation(fields: [beneficiary_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   //payment_sources   payment_sources @relation(fields: [payment_source_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([parent_account_id, type], name: "account_identifiers_unique_constraint")
 }
 
 //payment sources table linked to accounts identifiers table where an account identifier can have  1 payment source;
@@ -163,20 +165,20 @@ model remitters {
 
 //accounts table linked to assets table where an asset can have multiple accounts
 model accounts {
-  id                         String               @id @unique
-  account_id                 String               @unique
+  id                         String                @id @unique
+  account_id                 String                @unique
   asset_id                   String
   display_name               String
   description                String?
-  currency                   String               @db.VarChar(3)
-  available_balance_in_minor Decimal              @default(0) @db.Decimal(15, 6)
-  current_balance_in_minor   Decimal              @default(0) @db.Decimal(15, 6)
-  created_at                 DateTime             @default(now())
-  updated_at                 DateTime             @updatedAt
+  currency                   String                @db.VarChar(3)
+  available_balance_in_minor Decimal               @default(0) @db.Decimal(15, 6)
+  current_balance_in_minor   Decimal               @default(0) @db.Decimal(15, 6)
+  created_at                 DateTime              @default(now())
+  updated_at                 DateTime              @updatedAt
   provider_id                String
-  assets                     assets               @relation(fields: [asset_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  providers                  providers            @relation(fields: [provider_id], references: [provider_id], onDelete: NoAction, onUpdate: NoAction)
-  account_identifiers        account_identifiers?
+  assets                     assets                @relation(fields: [asset_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  providers                  providers             @relation(fields: [provider_id], references: [provider_id], onDelete: NoAction, onUpdate: NoAction)
+  account_identifiers        account_identifiers[]
 }
 
 //providers table linked to accounts table where an account can only belong to one bank; also linked to tokens table where a token can only belong to one bank

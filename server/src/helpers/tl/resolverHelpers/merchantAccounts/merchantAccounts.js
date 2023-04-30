@@ -1,24 +1,34 @@
 import { v4 as uuid_v4 } from "uuid";
 
-export function mapMerchantAccountData(apiData) {
-  const accountId = uuid_v4();
+export function mapMerchantAccountData(
+  apiData,
+  createNewIds = true,
+  existingAccountIdentifiers = []
+) {
+  const existingAccountIdentifier =
+    existingAccountIdentifiers.length > 0
+      ? existingAccountIdentifiers[0]
+      : null;
+  const accountId = createNewIds
+    ? uuid_v4()
+    : existingAccountIdentifier?.parent_account_id;
+
+  const sortCodeAccountNumberIdentifier = apiData.account_identifiers.find(
+    (item) => item.type === "sort_code_account_number"
+  );
+
+  const ibanIdentifier = apiData.account_identifiers.find(
+    (item) => item.type === "iban"
+  );
 
   const accountIdentifierData = {
-    id: uuid_v4(),
+    id: createNewIds ? uuid_v4() : existingAccountIdentifier?.id || null,
     parent_account_id: accountId,
-    type: "sort_code_account_number",
-    account_number:
-      apiData.account_identifiers.find(
-        (item) => item.type === "sort_code_account_number"
-      )?.account_number || null,
-    iban:
-      apiData.account_identifiers.find((item) => item.type === "iban")?.iban ||
-      null,
+    type: sortCodeAccountNumberIdentifier?.type || ibanIdentifier?.type,
+    account_number: sortCodeAccountNumberIdentifier?.account_number || null,
+    iban: ibanIdentifier?.iban || null,
     swift: null,
-    branch_number:
-      apiData.account_identifiers.find(
-        (item) => item.type === "sort_code_account_number"
-      )?.sort_code || null,
+    branch_number: sortCodeAccountNumberIdentifier?.sort_code || null,
   };
 
   const accountData = {

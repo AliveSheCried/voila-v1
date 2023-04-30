@@ -16,7 +16,7 @@ const types = `
   type MerchantAccount {
     id: ID!
     currency: String!
-    account_identifiers: AccountIdentifier
+    account_identifiers: [AccountIdentifier]
     available_balance_in_minor: String
     current_balance_in_minor: String
     account_holder_name: String
