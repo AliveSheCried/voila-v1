@@ -92,37 +92,28 @@ model assets {
 
 //transactions table linked to assets table where an asset can have multiple transactions
 model transactions {
-  id                String          @id @unique
+  id                String           @id @unique
   asset_id          String
-  transaction_id    String          @unique
-  currency          String          @db.VarChar(3)
-  amount_in_minor   Decimal         @db.Decimal(15, 6)
-  status            String          @db.VarChar(30)
-  created_at        DateTime        @db.Date
-  executed_at       DateTime?       @db.Date
-  settled_at        DateTime?       @db.Date
-  transaction_type  String          @db.VarChar(30)
+  transaction_id    String           @unique //ID of the transaction received into the beneficiary merchant account.
+  currency          String           @db.VarChar(3)
+  amount_in_minor   Decimal          @db.Decimal(15, 6)
+  status            String           @db.VarChar(30)
+  created_at        DateTime         @db.Date
+  executed_at       DateTime?        @db.Date
+  settled_at        DateTime?        @db.Date
+  transaction_type  String           @db.VarChar(30)
   reference         String?
   context_code      String?
-  payout_id         String?
-  payment_id        String?
-  beneficiary_id    String
-  payment_source_id String
+  payout_id         String? //Identical to transaction_id.
+  payment_id        String? //ID of the payment that TrueLayer initiates with the remitter bank.
+  beneficiary_id    String?
+  payment_source_id String?
   remitter_id       String?
-  beneficiary       beneficiaries   @relation(fields: [beneficiary_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  payment_sources   payment_sources @relation(fields: [payment_source_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  assets            assets          @relation(fields: [asset_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  remitters         remitters?      @relation(fields: [remitter_id], references: [id])
+  beneficiary       beneficiaries?   @relation(fields: [beneficiary_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  payment_sources   payment_sources? @relation(fields: [payment_source_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  assets            assets           @relation(fields: [asset_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  remitters         remitters?       @relation(fields: [remitter_id], references: [id])
   remitterId        String?
-}
-
-//beneficiaries table linked to transactions table where a beneficiary can have multiple transactions
-model beneficiaries {
-  id                  String         @id @unique
-  type                String         @db.VarChar(30)
-  account_holder_name String
-  transactions        transactions[]
-  // account_identifiers account_identifiers[]
 }
 
 //accounts indentifiers table linked to beneficiaries table where a beneficiary can have multiple accounts; also linked to payment sources table
@@ -137,30 +128,42 @@ model account_identifiers {
   created_at        DateTime  @default(now())
   updated_at        DateTime  @updatedAt
   accounts          accounts? @relation(fields: [parent_account_id], references: [id])
-  //beneficiary_id    String
-  //payment_source_id String
+  beneficiary_id    String?
+  payment_source_id String?
+  remitter_id       String?
 
-  //beneficiaries     beneficiaries   @relation(fields: [beneficiary_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  //payment_sources   payment_sources @relation(fields: [payment_source_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  beneficiaries   beneficiaries?   @relation(fields: [beneficiary_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  payment_sources payment_sources? @relation(fields: [payment_source_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  remitters       remitters?       @relation(fields: [remitter_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@unique([parent_account_id, type], name: "account_identifiers_unique_constraint")
 }
 
+//beneficiaries table linked to transactions table where a beneficiary can have multiple transactions
+model beneficiaries {
+  id                  String                @id @unique
+  type                String                @db.VarChar(30)
+  account_holder_name String
+  transactions        transactions[]
+  account_identifiers account_identifiers[]
+}
+
 //payment sources table linked to accounts identifiers table where an account identifier can have  1 payment source;
 model payment_sources {
-  id                  String         @id @default(uuid())
+  id                  String                @id @default(uuid())
   account_holder_name String
-  created_at          DateTime       @default(now())
-  updated_at          DateTime       @updatedAt
-  //account_identifiers account_identifiers[]
+  created_at          DateTime              @default(now())
+  updated_at          DateTime              @updatedAt
+  account_identifiers account_identifiers[]
   transactions        transactions[]
 }
 
 //remitter table linked to transactions table where a remitter can have multiple transactions
 model remitters {
-  id                  String         @id @default(uuid())
+  id                  String                @id @default(uuid())
   account_holder_name String
   transactions        transactions[]
+  account_identifiers account_identifiers[]
 }
 
 //accounts table linked to assets table where an asset can have multiple accounts

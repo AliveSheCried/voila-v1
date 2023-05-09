@@ -4,6 +4,7 @@ const prisma = new PrismaClient();
 
 // Get all merchant accounts
 const merchantAccounts = async (_, __, { token, dataSources }) => {
+  //try catch block to handle errors
   try {
     const responseData =
       await dataSources.tlMerchantAccountAPI.getMerchantAccounts(token);
@@ -14,7 +15,7 @@ const merchantAccounts = async (_, __, { token, dataSources }) => {
 
     // Iterate through the merchantAccountsClient array
     for (const merchantAccountClient of merchantAccountsClient) {
-      // Map the client data to the data shape required for the database
+      // Map the data to the data shape required for the database
       const { accountData, accountIdentifierData } = mapMerchantAccountData(
         merchantAccountClient
       );
@@ -53,6 +54,12 @@ const merchantAccounts = async (_, __, { token, dataSources }) => {
             branch_number: accountIdentifierData.branch_number,
             accounts: {
               connect: { id: upsertedMerchantAccount.id },
+            },
+            beneficiaries: {
+              connect: { id: accountIdentifierData.beneficiary_id },
+            },
+            payment_sources: {
+              connect: { id: accountIdentifierData.payment_source_id },
             },
           },
         }

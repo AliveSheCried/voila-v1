@@ -7,11 +7,11 @@ const prisma = new PrismaClient();
 const merchantAccount = async (_, { id }, { token, dataSources }) => {
   //try catch block to handle errors
   try {
-    //get updated merchant account data from TrueLayer
+    //get merchant account data for id from TrueLayer
     const responseData =
       await dataSources.tlMerchantAccountAPI.getMerchantAccount(id, token);
 
-    //return the merchant account data using the id
+    //check the datebase for the merchant account
     const account = await prisma.accounts.findUnique({
       where: { account_id: id },
     });
@@ -40,8 +40,6 @@ const merchantAccount = async (_, { id }, { token, dataSources }) => {
         },
       });
 
-      console.log("accountIdentifier", accountIdentifier);
-
       // Update the account_identifiers data
       await prisma.account_identifiers.update({
         where: { id: accountIdentifier.id },
@@ -61,7 +59,6 @@ const merchantAccount = async (_, { id }, { token, dataSources }) => {
         include: { account_identifiers: true },
       });
 
-      console.log("updatedMerchantAccount", updatedMerchantAccount);
       // Map the database fields to the GraphQL fields
       const mappedAccount = {
         ...updatedMerchantAccount,
@@ -74,7 +71,6 @@ const merchantAccount = async (_, { id }, { token, dataSources }) => {
         ),
       };
 
-      console.log("mappedAccount", mappedAccount);
       return mappedAccount;
     } else {
       throw new Error(

@@ -29,6 +29,8 @@ export function mapMerchantAccountData(
     iban: ibanIdentifier?.iban || null,
     swift: null,
     branch_number: sortCodeAccountNumberIdentifier?.sort_code || null,
+    beneficiary_id: "6995f751-2056-4778-bc2f-90323644cde5", //dummy value that represents the internal merchant account
+    payment_source_id: "4d79d101-e402-4520-bd57-570e2264b942", //dummy value that represents the internal merchant account
   };
 
   const accountData = {
