@@ -119,7 +119,7 @@ model transactions {
 //accounts indentifiers table linked to beneficiaries table where a beneficiary can have multiple accounts; also linked to payment sources table
 model account_identifiers {
   id                String    @id @default(uuid())
-  parent_account_id String
+  parent_account_id String?
   type              String    @db.VarChar(30)
   account_number    String?
   iban              String?   @db.VarChar(34)

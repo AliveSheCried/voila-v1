@@ -1,3 +1,4 @@
+import { v4 as uuid_v4 } from "uuid";
 //function to find the account_identifiers key in the transaction - TL returns this element in different places depending on the transaction type
 function findAccountIdentifier(apiData, identifierType) {
   if (!apiData) return;
@@ -20,7 +21,7 @@ function findAccountIdentifier(apiData, identifierType) {
 //Helper function to map transaction data from the API to the structure require to insert into the database
 //Function will need to return transaction data, beneficiary / remitter / payment source data, and account identifier data
 export async function processTransactionData(apiData, id, prisma) {
-  ////////Find internal account id for the merchant account
+  ////////Find internal account id for the merchant account (assumes that merchant account exists in the database)
   const account = await prisma.accounts.findFirst({
     where: {
       account_id: id,
@@ -28,6 +29,7 @@ export async function processTransactionData(apiData, id, prisma) {
   });
 
   const accountId = account.id;
+  console.log("accountId", accountId);
 
   ///////TL API data structure supports sort code and IBAN type account identifiers; functions below determine which is present and return the data
   //Sort code
@@ -56,7 +58,11 @@ export async function processTransactionData(apiData, id, prisma) {
 
   /////Function that checks if beneficiary / remitter / payment source data exists in the database; if yes, use this to update the transaction; if no, create a new record and use this to update the transaction
   //Variables to store the type of account identifier and the id of the existing account identifier type
-  const accountType = apiData.type;
+  const accountType = apiData.beneficiary
+    ? "beneficiary"
+    : apiData.remitter
+    ? "remitter"
+    : "payment_source";
   let beneficiaryId;
   let remitterId;
   let paymentSourceId;
@@ -95,6 +101,8 @@ export async function processTransactionData(apiData, id, prisma) {
         });
         //to be assigned to transactionData
         beneficiaryId = createdBeneficiary.id;
+
+        console.log("beneficiaryId", beneficiaryId);
 
         //update matching row in account_identifiers table to include new beneficiary_id
         await prisma.account_identifiers.update({
@@ -164,12 +172,15 @@ export async function processTransactionData(apiData, id, prisma) {
       });
       //to be assigned to transactionData
       beneficiaryId = createdBeneficiary.id;
+
       //create new row in account_identifiers table
       await prisma.account_identifiers.create({
         data: {
           id: uuid_v4(),
-          parent_account_id: accountId,
-          type: apiData[accountType].account_identifiers.type,
+          // parent_account_id: accountId,
+          type: sortCodeAccountNumberIdentifier
+            ? "sort_code_account_number"
+            : "iban",
           account_number:
             sortCodeAccountNumberIdentifier?.account_number || null,
           branch_number: sortCodeAccountNumberIdentifier?.sort_code || null,
@@ -193,8 +204,8 @@ export async function processTransactionData(apiData, id, prisma) {
       await prisma.account_identifiers.create({
         data: {
           id: uuid_v4(),
-          parent_account_id: accountId,
-          type: apiData[accountType].account_identifiers.type,
+          //   parent_account_id: accountId,
+          type: apiData.remitter.account_identifiers.type,
           account_number:
             sortCodeAccountNumberIdentifier?.account_number || null,
           branch_number: sortCodeAccountNumberIdentifier?.sort_code || null,
@@ -220,8 +231,8 @@ export async function processTransactionData(apiData, id, prisma) {
       await prisma.account_identifiers.create({
         data: {
           id: uuid_v4(),
-          parent_account_id: accountId,
-          type: apiData[accountType].account_identifiers.type,
+          //parent_account_id: accountId,
+          type: apiData.payment_source.account_identifiers.type,
           account_number:
             sortCodeAccountNumberIdentifier?.account_number || null,
           branch_number: sortCodeAccountNumberIdentifier?.sort_code || null,
@@ -246,16 +257,16 @@ export async function processTransactionData(apiData, id, prisma) {
     settled_at: apiData.settled_at || null,
     transaction_type: apiData.type,
     reference:
-      apiData.beneficiary.reference || apiData.remitter.reference || null,
+      apiData.beneficiary?.reference || apiData.remitter?.reference || null,
     context_code: apiData.context_code,
-    payout_id: apiData.payout_id,
-    payment_id: apiData.payment_id,
+    payout_id: apiData.payout_id || null,
+    payment_id: apiData.payment_id || null,
     beneficiary_id: beneficiaryId || null,
     remitter_id: remitterId || null,
     payment_source_id: paymentSourceId || null,
   };
 
-  return {
-    transactionData,
-  };
+  console.log("object to be created in transactions table: ", transactionData);
+
+  return transactionData;
 }
