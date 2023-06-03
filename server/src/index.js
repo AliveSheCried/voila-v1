@@ -5,6 +5,7 @@ import pkg from "body-parser";
 import cors from "cors";
 import express from "express";
 import http from "http";
+import { MongoClient } from "mongodb";
 const { json } = pkg;
 
 //imports not related to Apollo / Express packages
@@ -19,6 +20,30 @@ import resolvers from "./schema/resolvers.js";
 import typeDefs from "./schema/schema.js";
 dotenv.config();
 
+// Create a new MongoClient
+const client = new MongoClient(process.env.MONGO_DB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+async function run() {
+  try {
+    // Connect the client to the server
+    await client.connect();
+
+    // Establish and verify connection
+    await client.db("VoilaDev").command({ ping: 1 });
+    console.log("Connected successfully to server");
+
+    // Make client available globally
+    global.dbClient = client;
+  } catch (err) {
+    console.log(err.stack);
+  }
+}
+
+run().catch(console.dir);
+
 ////imports end
 const app = express();
 const httpServer = http.createServer(app);
@@ -27,8 +52,11 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: ({ req }) => {
+    const { dbClient } = global;
+    const token = req.headers.authorization || "";
     return {
-      token: req.headers.authorization || "",
+      dbClient,
+      token,
     };
   },
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
@@ -68,3 +96,8 @@ console.log(`
   🚀 Server ready 
   📭 Query at http://localhost:4000/graphql
   `);
+
+process.on("SIGINT", async () => {
+  await client.close();
+  process.exit();
+});
