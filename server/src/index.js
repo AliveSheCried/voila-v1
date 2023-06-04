@@ -29,6 +29,7 @@ const client = new MongoClient(process.env.MONGO_DB_URI, {
 async function run() {
   try {
     // Connect the client to the server
+    console.log("object", process.env.MONGO_DB_URI);
     await client.connect();
 
     // Establish and verify connection

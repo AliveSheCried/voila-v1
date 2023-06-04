@@ -1,39 +1,61 @@
-///////Prisma
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
-
 const merchantAccountTransactions = async (
   _,
   { id, fromDate, toDate },
   { token, dataSources }
 ) => {
-  // Decode the fromDate and toDate values
-  // const decodedFromDate = decodeURIComponent(fromDate);
-  // const decodedToDate = decodeURIComponent(toDate);
+  //try catch block to handle errors
+  try {
+    //MongoDB code
+    //confirm connection to mongodb
+    const { dbClient } = global;
+    if (!dbClient) {
+      throw new Error("No database client");
+    }
+    //db variables
+    const myDb = dbClient.db("VoilaDev");
+    const myCollection = myDb.collection("MerchantAccountTransactions");
 
-  //check database for transactions within date range supplied
-  // const transactionsDb = await prisma.transactions.findMany({
-  //   where: { transaction_date: { gte: decodedFromDate, lte: decodedToDate } },
-  // });
+    // Decode the fromDate and toDate values
+    const decodedFromDate = decodeURIComponent(fromDate);
+    const decodedToDate = decodeURIComponent(toDate);
 
-  // If transactions for the requested range are found in the database, return them
-  // if (transactionsDb && transactionsDb.length > 0) {
-  //   return transactionsDb;
-  // }
+    //check if transactions in date range exist in database
+    const transactionsDb = await myCollection
+      .find({
+        created_at: {
+          $gte: decodedFromDate,
+          $lte: decodedToDate,
+        },
+      })
+      .toArray();
 
-  //get transactions from TrueLayer
-  const responseData =
-    await dataSources.tlMerchantAccountAPI.getMerchantAccountTransactions(
-      id,
-      token,
-      fromDate,
-      toDate
-    );
+    //if transactions in date range do exist in database, return them
+    if (transactionsDb.length > 0) {
+      return transactionsDb;
+    }
 
-  //Convert received data to schema array of transaction objects
-  const transactions = responseData.items.map((transaction) => transaction);
+    //if transactions in date range do not exist in database, get them from TrueLayer
+    const responseData =
+      await dataSources.tlMerchantAccountAPI.getMerchantAccountTransactions(
+        id,
+        token,
+        fromDate,
+        toDate
+      );
 
-  return transactions;
+    //Convert received data to schema array of transaction objects
+    const transactions = responseData.items.map((transaction) => transaction);
+
+    //insert transactions into database, logging records inserted
+    const result = await myCollection.insertMany(transactions);
+    console.log(`Inserted ${result.insertedCount} records into the collection`);
+
+    return transactions;
+  } catch (error) {
+    console.log(error);
+    // Throw the error so that it can be caught and handled by Apollo Server
+    throw error;
+  }
 };
 
 export default { merchantAccountTransactions };
