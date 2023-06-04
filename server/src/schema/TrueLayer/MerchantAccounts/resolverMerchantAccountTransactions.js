@@ -43,6 +43,11 @@ const merchantAccountTransactions = async (
         toDate
       );
 
+    //confirm response includes transactions
+    if (!responseData.items) {
+      throw new Error("No transactions for the date range found");
+    }
+
     //Convert received data to schema array of transaction objects
     const transactions = responseData.items.map((transaction) => transaction);
 
