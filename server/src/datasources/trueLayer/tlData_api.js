@@ -32,9 +32,13 @@ export class TLDataAPI extends RESTDataSource {
   }
 
   async getBankAccountTransactions(id, token, fromDate, toDate) {
+    // Decode the fromDate and toDate values
+    const decodedFromDate = decodeURIComponent(fromDate);
+    const decodedToDate = decodeURIComponent(toDate);
+
     return await handleAPIRequest(
       this,
-      `/data/v1/accounts/${id}/transactions?to=${toDate}&from=${fromDate}`,
+      `/data/v1/accounts/${id}/transactions?to=${decodedToDate}&from=${decodedFromDate}`,
       token
     );
   }

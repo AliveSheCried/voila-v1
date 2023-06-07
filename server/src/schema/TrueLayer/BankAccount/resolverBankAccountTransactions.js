@@ -23,12 +23,14 @@ const bankAccountTransactions = async (
     //check if transactions in date range exist in database
     const exTransactionsDb = await myCollection
       .find({
-        created_at: {
+        timestamp: {
           $gte: decodedFromDate,
           $lte: decodedToDate,
         },
       })
       .toArray();
+
+    console.log("object", exTransactionsDb);
 
     //if transactions in date range do exist in database, return them
     if (exTransactionsDb.length > 0) {
