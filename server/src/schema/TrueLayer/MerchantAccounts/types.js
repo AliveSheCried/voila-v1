@@ -73,9 +73,10 @@ const types = `
 
   "Different bank account types - part of the Merchant account data structure"
   type AccountIdentifier {
-    type: String!
+    type: AccountIdentifierType!
     sort_code: String
     account_number: String
+    "IBAN string - Valid International Bank Account Number (no spaces). Consists of a 2 letter country code, followed by 2 check digits, and then by up to 30 alphanumeric characters (also known as the BBAN). pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$"
     iban: String
   }
 
@@ -104,71 +105,15 @@ const types = `
     reference: String
   }
 
+  ###Enums
+
+"Account identifier type enum"
+enum AccountIdentifierType {
+  sort_code_account_number  
+  iban
+}
+
+
 `;
-
-// const types = `
-
-// "Merchant bank account data structure at TrueLayer"
-// type MerchantAccount {
-//   id: ID!
-//   currency: String!
-//   account_identifiers: [AccountIdentifier!]!
-//   available_balance_in_minor: Int!
-//   current_balance_in_minor: Int!
-//   account_holder_name: String!
-// }
-
-// "Different bank account types - part of the Merchant account data structure"
-// type AccountIdentifier {
-//   type: String!
-//   sort_code: String
-//   account_number: String
-//   iban: String
-// }
-
-// "Merchant account transactions data structure at TrueLayer"
-// type Transaction {
-//   type: String!
-//   id: ID!
-//   currency: String!
-//   amount_in_minor: Int!
-//   status: String!
-//   created_at: String
-//   executed_at: String
-//   settled_at: String
-//   beneficiary: Beneficiary
-//   context_code: String
-//   payout_id: String
-//   payment_source: PaymentSource
-//   payment_id: String
-//   remitter: Remitter
-// }
-
-// "Beneficiary sub-type for Payout transaction type"
-// type Beneficiary {
-//   type: String!
-//   account_holder_name: String!
-//   account_identifier: AccountIdentifier!
-//   account_identifiers: [AccountIdentifier!]!
-//   reference: String
-// }
-
-// "PaymentSource sub-type for merchant account payment type"
-// type PaymentSource {
-//   id: ID!
-//   account_holder_name: String!
-//   account_identifiers: [AccountIdentifier!]!
-//   user_id: ID!
-// }
-
-// "Payer sub-type for external payment payment type"
-// type Remitter {
-//   account_holder_name: String!
-//   account_identifier: AccountIdentifier!
-//   account_identifiers: [AccountIdentifier!]!
-//   reference: String
-// }
-
-// `;
 
 export default types;

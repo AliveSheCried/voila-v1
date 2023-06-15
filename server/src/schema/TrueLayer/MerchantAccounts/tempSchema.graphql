@@ -1,0 +1,175 @@
+###Union
+union MerchantAccountTransactions =
+    Payout
+  | MerchantAccountPayment
+  | ExternalPayment
+
+###Interfaces - common fields for all transaction types
+interface Transaction {
+  type: String!
+  id: ID!
+  currency: String!
+  amount_in_minor: Float!
+  status: String!
+}
+
+###Types
+"Merchant bank account data structure at TrueLayer"
+type MerchantAccount {
+  id: ID!
+  currency: String!
+  account_identifiers: [AccountIdentifier]
+  available_balance_in_minor: String
+  current_balance_in_minor: String
+  account_holder_name: String
+}
+
+"Payout type; consists of Transaction interface + fields specific to Payouts"
+type Payout implements Transaction {
+  #Fields from Transaction
+  type: String!
+  id: ID!
+  currency: String!
+  amount_in_minor: Float!
+  status: String! ##New field - String enum
+  #Fields specific to Payouts
+  created_at: String!
+  executed_at: String!
+  beneficiary: Beneficiary!
+  context_code: String!
+  payout_id: ID!
+}
+
+"Merchant account payment type; consists of Transaction interface + fields specific to merchant account payments"
+type MerchantAccountPayment implements Transaction {
+  #Fields from Transaction
+  type: String!
+  id: ID!
+  currency: String!
+  amount_in_minor: Float!
+  status: String!
+
+  #Fields specific to merchant account payment type
+  settled_at: String!
+  payment_source: PaymentSource!
+  payment_id: ID!
+}
+
+#Type - External_payment - merchant account transaction type
+"External payment payment type; consists of Transaction interface + foelds specific to External payment payment type"
+type ExternalPayment implements Transaction {
+  #Fields from Transaction
+  type: String!
+  id: ID!
+  currency: String!
+  amount_in_minor: Float!
+  status: String!
+
+  #Fields specific to External payment
+  settled_at: String!
+  remitter: Remitter!
+}
+
+###SubTypes
+
+"Different bank account types - part of the Merchant account data structure"
+type AccountIdentifier {
+  type: AccountIdentifierType!
+  sort_code: String
+  account_number: String
+  "IBAN string - Valid International Bank Account Number (no spaces). Consists of a 2 letter country code, followed by 2 check digits, and then by up to 30 alphanumeric characters (also known as the BBAN). pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$"
+  iban: String
+}
+
+"Beneficiary sub-type for Payout transaction type"
+type Beneficiary {
+  type: String!
+  account_holder_name: String!
+  account_identifier: AccountIdentifier!
+  account_identifiers: [AccountIdentifier!]
+  reference: String
+}
+
+"PaymentSource sub-type for merchant account payment type"
+type PaymentSource {
+  id: ID!
+  account_holder_name: String!
+  account_identifiers: [AccountIdentifier!]
+  user_id: ID!
+}
+
+"Payer sub-type for external payment payment type"
+type Remitter {
+  account_holder_name: String!
+  account_identifier: AccountIdentifier!
+  account_identifiers: [AccountIdentifier!]
+  reference: String
+}
+
+"Payout detail returned when querying using ID"
+type Payout {
+  id: ID!
+  merchant_account_id: ID!
+  pay_amount_in_minor: Int!
+  currency: String!
+  beneficiary: Beneficiary!
+  scheme_id: String
+  status: String!
+  created_at: String!
+  authorized_at: String
+  executed_at: String
+  failed_at: String
+  failure_reason: String
+}
+
+# createPayoutExternalAccount(
+#   "Internal merchant account issuing payment"
+#   merchant_account_id: String!
+#   "Payment amount"
+#   amount_in_minor: Int!
+#   "Currency"
+#   currency: String!
+
+#   #Beneficiary data
+#   "Type payment - hardcoded to 'external_account'"
+#   type: String!
+#   "Payment reference"
+#   reference: String!
+#   "Account holder; currently most basic - will require more detail for other payment types e.g. SEPA"
+#   account_holder_name: String!
+#   "Account identifier - either sort code or IBAN"
+#   account_identifier: AccountIdentifier!
+
+# ): PayoutId
+
+"ID returned from Payout API when creating Payout; used to get payout detail"
+type PayoutId {
+  id: ID!
+}
+
+###Enums
+"Payout status enum"
+enum PayoutStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+"Account identifier type enum"
+enum AccountIdentifierType {
+  SORT_CODE
+  IBAN
+}
+
+###Input types
+"Input type for creating an External Account payout"
+"Can be either IBAN or sort code + account number"
+input ExternalAccountInput {
+  type: AccountIdentifierType!
+  "UK Sort code - 6 digits"
+  sort_code: String
+  "UK Account number - 8 digits"
+  account_number: String
+  "IBAN string - Valid International Bank Account Number (no spaces). Consists of a 2 letter country code, followed by 2 check digits, and then by up to 30 alphanumeric characters (also known as the BBAN). pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$"
+  iban: String
+}
