@@ -1,6 +1,6 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { TLPayoutAPI } from "../tlPayout_api.js";
+import { TLPayoutAPI } from "../datasources/trueLayer/tlPayout_api.js";
 
 const mock = new MockAdapter(axios);
 
