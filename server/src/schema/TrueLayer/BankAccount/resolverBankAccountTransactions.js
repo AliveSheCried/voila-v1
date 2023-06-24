@@ -20,8 +20,27 @@ const bankAccountTransactions = async (
     const decodedFromDate = decodeURIComponent(fromDate);
     const decodedToDate = decodeURIComponent(toDate);
 
+    // Always fetch the transactions from TrueLayer API
+    const responseData = await dataSources.tlDataAPI.getBankAccountTransactions(
+      id,
+      token,
+      fromDate,
+      toDate
+    );
+
+    if (!responseData.results) {
+      throw new Error(
+        `No transactions for the date range ${decodedFromDate} to ${decodedToDate} found`
+      );
+    }
+
+    // Convert received data to schema array of transaction objects
+    const apiTransactions = responseData.results.map(
+      (transaction) => transaction
+    );
+
     //check if transactions in date range exist in database
-    const exTransactionsDb = await myCollection
+    const dbTransactions = await myCollection
       .find({
         timestamp: {
           $gte: decodedFromDate,
@@ -30,36 +49,27 @@ const bankAccountTransactions = async (
       })
       .toArray();
 
-    console.log("object", exTransactionsDb);
-
-    //if transactions in date range do exist in database, return them
-    if (exTransactionsDb.length > 0) {
-      return exTransactionsDb;
-    }
-
-    //if transactions in date range do not exist in database, get them from TrueLayer
-    const responseData = await dataSources.tlDataAPI.getBankAccountTransactions(
-      id,
-      token,
-      fromDate,
-      toDate
+    // Filter out transactions that are already in the database
+    const newTransactions = apiTransactions.filter(
+      (apiTransaction) =>
+        !dbTransactions.some(
+          (dbTransaction) =>
+            dbTransaction.transaction_id === apiTransaction.transaction_id
+        )
     );
 
-    //confirm response includes transactions
-    if (!responseData.results) {
-      throw new Error(
-        `No transactions for the date range ${decodedFromDate} to ${decodedToDate} found`
-      );
+    //check if new transactions exist
+    if (newTransactions.length === 0) {
+      return dbTransactions;
     }
 
-    //Convert received data to schema array of transaction objects
-    const transactions = responseData.results.map((transaction) => transaction);
-
-    //insert transactions into database, logging records inserted
-    const result = await myCollection.insertMany(transactions);
+    // If newTransactions do exist, update the database with new transactions from the API
+    const result = await myCollection.insertMany(newTransactions);
     console.log(`Inserted ${result.insertedCount} records into the collection`);
 
-    return transactions;
+    const allTransactions = [...dbTransactions, ...newTransactions];
+
+    return allTransactions;
   } catch (error) {
     console.log(error);
     // Throw the error so that it can be caught and handled by Apollo Server
