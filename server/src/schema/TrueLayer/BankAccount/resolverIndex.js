@@ -3,9 +3,15 @@ import { bankAccountTransactionsResolvers } from "./resolverBankAccountTransacti
 import { bankAccountResolvers } from "./resolverBankAccounts.js";
 
 const queries = {
-  ...bankAccountResolvers,
-  ...bankAccountDataResolvers,
-  ...bankAccountTransactionsResolvers,
+  bankAccounts: bankAccountResolvers.bankAccounts,
+  bankAccount: bankAccountResolvers.bankAccount,
+  bankAccountTransactions:
+    bankAccountTransactionsResolvers.bankAccountTransactions,
+  bankAccountPendingTransactions:
+    bankAccountTransactionsResolvers.bankAccountPendingTransactions,
+  bankAccountBalance: bankAccountDataResolvers.bankAccountBalance,
+  bankAccountDirectDebits: bankAccountDataResolvers.bankAccountDirectDebits,
+  bankAccountStandingOrders: bankAccountDataResolvers.bankAccountStandingOrders,
 };
 
 export const resolvers = { queries };

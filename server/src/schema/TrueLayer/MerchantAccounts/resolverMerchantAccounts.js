@@ -23,4 +23,4 @@ const merchantAccounts = async (_, __, { token, dataSources }) => {
   }
 };
 
-export default { merchantAccounts };
+export { merchantAccounts };

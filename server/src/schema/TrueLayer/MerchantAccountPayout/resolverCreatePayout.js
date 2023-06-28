@@ -1,3 +1,5 @@
+import validator from "validator";
+
 const createPayoutExternalAccount = async (
   _,
   {
@@ -62,4 +64,4 @@ const createPayoutExternalAccount = async (
   return responseData;
 };
 
-export default { createPayoutExternalAccount };
+export { createPayoutExternalAccount };

@@ -1,12 +1,12 @@
-import createPayoutExternalAccount from "./resolverCreatePayout.js";
-import payoutDetail from "./resolverPayoutDetail.js";
+import { createPayoutExternalAccount } from "./resolverCreatePayout.js";
+import { payoutDetail } from "./resolverPayoutDetail.js";
 
 const mutations = {
-  ...createPayoutExternalAccount,
+  createPayoutExternalAccount: createPayoutExternalAccount,
 };
 
 const queries = {
-  ...payoutDetail,
+  payoutDetail: payoutDetail,
 };
 
 export const resolvers = { mutations, queries };

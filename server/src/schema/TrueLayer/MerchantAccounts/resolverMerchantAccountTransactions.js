@@ -19,22 +19,7 @@ const merchantAccountTransactions = async (
     const decodedFromDate = decodeURIComponent(fromDate);
     const decodedToDate = decodeURIComponent(toDate);
 
-    //check if transactions in date range exist in database
-    const transactionsDb = await myCollection
-      .find({
-        created_at: {
-          $gte: decodedFromDate,
-          $lte: decodedToDate,
-        },
-      })
-      .toArray();
-
-    //if transactions in date range do exist in database, return them
-    if (transactionsDb.length > 0) {
-      return transactionsDb;
-    }
-
-    //if transactions in date range do not exist in database, get them from TrueLayer
+    //Always fetch the transactions from TrueLayer API
     const responseData =
       await dataSources.tlMerchantAccountAPI.getMerchantAccountTransactions(
         id,
@@ -43,19 +28,42 @@ const merchantAccountTransactions = async (
         toDate
       );
 
-    //confirm response includes transactions
     if (!responseData.items) {
-      throw new Error("No transactions for the date range found");
+      throw new Error(
+        `No transactions for the date range ${decodedFromDate} to ${decodedToDate} found`
+      );
     }
 
-    //Convert received data to schema array of transaction objects
-    const transactions = responseData.items.map((transaction) => transaction);
+    // Convert received data to schema array of transaction objects
+    const apiTransactions = responseData.items.map(
+      (transaction) => transaction
+    );
 
-    //insert transactions into database, logging records inserted
-    const result = await myCollection.insertMany(transactions);
+    //check if transactions in date range exist in database
+    const dbTransactions = await myCollection
+      .find({
+        created_at: {
+          $gte: decodedFromDate,
+          $lte: decodedToDate,
+        },
+      })
+      .toArray();
+
+    // Filter out transactions that are already in the database
+    const newTransactions = apiTransactions.filter(
+      (apiTransaction) =>
+        !dbTransactions.some(
+          (dbTransaction) => dbTransaction.id === apiTransaction.id
+        )
+    );
+
+    // If newTransactions do exist, update the database with new transactions from the API
+    const result = await myCollection.insertMany(newTransactions);
     console.log(`Inserted ${result.insertedCount} records into the collection`);
 
-    return transactions;
+    const allTransactions = [...dbTransactions, ...newTransactions];
+
+    return allTransactions;
   } catch (error) {
     console.log(error);
     // Throw the error so that it can be caught and handled by Apollo Server
@@ -63,4 +71,4 @@ const merchantAccountTransactions = async (
   }
 };
 
-export default { merchantAccountTransactions };
+export { merchantAccountTransactions };

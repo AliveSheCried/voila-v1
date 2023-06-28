@@ -1,6 +1,6 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { TLDataAPI } from "../datasources/trueLayer/tlData_api.js";
+import { TLDataAPI } from "../../../datasources/trueLayer/tlData_api.js";
 
 const mock = new MockAdapter(axios);
 

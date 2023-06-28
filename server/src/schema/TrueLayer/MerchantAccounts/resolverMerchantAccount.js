@@ -7,7 +7,7 @@ const merchantAccount = async (_, { id }, { token, dataSources }) => {
       await dataSources.tlMerchantAccountAPI.getMerchantAccount(id, token);
 
     //Check if data exists
-    if (!responseData.items) {
+    if (!responseData) {
       throw new Error("No data found for the ID provided!");
     }
     //Response data is same shape as schema
@@ -19,4 +19,4 @@ const merchantAccount = async (_, { id }, { token, dataSources }) => {
   }
 };
 
-export default { merchantAccount };
+export { merchantAccount };
