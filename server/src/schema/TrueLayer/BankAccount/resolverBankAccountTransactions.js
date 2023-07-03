@@ -64,8 +64,27 @@ const bankAccountTransactions = async (
     }
 
     // If newTransactions do exist, update the database with new transactions from the API
-    const result = await myCollection.insertMany(newTransactions);
-    console.log(`Inserted ${result.insertedCount} records into the collection`);
+    try {
+      const result = await myCollection.insertMany(newTransactions);
+
+      //log the number of records inserted into the database and number of records in newTransactions for debugging
+      if (result.insertedCount !== newTransactions.length) {
+        console.log("Not all new transactions were inserted into the database");
+        console.log(
+          `Inserted ${result.insertedCount} records into the database`
+        );
+        console.log(`There were ${newTransactions.length} new transactions`);
+      } else {
+        console.log(
+          `Inserted ${result.insertedCount} records into the collection`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error(
+        "An error occurred while inserting new transactions into the database."
+      );
+    }
 
     const allTransactions = [...dbTransactions, ...newTransactions];
 

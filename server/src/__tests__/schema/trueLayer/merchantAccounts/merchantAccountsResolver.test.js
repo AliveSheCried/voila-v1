@@ -37,13 +37,14 @@ describe("merchantAccounts resolver", () => {
     ]);
   });
 
+  // This test is to be reviewed and updated - need to confirm what the API returns if no data is found
   it("throws an error if data is not found", async () => {
     const mockToken = "test-token";
     const mockDataSources = {
       tlMerchantAccountAPI: {
         getMerchantAccounts: jest.fn(() =>
           Promise.resolve({
-            items: null,
+            items: "not an array",
           })
         ),
       },

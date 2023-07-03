@@ -31,6 +31,7 @@ describe("merchantAccounts resolver", () => {
     expect(result).toEqual({ items: [{ id: 1, name: "Account 1" }] });
   });
 
+  // This test is to be reviewed and updated - need to confirm what the API returns if no data is found
   it("throws an error if data is not found", async () => {
     const mockToken = "test-token";
     const mockDataSources = {
