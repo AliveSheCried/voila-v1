@@ -28,6 +28,11 @@ const createPayoutExternalAccount = async (
     throw new Error("Invalid characters in account_holder_name");
   }
 
+  //validate account_identifier is an object
+  if (typeof account_identifier !== "object") {
+    throw new Error("account_identifier must be an object");
+  }
+
   // Validate account_identifier based on its type
   if (account_identifier.type.toLowerCase() === "iban") {
     const ibanRegex = /^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$/;
