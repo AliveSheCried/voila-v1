@@ -103,7 +103,7 @@ describe("createPayout resolver", () => {
     expect(result).toEqual({ id: 998 });
   });
 
-  // Unhappy path test where currency is not uppercase
+  // Error path test where currency is not uppercase
   it("throws an error if currency is not uppercase", async () => {
     await expect(
       createPayoutExternalAccount(
@@ -125,7 +125,7 @@ describe("createPayout resolver", () => {
     ).rejects.toThrow("Currency must be a 3 character uppercase code");
   });
 
-  //Unhappy path test where currency is not 3 characters
+  //Error path test where currency is not 3 characters
   it("throws an error if currency is not 3 characters", async () => {
     await expect(
       createPayoutExternalAccount(
@@ -147,7 +147,7 @@ describe("createPayout resolver", () => {
     ).rejects.toThrow("Currency must be a 3 character uppercase code");
   });
 
-  //unhappy path test where amount_in_minor is not an integer
+  //Error path test where amount_in_minor is not an integer
   it("throws an error if amount_in_minor is not an integer", async () => {
     await expect(
       createPayoutExternalAccount(
@@ -169,7 +169,7 @@ describe("createPayout resolver", () => {
     ).rejects.toThrow("amount_in_minor must be a positive integer");
   });
 
-  //unhappy path test where amount_in_minor is not a positive integer
+  //Error path test where amount_in_minor is not a positive integer
   it("throws an error if amount_in_minor is not a positive integer", async () => {
     await expect(
       createPayoutExternalAccount(
@@ -191,7 +191,7 @@ describe("createPayout resolver", () => {
     ).rejects.toThrow("amount_in_minor must be a positive integer");
   });
 
-  //unhappy path test where account_holder_name doesn't match regex
+  //Error path test where account_holder_name doesn't match regex
   it("throws an error if account_holder_name doesn't match regex", async () => {
     await expect(
       createPayoutExternalAccount(
@@ -213,7 +213,7 @@ describe("createPayout resolver", () => {
     ).rejects.toThrow("Invalid characters in account_holder_name");
   });
 
-  //unhappy path test where iban doesn't match regex
+  //Error path test where iban doesn't match regex
   it("throws an error if iban doesn't match regex", async () => {
     await expect(
       createPayoutExternalAccount(
@@ -234,7 +234,7 @@ describe("createPayout resolver", () => {
     ).rejects.toThrow("Invalid IBAN");
   });
 
-  //unhappy path test where sort_code is not 6 characters
+  //Error path test where sort_code is not 6 characters
   it("throws an error if sort_code is not 6 characters", async () => {
     await expect(
       createPayoutExternalAccount(
@@ -256,7 +256,7 @@ describe("createPayout resolver", () => {
     ).rejects.toThrow("Invalid sort code");
   });
 
-  //unhappy path test where account_number is not 8 characters
+  //Error path test where account_number is not 8 characters
   it("throws an error if account_number is not 8 characters", async () => {
     await expect(
       createPayoutExternalAccount(
@@ -278,7 +278,7 @@ describe("createPayout resolver", () => {
     ).rejects.toThrow("Invalid account number");
   });
 
-  //unhappy path test where account_identifier type is not valid
+  //Error path test where account_identifier type is not valid
   it("throws an error if account_identifier type is not valid", async () => {
     await expect(
       createPayoutExternalAccount(
@@ -300,7 +300,7 @@ describe("createPayout resolver", () => {
     ).rejects.toThrow("Invalid account identifier type");
   });
 
-  //unhappy path test where account_identifier type is not an object
+  //Error path test where account_identifier type is not an object
   it("throws an error if account_identifier type is not an object", async () => {
     await expect(
       createPayoutExternalAccount(
