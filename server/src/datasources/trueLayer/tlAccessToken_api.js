@@ -1,4 +1,5 @@
 import { RESTDataSource } from "@apollo/datasource-rest";
+import { handleAPIRequest } from "../../helpers/handleAPIRequest.js";
 
 export class TLAccessTokenAPI extends RESTDataSource {
   constructor() {
@@ -7,15 +8,31 @@ export class TLAccessTokenAPI extends RESTDataSource {
   }
 
   //methods
-  async generateAccessToken(scope, grant_type, redirect_uri, code) {
+  async generateAccessToken(
+    scope = "",
+    grant_type,
+    redirect_uri = "",
+    code = ""
+  ) {
+    const client_id = process.env.CLIENT_ID;
+    const client_secret = process.env.CLIENT_SECRET;
+    const options = {
+      accept: "application/json",
+      "content-type": "application/json",
+    };
+    const body = {
+      client_id,
+      client_secret,
+      scope,
+      grant_type,
+      redirect_uri,
+      code,
+    };
+
     try {
-      return await this.post(`/connect/token`, {
-        client_id: process.env.CLIENT_ID,
-        client_secret: process.env.CLIENT_SECRET,
-        scope: scope ? scope : "",
-        grant_type: grant_type,
-        redirect_uri: redirect_uri ? redirect_uri : "",
-        code: code ? code : "",
+      return await handleAPIRequest(this, `/connect/token`, "", "POST", {
+        ...options,
+        body,
       });
     } catch (error) {
       console.error(`Error: ${error.message}`);

@@ -11,7 +11,7 @@ export async function handleAPIRequest(
     const headers = {
       accept: "application/json; charset=UTF-8",
       ...additionalHeaders,
-      authorization: `Bearer ${token}`,
+      authorization: token.length === 0 ? "" : `Bearer ${token}`,
     };
 
     const client = axios.create({
@@ -43,19 +43,3 @@ export async function handleAPIRequest(
     console.log(error.config);
   }
 }
-
-// const options = {
-//   method: 'POST',
-//   headers: {
-//     accept: 'application/json; charset=UTF-8',
-//     'Idempotency-Key': 'b00f0fd8-0dfa-4d30-8e06-da8b71a7a3e7',
-//     'Tl-Signature': 'eyJhbGciOiJFUzUxMiIsImtpZCI6ImQ2YzhjYjlkLWM1YmQtNGYxMy1hOTYyLWM4ZGM0YWJhZmZmMSIsInRsX3ZlcnNpb24iOiIyIiwidGxfaGVhZGVycyI6IklkZW1wb3RlbmN5LUtleSJ9..AXDC6wBI3khurvj10FWHwZ8GMJpkOQ0cDpCQfYUsdbiTg0woHXjqw0VtrIzoQYU7D4UBeoBEzPEeJVk7BFoePBUPAP-BBb6LLgxz7kJrgNQePixGZt_GXr9s2oUM83BZzvnTivM1m-sNqaZOzNpji-T-u9yh6RyHampXLqIQOastLnew',
-//     'content-type': 'application/json; charset=UTF-8'
-//   },
-//   body: '{"currency":"GBP","beneficiary":{"type":"external_account","account_identifier":{"type":"sort_code_account_number","sort_code":"009922","account_number":"12345678"},"reference":"14JUN23","account_holder_name":"KingBOB"},"merchant_account_id":"e1eff241-77d7-490d-aef4-d2701d68f90a\'","amount_in_minor":987}'
-// };
-
-// fetch('https://api.truelayer-sandbox.com/payouts', options)
-//   .then(response => response.json())
-//   .then(response => console.log(response))
-//   .catch(err => console.error(err));
