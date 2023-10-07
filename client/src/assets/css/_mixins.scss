@@ -1,0 +1,19 @@
+@mixin fbox($content: null, $items: null, $direction: null, $wrap: null) {
+  display: flex;
+
+  @if $content != null {
+    justify-content: $content;
+  }
+
+  @if $items != null {
+    align-items: $items;
+  }
+
+  @if $direction != null {
+    flex-direction: $direction;
+  }
+
+  @if $wrap != null {
+    flex-wrap: $wrap;
+  }
+}

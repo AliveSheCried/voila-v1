@@ -1,0 +1,51 @@
+$avatar-size: 4rem;
+$indicator-size: 10px;
+
+.avatar {
+  @include fbox($content: space-between, $direction: row);
+
+  &__group {
+    @include fbox($direction: row);
+  }
+
+  &__contact {
+    @include fbox($direction: column, $content: center);
+  }
+
+  &__name {
+    font-weight: 700;
+  }
+
+  &__email {
+    font-weight: 400;
+  }
+
+  &__elipse {
+    font-weight: 600;
+  }
+
+  &__img {
+    width: $avatar-size;
+    height: $avatar-size;
+    margin: 0.5rem;
+    position: relative;
+
+    img {
+      border-radius: 50%;
+    }
+  }
+
+  // Active user indicator
+  &__img::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: $indicator-size;
+    height: $indicator-size;
+    background-color: var(--color-green);
+    border: 2px solid white;
+    border-radius: 50%;
+    z-index: 1;
+  }
+}

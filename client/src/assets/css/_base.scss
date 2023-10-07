@@ -1,0 +1,245 @@
+//Font import
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;600;700&display=swap");
+
+//material ui
+.material-symbols-outlined {
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 300,
+        "GRAD" 0,
+        "opsz" 12;
+}
+
+.material-symbols-sharp {
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 200,
+        "GRAD" 0,
+        "opsz" 6;
+}
+
+:root {
+    //css variables
+    //colors (https://paletton.com
+    --color-primary: #171c2a;
+    //yellow
+    --color-secondary: #f8efbf;
+    //lilac
+    --color-tertiary: #e6e4e9;
+    //light blue
+    --color-quaternary: #dde7eb;
+    //pink
+    --color-quinary: #f4c2c2;
+    --color-green: #31724b;
+    --color-blue: #1b4151; //#0a2b39;
+    --color-white: #fff;
+    --color-black: #000;
+    --color-gray-light-1: #faf9f9;
+    --color-gray-light-2: #f4f2f2;
+    --color-gray-light-3: #f1eeee;
+    --color-gray-dark-1: #333;
+    --color-gray-dark-2: #c5c4c4;
+
+    //spacing rem
+    --spacing-xxs: 0.25rem;
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 2.5rem;
+    --spacing-xxl: 3rem;
+    --spacing-xxxl: 4rem;
+
+    //font sizes
+    --font-size-xxs: 1rem;
+    --font-size-xs: 1.1rem;
+    --font-size-sm: 1.2rem;
+    --font-size-md: 1.4rem;
+    --font-size-lg: 1.6rem;
+}
+
+//Global styles
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+html {
+    font-size: 62.5%;
+    font-family: "Inter", sans-serif;
+}
+
+body {
+    font-size: 1.6rem;
+    line-height: 1.5;
+    background-color: var(--color-white);
+    color: var(--color-black);
+}
+
+header {
+    @include fbox($direction: row, $content: space-between, $items: center);
+    margin-bottom: var(--spacing-lg);
+}
+
+nav {
+    @include fbox($direction: column, $content: space-between, $items: left);
+
+    width: 230px;
+    height: 80vh;
+    z-index: 0;
+    border-right: 2px solid var(--color-gray-light-1);
+    padding-right: var(--spacing-md);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Inter", sans-serif;
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: 4rem;
+    color: var(--color-primary);
+}
+
+h2 {
+    font-size: 3.5rem;
+}
+
+h3 {
+    font-size: 3rem;
+    color: var(--color-primary);
+    font-weight: 400;
+}
+
+h4 {
+    font-size: 2.5rem;
+    color: var(--color-primary);
+    letter-spacing: 0.1rem;
+}
+
+h5 {
+    font-size: 2rem;
+    color: var(--color-primary);
+    letter-spacing: 0.1rem;
+    font-weight: 600;
+}
+
+h6 {
+    font-size: 1.75rem;
+    color: var(--color-primary);
+    letter-spacing: 0.1rem;
+    font-weight: 600;
+}
+
+p {
+    margin-bottom: 1.5rem;
+}
+
+ul {
+    list-style-type: none;
+}
+
+img {
+    width: 100%;
+    display: block;
+}
+
+//utility classes
+//font sizes
+.text-xxs {
+    font-size: var(--font-size-xxs);
+}
+
+.text-xs {
+    font-size: var(--font-size-xs);
+}
+
+.text-sm {
+    font-size: var(--font-size-sm);
+}
+
+.text-md {
+    font-size: var(--font-size-md);
+}
+
+.text-lg {
+    font-size: var(--font-size-lg);
+}
+
+.right {
+    text-align: right;
+    padding-right: 1rem;
+}
+
+/* Base link styles */
+a {
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+/* Primary link style */
+.a--primary {
+    color: var(--color-blue); /* Replace with your primary color variable */
+    font-weight: 600;
+    // &:hover {
+    //   color: var(--color-primary-dark); /* Replace with a darker shade of your primary color */
+    // }
+}
+
+/* Secondary link style */
+.a--secondary {
+    color: var(--color-primary); /* Replace with your secondary color variable */
+
+    // &:hover {
+    //   color: var(--color-secondary-dark); /* Replace with a darker shade of your secondary color */
+    // }
+}
+
+/* tertiart link style */
+.a--tertiary {
+    color: var(--color-primary); /* Replace with your secondary color variable */
+
+    &:hover {
+        color: var(--color-green); /* Replace with a darker shade of your secondary color */
+    }
+}
+
+//generic spacing classes
+.sp-sm {
+    margin-top: var(--spacing-sm);
+}
+
+.sp-md {
+    margin-top: var(--spacing-md);
+}
+
+.sp-lg {
+    margin-top: var(--spacing-lg);
+}
+
+///to be removed
+.test {
+    max-width: 30rem;
+    padding-top: var(--spacing-sm);
+}
+
+//to be moved
+.welcome {
+    font-weight: 600;
+    color: var(--color-primary);
+}
