@@ -1,0 +1,25 @@
+.token {
+    @include fbox($direction: row, $content: space-between);
+
+    &__card {
+        border: 1px solid var(--color-primary);
+        border-top-right-radius: 10px;
+        background-color: var(--color-gray-light-1);
+        width: 6rem;
+        height: 2.5rem;
+        padding: 1rem;
+        margin-left: var(--spacing-xxs);
+    }
+}
+
+.bg-green {
+    background-color: var(--color-quaternary);
+}
+
+.bg-amber {
+    background-color: var(--color-secondary);
+}
+
+.bg-red {
+    background-color: var(--color-quinary);
+}

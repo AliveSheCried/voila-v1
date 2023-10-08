@@ -1,5 +1,12 @@
+import Token from "./Token";
+
 const Tokens = () => {
-  return <div>Token stuff goes here.</div>;
+  return (
+    <div className="token">
+      <Token tokenName="Data" />
+      <Token tokenName="Payment" />
+    </div>
+  );
 };
 
 export default Tokens;

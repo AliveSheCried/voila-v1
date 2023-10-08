@@ -14,6 +14,7 @@
   --color-quaternary: #dde7eb;
   --color-quinary: #f4c2c2;
   --color-green: #31724b;
+  --color-light-green: #76a98b;
   --color-blue: #1b4151;
   --color-white: #fff;
   --color-black: #000;
@@ -64,7 +65,7 @@ body {
 header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   flex-direction: row;
   margin-bottom: var(--spacing-lg);
 }
@@ -157,6 +158,10 @@ img {
 
 .text-lg {
   font-size: var(--font-size-lg);
+}
+
+.text-bold {
+  font-weight: 600;
 }
 
 .right {
@@ -496,4 +501,31 @@ a:hover {
 }
 .btn--primary:hover {
   background-color: #454c5d;
+}
+
+.token {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+.token__card {
+  border: 1px solid var(--color-primary);
+  border-top-right-radius: 10px;
+  background-color: var(--color-gray-light-1);
+  width: 6rem;
+  height: 2.5rem;
+  padding: 1rem;
+  margin-left: var(--spacing-xxs);
+}
+
+.bg-green {
+  background-color: var(--color-quaternary);
+}
+
+.bg-amber {
+  background-color: var(--color-secondary);
+}
+
+.bg-red {
+  background-color: var(--color-quinary);
 }/*# sourceMappingURL=styles.css.map */

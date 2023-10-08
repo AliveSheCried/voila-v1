@@ -31,6 +31,7 @@
     //pink
     --color-quinary: #f4c2c2;
     --color-green: #31724b;
+    --color-light-green: #76a98b;
     --color-blue: #1b4151; //#0a2b39;
     --color-white: #fff;
     --color-black: #000;
@@ -84,7 +85,7 @@ body {
 }
 
 header {
-    @include fbox($direction: row, $content: space-between, $items: center);
+    @include fbox($direction: row, $content: space-between, $items: flex-start);
     margin-bottom: var(--spacing-lg);
 }
 
@@ -176,6 +177,10 @@ img {
 
 .text-lg {
     font-size: var(--font-size-lg);
+}
+
+.text-bold {
+    font-weight: 600;
 }
 
 .right {
