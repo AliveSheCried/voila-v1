@@ -1,25 +1,41 @@
 .token {
-    @include fbox($direction: row, $content: space-between);
-
-    &__card {
-        border: 1px solid var(--color-primary);
-        border-top-right-radius: 10px;
-        background-color: var(--color-gray-light-1);
-        width: 6rem;
-        height: 2.5rem;
-        padding: 1rem;
-        margin-left: var(--spacing-xxs);
+    &__container {
+        background-color: #faf9f9; //var(--color-gray-light-2);
+        border-radius: 5px;
+        border: 1px solid var(--color-gray-light-2);
+        margin-bottom: var(--spacing-lg);
+        padding-bottom: var(--spacing-sm);
     }
-}
 
-.bg-green {
-    background-color: var(--color-quaternary);
-}
+    &__title {
+        @include fbox($direction: row, $items: center);
+        font-size: var(--font-size-md);
+        padding: var(--spacing-sm);
+        color: var(--color-primary);
+        font-weight: 600;
+    }
 
-.bg-amber {
-    background-color: var(--color-secondary);
-}
+    &__text {
+        margin-left: var(--spacing-md);
+        padding: var(--spacing-sm) var(--spacing-md) var(--spacing-sm) var(--spacing-md);
+        margin-right: var(--spacing-xs);
+        font-size: var(--font-size-sm);
+        color: var(--color-gray-dark-2);
+        background-color: var(--color-white);
+        border-radius: 5px;
+    }
 
-.bg-red {
-    background-color: var(--color-quinary);
+    &__icon {
+        padding: var(--spacing-xs);
+        margin-left: var(--spacing-xs);
+        margin-right: var(--spacing-sm);
+        color: var(--color-white);
+        background-color: #454955; //var(--color-green);
+        border-radius: 50px;
+    }
+
+    &__button {
+        padding: var(--spacing-xs);
+        margin-left: var(--spacing-sm); //calc(var(--spacing-xs) + var(--spacing-sm));
+    }
 }

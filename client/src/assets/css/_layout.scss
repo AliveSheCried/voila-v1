@@ -37,16 +37,13 @@
 //similar to container__login - review when consolidating
 .container {
   display: grid;
-  grid-template-columns: 250px 1fr; // Set min and max width for the left column
+  grid-template-columns: 230px 1fr; // Set min and max width for the left column
   margin: 0 auto;
   //align-items: center;
-  height: 100vh;
+  height: 90vh;
   //content width not quite 100%
   width: 70vw;
-  padding-top: var(--spacing-md);
-
-  &__content {
-    @include fbox($direction: column);
-    padding-left: var(--spacing-md);
-  }
+  margin-top: var(--spacing-md);
+  border: 1px solid var(--color-gray-light-2);
+  border-radius: 10px;
 }

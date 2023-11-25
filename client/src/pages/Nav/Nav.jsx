@@ -1,6 +1,6 @@
-import Avatar from "../../components/Avatar/Avatar";
 import Logo from "../../components/Logo/Logo";
 import Menu from "../../components/Menu/Menu";
+import Settings from "../../components/Settings/Settings";
 
 const Nav = () => {
   return (
@@ -10,7 +10,7 @@ const Nav = () => {
         <Menu />
       </div>
       <div>
-        <Avatar />
+        <Settings />
       </div>
     </nav>
   );

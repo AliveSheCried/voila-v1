@@ -1,12 +1,12 @@
 import PropTypes from "prop-types";
-import GenerateToken from "../GenerateToken";
+import Content from "../../components/Content/Content";
 import Header from "../Header/Header";
 
 const Home = ({ name }) => {
   return (
     <div className="container__content">
       <Header name={name} />
-      <GenerateToken />
+      <Content />
     </div>
   );
 };

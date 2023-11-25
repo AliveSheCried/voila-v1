@@ -1,12 +1,12 @@
 import PropTypes from "prop-types";
-import Tokens from "../../components/Tokens/Tokens";
+import Avatar from "../../components/Avatar/Avatar";
 import Welcome from "../../components/Welcome/Welcome";
 
 const Header = ({ name }) => {
   return (
     <header>
       <Welcome name={name} />
-      <Tokens />
+      <Avatar />
     </header>
   );
 };

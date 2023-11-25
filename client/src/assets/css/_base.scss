@@ -1,38 +1,24 @@
 //Font import
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;600;700&display=swap");
 
-//material ui
-.material-symbols-outlined {
-    font-variation-settings:
-        "FILL" 0,
-        "wght" 300,
-        "GRAD" 0,
-        "opsz" 12;
-}
-
-.material-symbols-sharp {
-    font-variation-settings:
-        "FILL" 0,
-        "wght" 200,
-        "GRAD" 0,
-        "opsz" 6;
-}
-
 :root {
     //css variables
     //colors (https://paletton.com
     --color-primary: #171c2a;
+    --color-primary-hover: #74777f;
+    --color-primary-selected: #454c5d;
     //yellow
-    --color-secondary: #f8efbf;
+    --color-secondary: #3c5254; //#4d475f;
     //lilac
-    --color-tertiary: #e6e4e9;
+    --color-tertiary: #4d475f;
     //light blue
     --color-quaternary: #dde7eb;
     //pink
     --color-quinary: #f4c2c2;
     --color-green: #31724b;
-    --color-light-green: #76a98b;
-    --color-blue: #1b4151; //#0a2b39;
+    --color-green-light: #46805d;
+    //--color-green: #68c75b;
+    --color-blue: #454955; //#0a2b39;
     --color-white: #fff;
     --color-black: #000;
     --color-gray-light-1: #faf9f9;
@@ -40,6 +26,8 @@
     --color-gray-light-3: #f1eeee;
     --color-gray-dark-1: #333;
     --color-gray-dark-2: #c5c4c4;
+    //shadow colour
+    --shadow-color: 0deg 0% 63%;
 
     //spacing rem
     --spacing-xxs: 0.25rem;
@@ -84,19 +72,41 @@ body {
     color: var(--color-black);
 }
 
+main {
+    margin-top: var(--spacing-xl);
+    margin-left: var(--spacing-md);
+    display: grid;
+    grid-template-columns: 1fr 230px; // Set min and max width for the right column
+    grid-gap: var(--spacing-md);
+    width: 97%;
+}
+
 header {
-    @include fbox($direction: row, $content: space-between, $items: flex-start);
-    margin-bottom: var(--spacing-lg);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-top-right-radius: 10px;
+    background-color: var(--color-gray-light-1);
+    padding-bottom: var(--spacing-xs);
+    //padding-top: var(--spacing-md);
+    padding-left: var(--spacing-md);
+    //border: 1px solid red;
 }
 
 nav {
-    @include fbox($direction: column, $content: space-between, $items: left);
-
-    width: 230px;
-    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: space-between;
+    width: 215px;
+    //height: 100vh;
     z-index: 0;
-    border-right: 2px solid var(--color-gray-light-1);
+    //border-right: 2px solid var(--color-gray-light-1);
     padding-right: var(--spacing-md);
+    background-color: var(--color-primary);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
 
 h1,
@@ -132,7 +142,7 @@ h4 {
 
 h5 {
     font-size: 2rem;
-    color: var(--color-primary);
+    color: var(--color-white);
     letter-spacing: 0.1rem;
     font-weight: 600;
 }
@@ -157,6 +167,15 @@ img {
     display: block;
 }
 
+//material ui
+.material-symbols-outlined {
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 300,
+        "GRAD" 0,
+        "opsz" 10;
+}
+
 //utility classes
 //font sizes
 .text-xxs {
@@ -177,10 +196,6 @@ img {
 
 .text-lg {
     font-size: var(--font-size-lg);
-}
-
-.text-bold {
-    font-weight: 600;
 }
 
 .right {
@@ -237,14 +252,18 @@ a {
     margin-top: var(--spacing-lg);
 }
 
-///to be removed
-.test {
-    max-width: 30rem;
-    padding-top: var(--spacing-sm);
+.sp-bottom-lg {
+    margin-bottom: var(--spacing-lg);
+}
+
+.sp-bottom-sm {
+    margin-bottom: var(--spacing-xs);
 }
 
 //to be moved
 .welcome {
+    //border: 1px solid red;
     font-weight: 600;
+    font-size: 2rem;
     color: var(--color-primary);
 }

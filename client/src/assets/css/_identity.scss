@@ -2,7 +2,9 @@
 .logo {
     @include fbox($direction: row, $content: flex-start, $items: center);
     border-left: 2px solid transparent;
-    padding-left: var(--spacing-xxs);
+    padding-left: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    //border: 1px solid red;
 }
 
 .logo__icon {

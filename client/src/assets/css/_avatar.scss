@@ -3,6 +3,8 @@ $indicator-size: 10px;
 
 .avatar {
   @include fbox($content: space-between, $direction: row);
+  padding-right: var(--spacing-sm);
+  margin-right: var(--spacing-sm);
 
   &__group {
     @include fbox($direction: row);

@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
 const Welcome = ({ name = "rob" }) => {
-  return <div className="welcome">Welcome, {name}</div>;
+  return <div className="welcome">welcome, {name}</div>;
 };
 
 Welcome.propTypes = {

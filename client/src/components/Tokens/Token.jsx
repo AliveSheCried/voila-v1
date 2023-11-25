@@ -1,27 +1,22 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
 
-const Token = ({ tokenName }) => {
-  const [timeLeft, setTimeLeft] = useState(3600);
-  let colorClass;
-  if (timeLeft <= 360) {
-    colorClass = "bg-red";
-  } else if (timeLeft <= 1080) {
-    colorClass = "bg-amber";
-  } else {
-    colorClass = "bg-green";
-  }
+const Token = ({ name = "data" }) => {
   return (
-    <div className={`token__card text-xxs ${colorClass}`}>
-      <span className="text-bold">{tokenName}</span>
-      <br />
-      {timeLeft}
+    <div className="token__container">
+      <div className="token__title">
+        <span className="material-symbols-outlined token__icon">token</span>
+        {name} token
+      </div>
+      <div className="token__text">No active token</div>
+      <div className="token__button">
+        <button className="btn btn--secondary">Create</button>
+      </div>
     </div>
   );
 };
 
 Token.propTypes = {
-  tokenName: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
 };
 
 export default Token;
