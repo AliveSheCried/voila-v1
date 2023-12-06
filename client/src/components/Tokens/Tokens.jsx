@@ -4,8 +4,8 @@ import Token from "./Token";
 const Tokens = () => {
   return (
     <Card>
-      <Token name="data" />
       <Token name="payment" />
+      <Token name="data" />
     </Card>
   );
 };

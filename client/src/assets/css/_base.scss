@@ -8,6 +8,24 @@
     --color-primary-hover: #74777f;
     --color-primary-selected: #454c5d;
     //yellow
+    --color-yellow: #efcb68;
+    // pink
+    --color-pink: #f9cff2;
+    // green, green light & green palette
+    --color-green: #31724b;
+    --color-green-light: #46805d;
+    --color-green-palette: #acd8aa;
+    // B& white
+    --color-white: #fff;
+    --color-black: #000;
+    //greys
+    --color-gray-light-1: #faf9f9;
+    --color-gray-light-2: #f4f2f2;
+    --color-gray-light-3: #f1eeee;
+    --color-gray-dark-1: #333;
+    --color-gray-dark-2: #c5c4c4;
+
+    //Other colors?
     --color-secondary: #3c5254; //#4d475f;
     //lilac
     --color-tertiary: #4d475f;
@@ -15,17 +33,8 @@
     --color-quaternary: #dde7eb;
     //pink
     --color-quinary: #f4c2c2;
-    --color-green: #31724b;
-    --color-green-light: #46805d;
     //--color-green: #68c75b;
     --color-blue: #454955; //#0a2b39;
-    --color-white: #fff;
-    --color-black: #000;
-    --color-gray-light-1: #faf9f9;
-    --color-gray-light-2: #f4f2f2;
-    --color-gray-light-3: #f1eeee;
-    --color-gray-dark-1: #333;
-    --color-gray-dark-2: #c5c4c4;
     //shadow colour
     --shadow-color: 0deg 0% 63%;
 
@@ -73,7 +82,7 @@ body {
 }
 
 main {
-    margin-top: var(--spacing-xl);
+    margin-top: var(--spacing-sm);
     margin-left: var(--spacing-md);
     display: grid;
     grid-template-columns: 1fr 230px; // Set min and max width for the right column
@@ -120,8 +129,8 @@ h6 {
 }
 
 h1 {
-    font-size: 4rem;
     color: var(--color-primary);
+    font-size: 4rem;
 }
 
 h2 {

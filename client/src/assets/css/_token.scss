@@ -29,9 +29,18 @@
         padding: var(--spacing-xs);
         margin-left: var(--spacing-xs);
         margin-right: var(--spacing-sm);
-        color: var(--color-white);
-        background-color: #454955; //var(--color-green);
+
         border-radius: 50px;
+
+        &--payment {
+            background-color: var(--color-pink);
+            color: var(--color-primary);
+        }
+
+        &--data {
+            background-color: var(--color-yellow);
+            color: var(--color-white);
+        }
     }
 
     &__button {
