@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
-import Avatar from "../../components/Avatar/Avatar";
-import Welcome from "../../components/Welcome/Welcome";
+import Avatar from "../Avatar/Avatar";
+import Welcome from "../Welcome/Welcome";
 
 const Header = ({ name }) => {
   return (

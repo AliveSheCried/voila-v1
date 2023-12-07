@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import Content from "../../components/Content/Content";
-import Header from "../Header/Header";
+import Header from "../../components/Header/Header";
 
 const Home = ({ name }) => {
   return (

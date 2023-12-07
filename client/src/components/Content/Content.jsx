@@ -1,14 +1,17 @@
 import { useState } from "react";
 import ApiContent from "../ApiContent/ApiContent";
+
+import RightPanel from "../RightPanel/RightPanel";
 import Start from "../Start/Start";
-import Tokens from "../Tokens/Tokens";
 
 const Content = () => {
   const [active, setActive] = useState(false);
   return (
     <main>
-      {active ? <ApiContent /> : <Start />}
-      <Tokens />
+      <div className="main__content">{active ? <ApiContent /> : <Start />}</div>
+      <div className="main__right-panel">
+        <RightPanel />
+      </div>
     </main>
   );
 };

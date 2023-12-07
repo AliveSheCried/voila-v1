@@ -1,0 +1,4 @@
+.main__right-panel {
+    @include fbox($direction: column, $content: space-between);
+    height: 82vh;
+}

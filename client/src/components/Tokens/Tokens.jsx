@@ -1,12 +1,11 @@
-import Card from "../Card/Card";
 import Token from "./Token";
 
 const Tokens = () => {
   return (
-    <Card>
-      <Token name="payment" />
+    <div>
       <Token name="data" />
-    </Card>
+      <Token name="payment" />
+    </div>
   );
 };
 
