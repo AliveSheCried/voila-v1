@@ -74,7 +74,17 @@ const Token = ({ name = "data" }) => {
   return (
     <div className="token__container">
       <div className="token__title">
-        <span className="material-symbols-outlined token__icon">token</span>
+        <span
+          className={`material-symbols-outlined token__icon ${
+            name === "payment"
+              ? "token__icon--payment"
+              : name === "data"
+              ? "token__icon--data"
+              : ""
+          }`}
+        >
+          token
+        </span>
         {name} token
       </div>
       <div className="token__text">

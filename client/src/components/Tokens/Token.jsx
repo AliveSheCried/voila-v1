@@ -1,75 +1,38 @@
-import { gql, useMutation } from "@apollo/client";
 import PropTypes from "prop-types";
-import { useContext, useEffect, useState } from "react";
-import { TokenContext } from "../../contexts/TokenContext";
+import { useEffect, useState } from "react";
 
-const GENERATE_ACCESS_TOKEN = gql`
-  mutation GenerateAccessToken(
-    $grantType: String!
-    $scope: String
-    $redirectUri: String
-    $code: String
-  ) {
-    generateAccessToken(
-      grant_type: $grantType
-      scope: $scope
-      redirect_uri: $redirectUri
-      code: $code
-    ) {
-      access_token
-      expires_in
-      scope
-      token_type
-    }
-  }
-`;
+const Token = ({ name, loading, onCreateToken, expiry }) => {
+  const [timeLeft, setTimeLeft] = useState(expiry);
 
-const Token = ({ name = "data" }) => {
-  const { setToken } = useContext(TokenContext);
-  const [timeLeft, setTimeLeft] = useState(null);
-  const [generateToken, { loading, data }] = useMutation(GENERATE_ACCESS_TOKEN);
+  console.log(expiry);
+
+  useEffect(() => {
+    // Set the initial timeLeft value to the expiry time when the component mounts
+    const timeRemaining = Math.max(Math.floor((expiry - Date.now()) / 1000), 0);
+    console.log(timeRemaining);
+    setTimeLeft(timeRemaining);
+  }, [expiry]);
 
   useEffect(() => {
     let timer;
 
     // Update the countdown every second if timeLeft is set
-    if (timeLeft > 0) {
-      timer = setInterval(() => setTimeLeft(timeLeft - 1), 1000);
-    } else if (timer) {
-      clearInterval(timer);
+    if (timeLeft && timeLeft > 0) {
+      timer = setInterval(() => {
+        const timeRemaining = Math.max(
+          Math.floor((expiry - Date.now()) / 1000),
+          0
+        );
+        setTimeLeft(timeRemaining);
+      }, 1000);
     }
 
-    // Cleanup function
-    return () => clearInterval(timer);
-  }, [timeLeft]); // Dependency array
-
-  const handleCreateToken = () => {
-    generateToken({
-      variables: {
-        grantType: "client_credentials", // Replace with actual value
-        scope: "payments", // Replace as needed
-        redirectUri: "", // Replace as needed
-        code: "", // Replace as needed
-      },
-    });
-  };
-
-  useEffect(() => {
-    if (data) {
-      const { access_token, expires_in } = data.generateAccessToken;
-      setToken({
-        tokenData: {
-          name: name,
-          type: "Bearer",
-          expiry: expires_in,
-          state: "active",
-          accessToken: access_token,
-        },
-      });
-      // Start the countdown timer
-      setTimeLeft(expires_in);
-    }
-  }, [data, name]); // Rem
+    return () => {
+      if (timer) {
+        clearInterval(timer);
+      }
+    };
+  }, [timeLeft, expiry]); // Dependency array
 
   return (
     <div className="token__container">
@@ -97,7 +60,7 @@ const Token = ({ name = "data" }) => {
       <div className="token__button">
         <button
           className="btn btn--secondary"
-          onClick={handleCreateToken}
+          onClick={onCreateToken}
           disabled={loading}
         >
           Create
@@ -109,6 +72,9 @@ const Token = ({ name = "data" }) => {
 
 Token.propTypes = {
   name: PropTypes.string.isRequired,
+  loading: PropTypes.bool,
+  onCreateToken: PropTypes.func.isRequired,
+  expiry: PropTypes.number,
 };
 
 export default Token;

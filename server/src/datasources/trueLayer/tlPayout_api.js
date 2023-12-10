@@ -6,7 +6,7 @@ import { handleAPIRequest } from "../../helpers/handleAPIRequest.js";
 export class TLPayoutAPI extends RESTDataSource {
   constructor() {
     super();
-    this.baseURL = "https://api.truelayer-sandbox.com";
+    this.baseURL = "https://api.truelayer-sandbox.com/v3";
   }
 
   /* 

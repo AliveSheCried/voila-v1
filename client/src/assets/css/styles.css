@@ -228,9 +228,9 @@
   border: 1px solid var(--color-gray-light-2);
   border-radius: 10px;
 }
-@media (max-width: 1080px) {
+@media (max-width: 1024px) {
   .container {
-    width: 90vw;
+    width: 95vw;
   }
 }
 
@@ -446,6 +446,20 @@
 .placeholder__button {
   padding: var(--spacing-xs);
   margin-left: var(--spacing-sm);
+}
+
+.content__head {
+  margin-top: 1.5rem;
+  font-weight: 600;
+  font-size: calc(3rem + 2 * (100vw - 1024px) / 896);
+}
+
+.content__arrow {
+  background-color: var(--color-pink);
+  color: var(--color-white);
+  border-radius: 5px;
+  padding-left: 5rem;
+  padding-right: 1rem;
 }
 
 :root {

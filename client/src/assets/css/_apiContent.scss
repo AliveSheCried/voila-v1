@@ -1,0 +1,13 @@
+.content__head {
+    margin-top: 1.5rem;
+    font-weight: 600;
+    font-size: calc(3rem + (5 - 3) * ((100vw - 1024px) / (1920 - 1024)));
+}
+
+.content__arrow {
+    background-color: var(--color-pink);
+    color: var(--color-white);
+    border-radius: 5px;
+    padding-left: 5rem;
+    padding-right: 1rem;
+}
