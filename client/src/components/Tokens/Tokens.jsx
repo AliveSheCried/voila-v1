@@ -25,21 +25,22 @@ const Tokens = () => {
   useEffect(() => {
     if (data) {
       const { access_token, expires_in, scope } = data.generateAccessToken;
-      const expiryTimestamp = Date.now() + expires_in * 1000; // Convert expires_in to milliseconds and add it to the current time
-      console.log(expiryTimestamp, scope);
-      setToken({
-        tokenData: {
+      const expiresInNumber = Number(expires_in); // Make sure it's a number
+      if (!isNaN(expiresInNumber)) {
+        const expiryTimestamp = Date.now() + expiresInNumber * 1000;
+        //  console.log("Tokens: useEffect", expiryTimestamp, scope);
+        setToken({
           name: scope,
           type: "Bearer",
-          expiry: expiryTimestamp, //parseInt(expires_in, 10),
+          expiry: Number(expiryTimestamp),
           state: "active",
           accessToken: access_token,
-        },
-      });
+        });
+      } else {
+        console.error("expires_in is not a number", expires_in);
+      }
     }
   }, [data]);
-
-  console.log(tokenData.expiry);
 
   return (
     <div>
@@ -52,7 +53,7 @@ const Tokens = () => {
       <Token
         name="payment"
         loading={loading}
-        expiry={tokenData.expiry} //{data?.generateAccessToken.expires_in}
+        //    expiry={Number(tokenData?.expiry || 0)} //{data?.generateAccessToken.expires_in}
         onCreateToken={() => handleCreateToken("payment")}
       />
     </div>

@@ -1,38 +1,33 @@
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { TokenContext } from "../../contexts/TokenContext";
 
-const Token = ({ name, loading, onCreateToken, expiry }) => {
-  const [timeLeft, setTimeLeft] = useState(expiry);
+const Token = ({ name, loading, onCreateToken }) => {
+  const [timeLeft, setTimeLeft] = useState(null);
+  const { tokenData } = useContext(TokenContext);
 
-  console.log(expiry);
+  // Function to calculate and set the time left
+  const calculateTimeLeft = () => {
+    const expiryTimestamp = Number(tokenData.expiry);
+    const currentTime = Date.now();
+    // console.log("Expiry timestamp:", expiryTimestamp);
+    //console.log("Current time:", currentTime);
 
-  useEffect(() => {
-    // Set the initial timeLeft value to the expiry time when the component mounts
-    const timeRemaining = Math.max(Math.floor((expiry - Date.now()) / 1000), 0);
-    console.log(timeRemaining);
+    const timeRemaining = Math.max(
+      Math.floor((expiryTimestamp - currentTime) / 1000),
+      0
+    );
+    // console.log("Time remaining:", timeRemaining);
+
     setTimeLeft(timeRemaining);
-  }, [expiry]);
+  };
 
   useEffect(() => {
-    let timer;
+    calculateTimeLeft(); // Call it immediately to set initial value
+    const timer = setInterval(calculateTimeLeft, 1000); // Set up the interval
 
-    // Update the countdown every second if timeLeft is set
-    if (timeLeft && timeLeft > 0) {
-      timer = setInterval(() => {
-        const timeRemaining = Math.max(
-          Math.floor((expiry - Date.now()) / 1000),
-          0
-        );
-        setTimeLeft(timeRemaining);
-      }, 1000);
-    }
-
-    return () => {
-      if (timer) {
-        clearInterval(timer);
-      }
-    };
-  }, [timeLeft, expiry]); // Dependency array
+    return () => clearInterval(timer); // Clean up the interval on component unmount
+  }, []);
 
   return (
     <div className="token__container">
@@ -53,7 +48,7 @@ const Token = ({ name, loading, onCreateToken, expiry }) => {
       <div className="token__text">
         {loading
           ? "Generating..."
-          : timeLeft
+          : name === "payment" && timeLeft !== null
           ? `Time remaining: ${timeLeft}s`
           : "No active token"}
       </div>
@@ -74,7 +69,6 @@ Token.propTypes = {
   name: PropTypes.string.isRequired,
   loading: PropTypes.bool,
   onCreateToken: PropTypes.func.isRequired,
-  expiry: PropTypes.number,
 };
 
 export default Token;
