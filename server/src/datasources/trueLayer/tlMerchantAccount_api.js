@@ -4,7 +4,7 @@ import { handleAPIRequest } from "../../helpers/handleAPIRequest.js";
 export class TLMerchantAccountAPI extends RESTDataSource {
   constructor() {
     super();
-    this.baseURL = "https://api.truelayer-sandbox.com";
+    this.baseURL = "https://api.truelayer-sandbox.com/v3";
   }
   /* 
   *************************

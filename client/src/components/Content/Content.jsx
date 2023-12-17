@@ -1,17 +1,20 @@
-import { useState } from "react";
 //import ApiContent from "../ApiContent/ApiContent";
-import CreateMerchantPayment from "../MerchantAccounts/CreateMerchantPayment";
+import { useContext } from "react";
+import { TokenContext } from "../../contexts/TokenContext";
+import GetMerchantAccounts from "../MerchantAccounts/GetMerchantAccounts";
 
 import RightPanel from "../RightPanel/RightPanel";
 import Start from "../Start/Start";
 
 const Content = () => {
-  const [active, setActive] = useState(true);
+  const { tokenData } = useContext(TokenContext);
+  //console.log("tokenData", tokenData);
+
   return (
     <main>
       {/* <div className="main__content">{active ? <ApiContent /> : <Start />}</div> */}
       <div className="main__content">
-        {active ? <CreateMerchantPayment /> : <Start />}
+        {tokenData.name ? <GetMerchantAccounts /> : <Start />}
       </div>
       <div className="main__right-panel">
         <RightPanel />
