@@ -41,6 +41,11 @@
             background-color: var(--color-yellow);
             color: var(--color-white);
         }
+
+        &--bank {
+            background-color: var(--color-tertiary);
+            color: var(--color-white);
+        }
     }
 
     &__button {

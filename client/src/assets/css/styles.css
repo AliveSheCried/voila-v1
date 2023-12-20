@@ -406,6 +406,10 @@
   background-color: var(--color-yellow);
   color: var(--color-white);
 }
+.token__icon--bank {
+  background-color: var(--color-tertiary);
+  color: var(--color-white);
+}
 .token__button {
   padding: var(--spacing-xs);
   margin-left: var(--spacing-sm);
@@ -460,6 +464,38 @@
   border-radius: 5px;
   padding-left: 5rem;
   padding-right: 1rem;
+}
+
+.content__json {
+  margin-top: var(--spacing-md);
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.content__merchant-account {
+  padding-left: 6rem;
+}
+.content__merchant-account--meta {
+  padding: var(--spacing-sm);
+  border-radius: 5px;
+  border: 1px solid var(--color-gray-light-2);
+}
+
+.content__key {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-dark-1);
+  font-weight: 600;
+  margin-bottom: var(--spacing-xs);
+  padding-right: var(--spacing-xs);
+}
+
+.content__value {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-dark-1);
+  margin-bottom: var(--spacing-xs);
 }
 
 :root {
@@ -687,7 +723,15 @@ a:hover {
 }
 
 .sp-bottom-sm {
-  margin-bottom: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+}
+
+.sp-bottom-md {
+  margin-bottom: var(--spacing-md);
+}
+
+.sp-right-sm {
+  margin-right: var(--spacing-sm);
 }
 
 .welcome {

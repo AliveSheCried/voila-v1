@@ -266,7 +266,15 @@ a {
 }
 
 .sp-bottom-sm {
-    margin-bottom: var(--spacing-xs);
+    margin-bottom: var(--spacing-sm);
+}
+
+.sp-bottom-md {
+    margin-bottom: var(--spacing-md);
+}
+
+.sp-right-sm {
+    margin-right: var(--spacing-sm);
 }
 
 //to be moved

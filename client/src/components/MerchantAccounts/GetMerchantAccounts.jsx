@@ -2,6 +2,7 @@ import { useLazyQuery } from "@apollo/client"; // Notice useLazyQuery instead of
 import React, { useContext, useEffect } from "react";
 import { TokenContext } from "../../contexts/TokenContext";
 import { GET_MERCHANT_ACCOUNTS } from "../../graphql/queries/getMerchantAccounts";
+import Card from "../Card/Card";
 
 const GetMerchantAccounts = () => {
   const { tokenData } = useContext(TokenContext);
@@ -27,34 +28,71 @@ const GetMerchantAccounts = () => {
   if (data) {
     // Render your merchant accounts data
     //console.log("GetMerchantAccounts", data);
-    const jsonString = JSON.stringify(data, null, 2);
+    // const jsonString = JSON.stringify(data, null, 2);
     return (
       <div>
         <div className="content__head">
           <span className="content__arrow">&raquo;</span> All merchant accounts
         </div>
-        <pre className="text-xs">{jsonString}</pre>
-        {/* <div className="merchant-accounts">
+        {/* <pre className="text-xs">{jsonString}</pre> */}
+        <div className="content__json text-sm">
           {data.merchantAccounts.map((account) => (
-            <div key={account.id} className="merchant-account">
-              <h3>Account Holder: {account.account_holder_name}</h3>
-              <p>ID: {account.id}</p>
-              <p>Currency: {account.currency}</p>
-              <p>Available Balance: {account.available_balance_in_minor}</p>
-              <p>Current Balance: {account.current_balance_in_minor}</p>
-              <div className="account-identifiers">
-                {account.account_identifiers.map((identifier, index) => (
-                  <div key={index}>
-                    <p>Type: {identifier.type}</p>
-                    <p>Sort Code: {identifier.sort_code}</p>
-                    <p>Account Number: {identifier.account_number}</p>
-                    <p>IBAN: {identifier.iban}</p>
-                  </div>
-                ))}
+            <Card
+              key={account.id}
+              data={account}
+              style="sp-right-sm sp-bottom-md"
+            >
+              <div className="token__title token__container">
+                <span className="material-symbols-outlined token__icon ">
+                  account_balance
+                </span>
+                {account.id}
               </div>
-            </div>
+              <div className="content__merchant-account">
+                <div className="content__merchant-account--meta">
+                  <span className="content__key">Account Holder Name:</span>
+                  <span className="content__value">
+                    {account.account_holder_name}
+                  </span>
+                  <br />
+                  <span className="content__key">Currency:</span>
+                  <span className="content__value">{account.currency}</span>
+
+                  <div className="account-identifiers">
+                    {account.account_identifiers.map((identifier, index) => (
+                      <div key={index}>
+                        {identifier.type === "sort_code_account_number" ? (
+                          <>
+                            <span className="content__key">Sort Code:</span>
+                            <span className="content__value">
+                              {identifier.sort_code}
+                            </span>
+                            <br />
+                            <span className="content__key">
+                              Account Number:
+                            </span>
+                            <span className="content__value">
+                              {identifier.account_number}
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <span className="content__key">IBAN:</span>
+                            <span className="content__value">
+                              {identifier.iban}
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <p>Available Balance: {account.available_balance_in_minor}</p>
+                <p>Current Balance: {account.current_balance_in_minor}</p>
+              </div>
+            </Card>
           ))}
-        </div> */}
+        </div>
       </div>
     );
   }

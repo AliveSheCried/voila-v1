@@ -13,5 +13,30 @@
 }
 
 .content__json {
-    font-size:;
+    margin-top: var(--spacing-md);
+    @include fbox($direction: row, $items: start, $content: start, $wrap: wrap);
+}
+
+.content__merchant-account {
+    padding-left: 6rem;
+
+    &--meta {
+        padding: var(--spacing-sm);
+        border-radius: 5px;
+        border: 1px solid var(--color-gray-light-2);
+    }
+}
+
+.content__key {
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-dark-1);
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+    padding-right: var(--spacing-xs);
+}
+
+.content__value {
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-dark-1);
+    margin-bottom: var(--spacing-xs);
 }
