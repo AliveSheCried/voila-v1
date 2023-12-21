@@ -1,42 +1,83 @@
-.content__head {
-    margin-top: 1.5rem;
-    font-weight: 600;
-    font-size: calc(3rem + (5 - 3) * ((100vw - 1024px) / (1920 - 1024)));
-}
+//headings
 
-.content__arrow {
-    background-color: var(--color-pink);
-    color: var(--color-white);
-    border-radius: 5px;
-    padding-left: 5rem;
-    padding-right: 1rem;
-}
+.content {
+    &__head {
+        margin-top: 1.5rem;
+        font-weight: 600;
+        font-size: calc(3rem + (5 - 3) * ((100vw - 1024px) / (1920 - 1024)));
+    }
 
-.content__json {
-    margin-top: var(--spacing-md);
-    @include fbox($direction: row, $items: start, $content: start, $wrap: wrap);
-}
-
-.content__merchant-account {
-    padding-left: 6rem;
-
-    &--meta {
+    &__title {
+        @include fbox($direction: row, $items: center);
+        font-size: var(--font-size-md);
         padding: var(--spacing-sm);
+        color: var(--color-primary);
+        font-weight: 600;
+    }
+
+    &__container {
+        background-color: #faf9f9; //var(--color-gray-light-2);
         border-radius: 5px;
         border: 1px solid var(--color-gray-light-2);
+        margin-bottom: var(--spacing-sm);
+        padding-bottom: var(--spacing-sm);
+    }
+
+    &__arrow {
+        background-color: var(--color-pink);
+        color: var(--color-white);
+        border-radius: 5px;
+        padding-left: 5rem;
+        padding-right: 1rem;
+    }
+
+    &__key {
+        font-size: var(--font-size-sm);
+        color: var(--color-gray-dark-1);
+        font-weight: 600;
+        margin-bottom: var(--spacing-xs);
+    }
+
+    &__value {
+        font-size: var(--font-size-sm);
+        color: var(--color-gray-dark-1);
+        margin-bottom: var(--spacing-xs);
+    }
+
+    &__icon {
+        padding: var(--spacing-xs);
+        margin-left: var(--spacing-xs);
+        margin-right: var(--spacing-sm);
     }
 }
 
-.content__key {
-    font-size: var(--font-size-sm);
-    color: var(--color-gray-dark-1);
-    font-weight: 600;
-    margin-bottom: var(--spacing-xs);
-    padding-right: var(--spacing-xs);
+.merchant-account {
+    border: 1px solid var(--color-gray-light-2);
+    border-radius: 5px;
+    width: 100%;
+
+    &--balance {
+        background-color: var(--color-primary-hover);
+
+        // margin-top: var(--spacing-md);
+        // padding: var(--spacing-sm);
+    }
 }
 
-.content__value {
-    font-size: var(--font-size-sm);
-    color: var(--color-gray-dark-1);
-    margin-bottom: var(--spacing-xs);
+th {
+    text-align: left;
+    padding-left: 2rem;
+}
+
+.blank-row {
+    height: var(--spacing-sm);
+    background-color: #fff;
+}
+
+.test {
+    padding-top: var(--spacing-sm);
+}
+
+.test2 {
+    padding-bottom: var(--spacing-sm);
 }
