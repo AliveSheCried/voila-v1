@@ -454,24 +454,9 @@
 
 .content__head {
   margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
   font-weight: 600;
   font-size: calc(3rem + 2 * (100vw - 1024px) / 896);
-}
-.content__title {
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  font-size: var(--font-size-md);
-  padding: var(--spacing-sm);
-  color: var(--color-primary);
-  font-weight: 600;
-}
-.content__container {
-  background-color: #faf9f9;
-  border-radius: 5px;
-  border: 1px solid var(--color-gray-light-2);
-  margin-bottom: var(--spacing-sm);
-  padding-bottom: var(--spacing-sm);
 }
 .content__arrow {
   background-color: var(--color-pink);
@@ -480,21 +465,31 @@
   padding-left: 5rem;
   padding-right: 1rem;
 }
-.content__key {
+.content__key, .content__key--white {
   font-size: var(--font-size-sm);
   color: var(--color-gray-dark-1);
   font-weight: 600;
   margin-bottom: var(--spacing-xs);
+  text-align: left;
+  padding-left: 2rem;
 }
-.content__value {
+.content__key--white {
+  color: var(--color-primary);
+}
+.content__value, .content__value--white {
   font-size: var(--font-size-sm);
   color: var(--color-gray-dark-1);
   margin-bottom: var(--spacing-xs);
+  padding-left: var(--spacing-xs);
 }
-.content__icon {
-  padding: var(--spacing-xs);
-  margin-left: var(--spacing-xs);
-  margin-right: var(--spacing-sm);
+.content__value--white {
+  color: var(--color-gray-dark-1);
+  font-weight: 600;
+}
+.content__value--white-highlight {
+  background-color: var(--color-green-palette);
+  padding-left: var(--spacing-xs);
+  padding-right: var(--spacing-xs);
 }
 
 .merchant-account {
@@ -502,26 +497,46 @@
   border-radius: 5px;
   width: 100%;
 }
-.merchant-account--balance {
-  background-color: var(--color-primary-hover);
+.merchant-account__container {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
-
-th {
-  text-align: left;
-  padding-left: 2rem;
+.merchant-account__title {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  font-size: var(--font-size-md);
+  padding: var(--spacing-sm);
+  color: var(--color-primary);
+  font-weight: 600;
+  background-color: #d8dce9;
+  border-radius: 5px;
+  margin-bottom: var(--spacing-sm);
+}
+.merchant-account__icon {
+  padding: var(--spacing-xs);
+  margin-left: var(--spacing-xs);
+  margin-right: var(--spacing-sm);
+}
+.merchant-account--balance {
+  background-color: var(--color-gray-light-1);
 }
 
 .blank-row {
   height: var(--spacing-sm);
   background-color: #fff;
+  border-bottom: 1px solid var(--color-gray-light-2);
 }
 
 .test {
   padding-top: var(--spacing-sm);
 }
 
-.test2 {
-  padding-bottom: var(--spacing-sm);
+table {
+  border-spacing: 0;
 }
 
 :root {
@@ -531,8 +546,9 @@ th {
   --color-yellow: #efcb68;
   --color-pink: #f9cff2;
   --color-green: #31724b;
-  --color-green-light: #46805d;
+  --color-green-light: #659176;
   --color-green-palette: #acd8aa;
+  --color-green-jade: #7ec89c;
   --color-white: #fff;
   --color-black: #000;
   --color-gray-light-1: #faf9f9;

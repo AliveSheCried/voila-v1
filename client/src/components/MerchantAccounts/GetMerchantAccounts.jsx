@@ -35,15 +35,15 @@ const GetMerchantAccounts = () => {
           <span className="content__arrow">&raquo;</span> All merchant accounts
         </div>
         {/* <pre className="text-xs">{jsonString}</pre> */}
-        <div className="text-sm">
+        <div className="merchant-account__container">
           {data.merchantAccounts.map((account) => (
             <Card
               key={account.id}
               data={account}
               style="sp-right-sm sp-bottom-md"
             >
-              <div className="content__title content__container">
-                <span className="material-symbols-outlined content__icon">
+              <div className="merchant-account__title">
+                <span className="material-symbols-outlined merchant-account__icon">
                   account_balance
                 </span>
                 {account.id}
@@ -98,15 +98,23 @@ const GetMerchantAccounts = () => {
                     </tr> */}
 
                     <tr className="merchant-account--balance">
-                      <th className="content__key">Available</th>
-                      <td className="content__value">
-                        {account.available_balance_in_minor}
+                      <th className="content__key--white">Available</th>
+                      <td className="content__value--white">
+                        <span className="content__value--white-highlight">
+                          {new Intl.NumberFormat("en-GB").format(
+                            account.current_balance_in_minor
+                          )}
+                        </span>
                       </td>
                     </tr>
                     <tr className="merchant-account--balance">
-                      <th className="content__key test2">Current</th>
-                      <td className="content__value test2">
-                        {account.current_balance_in_minor}
+                      <th className="content__key--white">Current</th>
+                      <td className="content__value--white">
+                        <span className="content__value--white-highlight">
+                          {new Intl.NumberFormat("en-GB").format(
+                            account.current_balance_in_minor
+                          )}
+                        </span>
                       </td>
                     </tr>
                   </tbody>

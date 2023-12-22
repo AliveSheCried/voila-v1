@@ -1,26 +1,11 @@
-//headings
+// Styles applicable to all API content pages
 
 .content {
     &__head {
         margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
         font-weight: 600;
         font-size: calc(3rem + (5 - 3) * ((100vw - 1024px) / (1920 - 1024)));
-    }
-
-    &__title {
-        @include fbox($direction: row, $items: center);
-        font-size: var(--font-size-md);
-        padding: var(--spacing-sm);
-        color: var(--color-primary);
-        font-weight: 600;
-    }
-
-    &__container {
-        background-color: #faf9f9; //var(--color-gray-light-2);
-        border-radius: 5px;
-        border: 1px solid var(--color-gray-light-2);
-        margin-bottom: var(--spacing-sm);
-        padding-bottom: var(--spacing-sm);
     }
 
     &__arrow {
@@ -36,12 +21,57 @@
         color: var(--color-gray-dark-1);
         font-weight: 600;
         margin-bottom: var(--spacing-xs);
+        text-align: left;
+        padding-left: 2rem;
+
+        &--white {
+            @extend .content__key;
+            color: var(--color-primary);
+        }
     }
 
     &__value {
         font-size: var(--font-size-sm);
         color: var(--color-gray-dark-1);
         margin-bottom: var(--spacing-xs);
+        padding-left: var(--spacing-xs);
+
+        &--white {
+            @extend .content__value;
+            color: var(--color-gray-dark-1);
+            font-weight: 600;
+
+            &-highlight {
+                background-color: var(--color-green-palette);
+                // padding: var(--spacing-xs);
+                padding-left: var(--spacing-xs);
+                padding-right: var(--spacing-xs);
+            }
+        }
+    }
+}
+
+//Merchant Account pages styles
+
+.merchant-account {
+    border: 1px solid var(--color-gray-light-2);
+    border-radius: 5px;
+    width: 100%;
+
+    &__container {
+        @include fbox($direction: row, $items: start, $content: start, $wrap: wrap);
+    }
+
+    &__title {
+        @include fbox($direction: row, $items: center);
+        font-size: var(--font-size-md);
+        padding: var(--spacing-sm);
+        color: var(--color-primary);
+        font-weight: 600;
+        background-color: #d8dce9; //#fdedfa; // #efe9f4; //var(--color-gray-light-1);
+        border-radius: 5px;
+        // border: 1px solid var(--color-gray-light-2);
+        margin-bottom: var(--spacing-sm);
     }
 
     &__icon {
@@ -49,35 +79,22 @@
         margin-left: var(--spacing-xs);
         margin-right: var(--spacing-sm);
     }
-}
-
-.merchant-account {
-    border: 1px solid var(--color-gray-light-2);
-    border-radius: 5px;
-    width: 100%;
 
     &--balance {
-        background-color: var(--color-primary-hover);
-
-        // margin-top: var(--spacing-md);
-        // padding: var(--spacing-sm);
+        background-color: var(--color-gray-light-1);
     }
-}
-
-th {
-    text-align: left;
-    padding-left: 2rem;
 }
 
 .blank-row {
     height: var(--spacing-sm);
     background-color: #fff;
+    border-bottom: 1px solid var(--color-gray-light-2);
 }
 
 .test {
     padding-top: var(--spacing-sm);
 }
 
-.test2 {
-    padding-bottom: var(--spacing-sm);
+table {
+    border-spacing: 0;
 }
