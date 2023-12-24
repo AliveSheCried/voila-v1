@@ -51,3 +51,11 @@ $indicator-size: 10px;
     z-index: 1;
   }
 }
+
+// Welcome text
+.welcome {
+  //border: 1px solid red;
+  font-weight: 600;
+  font-size: 2rem;
+  color: var(--color-primary);
+}

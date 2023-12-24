@@ -1,0 +1,81 @@
+//utility classes
+//font sizes
+.text-xxs {
+    font-size: var(--font-size-xxs);
+}
+
+.text-xs {
+    font-size: var(--font-size-xs);
+}
+
+.text-sm {
+    font-size: var(--font-size-sm);
+}
+
+.text-md {
+    font-size: var(--font-size-md);
+}
+
+.text-lg {
+    font-size: var(--font-size-lg);
+}
+
+//text alignment classes
+.right {
+    text-align: right;
+    padding-right: 1rem;
+}
+
+.left {
+    text-align: left;
+    padding-left: 1rem;
+}
+
+//generic spacing classes - margin
+.sp-sm {
+    margin-top: var(--spacing-sm);
+}
+
+.sp-md {
+    margin-top: var(--spacing-md);
+}
+
+.sp-lg {
+    margin-top: var(--spacing-lg);
+}
+
+.sp-bottom-lg {
+    margin-bottom: var(--spacing-lg);
+}
+
+.sp-bottom-sm {
+    margin-bottom: var(--spacing-sm);
+}
+
+.sp-bottom-md {
+    margin-bottom: var(--spacing-md);
+}
+
+.sp-right-sm {
+    margin-right: var(--spacing-sm);
+}
+
+.sp-right-md {
+    margin-right: var(--spacing-md);
+}
+
+.sp-right-lg {
+    margin-right: var(--spacing-lg);
+}
+
+.sp-left-sm {
+    margin-left: var(--spacing-sm);
+}
+
+.sp-left-md {
+    margin-left: var(--spacing-md);
+}
+
+.sp-left-lg {
+    margin-left: var(--spacing-lg);
+}

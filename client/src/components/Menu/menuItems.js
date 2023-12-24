@@ -36,14 +36,32 @@ export const menuItems = [
     level: 1,
     children: [
       {
-        name: "Payment - outgoing",
+        name: "Get - merchant accounts",
         icon: "dataset",
         level: 2,
         children: [],
       },
       {
-        name: "Payment - incoming",
+        name: "Get - merchant account",
         icon: "data_usage",
+        level: 2,
+        children: [],
+      },
+      {
+        name: "Get - transactions",
+        icon: "sort",
+        level: 2,
+        children: [],
+      },
+      {
+        name: "Create - payout",
+        icon: "north_east",
+        level: 2,
+        children: [],
+      },
+      {
+        name: "get - payout details",
+        icon: "south_west",
         level: 2,
         children: [],
       },

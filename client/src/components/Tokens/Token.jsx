@@ -27,7 +27,7 @@ const Token = ({ name, loading, onCreateToken }) => {
     const timer = setInterval(calculateTimeLeft, 1000); // Set up the interval
 
     return () => clearInterval(timer); // Clean up the interval on component unmount
-  }, []);
+  }, [tokenData.expiry]);
 
   return (
     <div className="token__container">

@@ -144,7 +144,7 @@ function Login({ onLogin }) {
                 />
               </span>
             </div>
-            <p className="text-xs right">
+            <p className="pTest text-xs right">
               <a href="#" className="a--secondary">
                 Forgot password?
               </a>
