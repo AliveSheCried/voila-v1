@@ -32,15 +32,15 @@
 }
 
 //generic spacing classes - margin
-.sp-sm {
+.sp-top-sm {
     margin-top: var(--spacing-sm);
 }
 
-.sp-md {
+.sp-top-md {
     margin-top: var(--spacing-md);
 }
 
-.sp-lg {
+.sp-top-lg {
     margin-top: var(--spacing-lg);
 }
 
@@ -78,4 +78,8 @@
 
 .sp-left-lg {
     margin-left: var(--spacing-lg);
+}
+
+.sp-top-negative-sm {
+    margin-top: -10px; //-var(--spacing-sm);
 }

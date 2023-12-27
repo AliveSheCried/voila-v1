@@ -86,8 +86,8 @@ function Login({ onLogin }) {
       <div className="container__login--grid">
         <div className="container__login--form">
           <span className="login__icon">*</span>
-          <h5 className="sp-lg">Sign into Voila!</h5>
-          <p className="text-xs">
+          <h5 className="sp-top-lg">Sign into Voila!</h5>
+          <p className="sp-bottom-md text-xs">
             New user?{" "}
             <a href="#" className="a--primary">
               Create an account
@@ -144,12 +144,10 @@ function Login({ onLogin }) {
                 />
               </span>
             </div>
-            <p className="pTest text-xs right">
-              <a href="#" className="a--secondary">
-                Forgot password?
-              </a>
+            <p className="sp-top-negative-sm sp-bottom-md text-xs right">
+              <a href="#">Forgot password?</a>
             </p>
-            <button className="btn btn--primary btn--icon sp-sm">
+            <button className="btn btn--primary btn--icon sp-top-sm">
               Sign in
               <span>
                 <FontAwesomeIcon

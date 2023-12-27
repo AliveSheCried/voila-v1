@@ -17,3 +17,16 @@
     flex-wrap: $wrap;
   }
 }
+
+@mixin myGrid($height: null, $width: null, $col1: null, $col2: null) {
+  display: grid;
+  grid-template-columns: $col1 $col2;
+
+  @if $height != null {
+    height: $height;
+  }
+
+  @if $width != null {
+    width: $width;
+  }
+}

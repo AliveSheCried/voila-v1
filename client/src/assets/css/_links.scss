@@ -1,0 +1,18 @@
+/* Base link styles */
+a {
+    text-decoration: none;
+    color: var(--color-primary);
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+/* Primary link style */
+.a--primary {
+    color: var(--color-primary); /* Replace with your primary color variable */
+    font-weight: 600;
+    background-color: var(--color-pink);
+    padding-left: var(--spacing-xs);
+    padding-right: var(--spacing-xs);
+}

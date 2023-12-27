@@ -1,50 +1,9 @@
 //////////Layout
-////login
-
-.container__login {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-.container__login--grid {
-  display: grid;
-  grid-template-columns: minmax(300px, 400px) 1fr; // Set min and max width for the left column
-  height: 80vh;
-  width: 70vw;
-  border-radius: var(--spacing-lg);
-  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
-
-  // Media query for mobile screens
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr; // Only one column for mobile
-  }
-}
-
-.container__login--form {
-  grid-column: 1 / 2; /* spans 1 column */
-  display: flex;
-  flex-direction: column;
-  padding: 2rem;
-  background-color: var(--color-white);
-  border-radius: var(--spacing-lg);
-  width: 80%;
-}
-
 ////Main
-//similar to container__login - review when consolidating
 //Media query for other screens (mobile not required)
 .container {
-  display: grid;
-  grid-template-columns: 230px 1fr; // Set min and max width for the left column
+  @include myGrid($height: 90vh, $width: 75vw, $col1: 230px, $col2: 1fr);
   margin: 0 auto;
-  //align-items: center;
-  height: 90vh;
-  //content width not quite 100%
-
-  width: 75vw;
 
   // Media query for laptop screens
   @media (max-width: 1024px) {
@@ -53,4 +12,30 @@
   margin-top: var(--spacing-md);
   border: 1px solid var(--color-gray-light-2);
   border-radius: 10px;
+
+  ////login
+  &__login {
+    @include fbox($direction: column, $content: center, $items: center);
+    height: 100vh;
+
+    &--grid {
+      @include myGrid($height: 80vh, $width: 70vw, $col1: minmax(300px, 400px), $col2: 1fr);
+      border-radius: var(--spacing-lg);
+      box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
+
+      // Media query for smaller screens
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr; // Only one column
+      }
+    }
+
+    &--form {
+      grid-column: 1 / 2; // spans 1 column
+      @include fbox($direction: column);
+      padding: 2rem;
+      background-color: var(--color-white);
+      border-radius: var(--spacing-lg);
+      width: 80%;
+    }
+  }
 }
