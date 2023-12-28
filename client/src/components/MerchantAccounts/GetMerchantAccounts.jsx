@@ -1,11 +1,13 @@
 import { useLazyQuery } from "@apollo/client"; // Notice useLazyQuery instead of useQuery
-import React, { useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { MerchantAccountContext } from "../../contexts/MerchantAccountContext";
 import { TokenContext } from "../../contexts/TokenContext";
 import { GET_MERCHANT_ACCOUNTS } from "../../graphql/queries/getMerchantAccounts";
 import Card from "../Card/Card";
 
 const GetMerchantAccounts = () => {
   const { tokenData } = useContext(TokenContext);
+  const { setMerchantAccounts } = useContext(MerchantAccountContext);
   const [getMerchantAccounts, { loading, data, error }] = useLazyQuery(
     GET_MERCHANT_ACCOUNTS,
     {
@@ -19,9 +21,12 @@ const GetMerchantAccounts = () => {
 
   useEffect(() => {
     if (tokenData.accessToken) {
-      getMerchantAccounts();
+      getMerchantAccounts().then((response) => {
+        const data = response.data.merchantAccounts;
+        setMerchantAccounts(data);
+      });
     }
-  }, [tokenData.accessToken, getMerchantAccounts]);
+  }, [tokenData.accessToken, getMerchantAccounts, setMerchantAccounts]);
 
   if (loading) return <p>Loading accounts...</p>;
   if (error) return <p>An error occurred: {error.message}</p>;

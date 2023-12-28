@@ -48,7 +48,7 @@ const Token = ({ name, loading, onCreateToken }) => {
       <div className="token__text">
         {loading
           ? "Generating..."
-          : name === "payment" && timeLeft !== null
+          : name === "payment" && timeLeft !== null && tokenData.accessToken
           ? `Time remaining: ${timeLeft}s`
           : "No active token"}
       </div>
