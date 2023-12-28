@@ -11,14 +11,14 @@
     &__arrow {
         background-color: var(--color-pink);
         color: var(--color-white);
-        border-radius: 5px;
+        border-radius: var(--br-small);
         padding-left: 5rem;
         padding-right: 1rem;
     }
 
     &__key {
         font-size: var(--font-size-sm);
-        color: var(--color-gray-dark-1);
+        color: var(--color-grey-dark-1);
         font-weight: 600;
         margin-bottom: var(--spacing-xs);
         text-align: left;
@@ -32,18 +32,17 @@
 
     &__value {
         font-size: var(--font-size-sm);
-        color: var(--color-gray-dark-1);
+        color: var(--color-grey-dark-1);
         margin-bottom: var(--spacing-xs);
         padding-left: var(--spacing-xs);
 
         &--white {
             @extend .content__value;
-            color: var(--color-gray-dark-1);
+            color: var(--color-grey-dark-1);
             font-weight: 600;
 
             &-highlight {
                 background-color: var(--color-green-palette);
-                // padding: var(--spacing-xs);
                 padding-left: var(--spacing-xs);
                 padding-right: var(--spacing-xs);
             }
@@ -54,9 +53,17 @@
 //Merchant Account pages styles
 
 .merchant-account {
-    border: 1px solid var(--color-gray-light-2);
-    border-radius: 5px;
+    border: 1px solid var(--color-grey-light-2);
+    border-radius: var(--br-small);
     width: 100%;
+
+    & tr:first-child th {
+        padding-top: var(--spacing-sm);
+    }
+
+    & tr:first-child td {
+        padding-top: var(--spacing-sm);
+    }
 
     &__container {
         @include fbox($direction: row, $items: start, $content: start, $wrap: wrap);
@@ -68,9 +75,8 @@
         padding: var(--spacing-sm);
         color: var(--color-primary);
         font-weight: 600;
-        background-color: #d8dce9; //#fdedfa; // #efe9f4; //var(--color-gray-light-1);
-        border-radius: 5px;
-        // border: 1px solid var(--color-gray-light-2);
+        background-color: #d8dce9; //#fdedfa; // #efe9f4; //var(--color-grey-light-1);
+        border-radius: var(--br-small);
         margin-bottom: var(--spacing-sm);
     }
 
@@ -81,20 +87,16 @@
     }
 
     &--balance {
-        background-color: var(--color-gray-light-1);
+        background-color: var(--color-grey-light-1);
     }
 }
 
 .blank-row {
     height: var(--spacing-sm);
     background-color: #fff;
-    border-bottom: 1px solid var(--color-gray-light-2);
+    border-bottom: 1px solid var(--color-grey-light-2);
 }
 
-.test {
-    padding-top: var(--spacing-sm);
-}
-
-table {
-    border-spacing: 0;
-}
+// .test {
+//     padding-top: var(--spacing-sm);
+// }

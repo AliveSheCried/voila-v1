@@ -8,7 +8,7 @@
     padding-top: var(--spacing-xs);
     padding-right: 4rem;
     padding-bottom: 11rem;
-    border-radius: 5px;
+    border-radius: var(--br-small);
     //text
     text-align: right;
     font-weight: 700;
@@ -22,7 +22,7 @@
 .start__arrow {
     background-color: var(--color-pink);
     color: var(--color-white);
-    border-radius: 5px;
+    border-radius: var(--br-small);
     padding-left: 5rem;
-    padding-right: 1rem;
+    padding-right: var(--spacing-sm);
 }

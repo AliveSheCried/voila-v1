@@ -52,8 +52,8 @@ const GetMerchantAccounts = () => {
                 <table className="merchant-account">
                   <tbody>
                     <tr>
-                      <th className="content__key test">Account Holder Name</th>
-                      <td className="content__value test">
+                      <th className="content__key">Account Holder Name</th>
+                      <td className="content__value">
                         {account.account_holder_name}
                       </td>
                     </tr>
@@ -120,59 +120,6 @@ const GetMerchantAccounts = () => {
                   </tbody>
                 </table>
               </div>
-
-              {/* <div className="content__merchant-account">
-                <div className="content__merchant-account--meta">
-                  <span className="content__key">Account Holder Name:</span>
-                  <span className="content__value">
-                    {account.account_holder_name}
-                  </span>
-                  <br />
-                  <span className="content__key">Currency:</span>
-                  <span className="content__value">{account.currency}</span>
-
-                  <div className="account-identifiers">
-                    {account.account_identifiers.map((identifier, index) => (
-                      <div key={index}>
-                        {identifier.type === "sort_code_account_number" ? (
-                          <>
-                            <span className="content__key">Sort Code:</span>
-                            <span className="content__value">
-                              {identifier.sort_code}
-                            </span>
-                            <br />
-                            <span className="content__key">
-                              Account Number:
-                            </span>
-                            <span className="content__value">
-                              {identifier.account_number}
-                            </span>
-                          </>
-                        ) : (
-                          <>
-                            <span className="content__key">IBAN:</span>
-                            <span className="content__value">
-                              {identifier.iban}
-                            </span>
-                          </>
-                        )}
-                      </div>
-                    ))}
-                    <div className="content__merchant-account--balance">
-                      <span className="content__key">Available Balance:</span>
-                      <span className="content__value">
-                        {account.available_balance_in_minor}
-                      </span>
-                      <br />
-
-                      <span className="content__key">Current Balance:</span>
-                      <span className="content__value">
-                        {account.current_balance_in_minor}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div> */}
             </Card>
           ))}
         </div>

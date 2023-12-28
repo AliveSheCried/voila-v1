@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;600;700&display=swap");
 .card {
-  border: 1px solid var(--color-gray-light-2);
-  border-radius: 10px;
+  border: 1px solid var(--color-grey-light-2);
+  border-radius: var(--br-standard);
   padding: var(--spacing-md);
 }
 
@@ -17,7 +17,7 @@
   padding-top: var(--spacing-xs);
   padding-right: 4rem;
   padding-bottom: 11rem;
-  border-radius: 5px;
+  border-radius: var(--br-small);
   text-align: right;
   font-weight: 700;
   font-size: 7rem;
@@ -37,9 +37,9 @@
 .start__arrow {
   background-color: var(--color-pink);
   color: var(--color-white);
-  border-radius: 5px;
+  border-radius: var(--br-small);
   padding-left: 5rem;
-  padding-right: 1rem;
+  padding-right: var(--spacing-sm);
 }
 
 .main__right-panel {
@@ -112,7 +112,7 @@
   width: 210px;
   cursor: pointer;
   border-left: 2px solid transparent;
-  border-radius: 10px;
+  border-radius: var(--br-standard);
   padding: var(--spacing-xxs);
   transition: opacity 0.3s ease, background-color 0.3s ease;
 }
@@ -128,23 +128,23 @@
   opacity: 0;
   pointer-events: none;
   border-left: 2px solid var(--color-primary);
-  border-radius: 10px;
+  border-radius: var(--br-standard);
   transition: opacity 0.3s ease, background-color 0.3s ease;
 }
 .menu-item:hover::before {
   opacity: 1;
   background-color: var(--color-primary-hover);
-  border-radius: 10px;
+  border-radius: var(--br-standard);
 }
 .menu-item:active::before {
   background-color: var(--color-primary-hover);
   border-left: 2px solid var(--color-primary);
-  border-radius: 10px;
+  border-radius: var(--br-standard);
 }
 .menu-item__selected {
   background-color: var(--color-primary-selected);
   border-left: 3px solid var(--color-primary);
-  border-radius: 10px;
+  border-radius: var(--br-standard);
   transition: opacity 0.3s ease, background-color 0.3s ease;
 }
 .menu-item__left {
@@ -184,7 +184,10 @@
   flex-direction: row;
   border-left: 2px solid transparent;
   padding-left: var(--spacing-md);
-  padding-top: var(--spacing-md);
+  padding-top: var(--spacing-sm);
+  color: var(--color-white);
+  font-size: 2rem;
+  font-weight: 600;
 }
 
 .logo__icon {
@@ -199,8 +202,8 @@
   width: 75vw;
   margin: 0 auto;
   margin-top: var(--spacing-md);
-  border: 1px solid var(--color-gray-light-2);
-  border-radius: 10px;
+  border: 1px solid var(--color-grey-light-2);
+  border-radius: var(--br-standard);
 }
 @media (max-width: 1024px) {
   .container {
@@ -264,13 +267,13 @@
 }
 .input__field input {
   border-radius: var(--spacing-xs);
-  border: 1px solid var(--color-gray-light-2);
+  border: 1px solid var(--color-grey-light-2);
   padding: var(--spacing-md);
   margin-bottom: var(--spacing-md);
   background: transparent;
   font-family: inherit;
   font-weight: 400;
-  color: var(--color-gray-dark-1);
+  color: var(--color-grey-dark-1);
   width: 90%;
   outline: none;
 }
@@ -282,7 +285,7 @@
   top: 37%;
   left: 15px;
   transform: translateY(-50%);
-  color: var(--color-gray-dark-2);
+  color: var(--color-grey-dark-2);
   pointer-events: none;
   transition: 0.3s;
 }
@@ -332,7 +335,7 @@
   justify-content: space-between;
   background-color: var(--color-primary);
   color: var(--color-white);
-  font-size: 1.2rem;
+  font-size: var(--font-size-sm);
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s;
@@ -349,7 +352,7 @@
   justify-content: space-between;
   background-color: var(--color-green-light);
   color: var(--color-white);
-  font-size: 1.2rem;
+  font-size: var(--font-size-sm);
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s;
@@ -360,8 +363,8 @@
 
 .token__container {
   background-color: #faf9f9;
-  border-radius: 5px;
-  border: 1px solid var(--color-gray-light-2);
+  border-radius: var(--br-small);
+  border: 1px solid var(--color-grey-light-2);
   margin-bottom: var(--spacing-lg);
   padding-bottom: var(--spacing-sm);
 }
@@ -379,9 +382,9 @@
   padding: var(--spacing-sm) var(--spacing-md) var(--spacing-sm) var(--spacing-md);
   margin-right: var(--spacing-xs);
   font-size: var(--font-size-sm);
-  color: var(--color-gray-dark-2);
+  color: var(--color-grey-dark-2);
   background-color: var(--color-white);
-  border-radius: 5px;
+  border-radius: var(--br-small);
 }
 .token__icon {
   padding: var(--spacing-xs);
@@ -408,8 +411,8 @@
 
 .placeholder__container {
   background-color: #faf9f9;
-  border-radius: 5px;
-  border: 1px solid var(--color-gray-light-2);
+  border-radius: var(--br-small);
+  border: 1px solid var(--color-grey-light-2);
   margin-bottom: var(--spacing-xxs);
 }
 .placeholder__title {
@@ -426,9 +429,9 @@
   padding: var(--spacing-sm) var(--spacing-md) var(--spacing-sm) var(--spacing-md);
   margin-right: var(--spacing-xs);
   font-size: var(--font-size-sm);
-  color: var(--color-gray-dark-2);
+  color: var(--color-grey-dark-2);
   background-color: var(--color-white);
-  border-radius: 5px;
+  border-radius: var(--br-small);
 }
 .placeholder__icon {
   padding: var(--spacing-xs);
@@ -452,13 +455,13 @@
 .content__arrow {
   background-color: var(--color-pink);
   color: var(--color-white);
-  border-radius: 5px;
+  border-radius: var(--br-small);
   padding-left: 5rem;
   padding-right: 1rem;
 }
 .content__key, .content__key--white {
   font-size: var(--font-size-sm);
-  color: var(--color-gray-dark-1);
+  color: var(--color-grey-dark-1);
   font-weight: 600;
   margin-bottom: var(--spacing-xs);
   text-align: left;
@@ -469,12 +472,12 @@
 }
 .content__value, .content__value--white {
   font-size: var(--font-size-sm);
-  color: var(--color-gray-dark-1);
+  color: var(--color-grey-dark-1);
   margin-bottom: var(--spacing-xs);
   padding-left: var(--spacing-xs);
 }
 .content__value--white {
-  color: var(--color-gray-dark-1);
+  color: var(--color-grey-dark-1);
   font-weight: 600;
 }
 .content__value--white-highlight {
@@ -484,9 +487,15 @@
 }
 
 .merchant-account {
-  border: 1px solid var(--color-gray-light-2);
-  border-radius: 5px;
+  border: 1px solid var(--color-grey-light-2);
+  border-radius: var(--br-small);
   width: 100%;
+}
+.merchant-account tr:first-child th {
+  padding-top: var(--spacing-sm);
+}
+.merchant-account tr:first-child td {
+  padding-top: var(--spacing-sm);
 }
 .merchant-account__container {
   display: flex;
@@ -504,7 +513,7 @@
   color: var(--color-primary);
   font-weight: 600;
   background-color: #d8dce9;
-  border-radius: 5px;
+  border-radius: var(--br-small);
   margin-bottom: var(--spacing-sm);
 }
 .merchant-account__icon {
@@ -513,21 +522,13 @@
   margin-right: var(--spacing-sm);
 }
 .merchant-account--balance {
-  background-color: var(--color-gray-light-1);
+  background-color: var(--color-grey-light-1);
 }
 
 .blank-row {
   height: var(--spacing-sm);
   background-color: #fff;
-  border-bottom: 1px solid var(--color-gray-light-2);
-}
-
-.test {
-  padding-top: var(--spacing-sm);
-}
-
-table {
-  border-spacing: 0;
+  border-bottom: 1px solid var(--color-grey-light-2);
 }
 
 :root {
@@ -539,18 +540,13 @@ table {
   --color-green: #31724b;
   --color-green-light: #659176;
   --color-green-palette: #acd8aa;
-  --color-green-jade: #7ec89c;
   --color-white: #fff;
   --color-black: #000;
-  --color-gray-light-1: #faf9f9;
-  --color-gray-light-2: #f4f2f2;
-  --color-gray-light-3: #f1eeee;
-  --color-gray-dark-1: #333;
-  --color-gray-dark-2: #c5c4c4;
-  --color-secondary: #3c5254;
+  --color-grey-light-1: #faf9f9;
+  --color-grey-light-2: #f4f2f2;
+  --color-grey-dark-1: #333;
+  --color-grey-dark-2: #c5c4c4;
   --color-tertiary: #4d475f;
-  --color-quaternary: #dde7eb;
-  --color-quinary: #f4c2c2;
   --color-blue: #454955;
   --shadow-color: 0deg 0% 63%;
   --spacing-xxs: 0.25rem;
@@ -566,6 +562,8 @@ table {
   --font-size-sm: 1.2rem;
   --font-size-md: 1.4rem;
   --font-size-lg: 1.6rem;
+  --br-small: 5px;
+  --br-standard: 10px;
 }
 
 * {
@@ -586,7 +584,7 @@ html {
 }
 
 body {
-  font-size: 1.6rem;
+  font-size: var(--font-size-lg);
   line-height: 1.5;
   background-color: var(--color-white);
   color: var(--color-black);
@@ -607,7 +605,7 @@ header {
   justify-content: space-between;
   align-items: center;
   border-top-right-radius: 10px;
-  background-color: var(--color-gray-light-1);
+  background-color: var(--color-grey-light-1);
   padding-bottom: var(--spacing-xs);
   padding-left: var(--spacing-md);
 }
@@ -677,6 +675,10 @@ ul {
 img {
   width: 100%;
   display: block;
+}
+
+table {
+  border-spacing: 0;
 }
 
 .material-symbols-outlined {

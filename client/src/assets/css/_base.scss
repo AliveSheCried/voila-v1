@@ -11,30 +11,22 @@
     --color-yellow: #efcb68;
     // pink
     --color-pink: #f9cff2;
-    // green, green light & green palette
+    // green, green light & green palette  (need to optimise)
     --color-green: #31724b;
     --color-green-light: #659176;
     --color-green-palette: #acd8aa;
-    --color-green-jade: #7ec89c;
     // B& white
     --color-white: #fff;
     --color-black: #000;
     //greys
-    --color-gray-light-1: #faf9f9;
-    --color-gray-light-2: #f4f2f2;
-    --color-gray-light-3: #f1eeee;
-    --color-gray-dark-1: #333;
-    --color-gray-dark-2: #c5c4c4;
+    --color-grey-light-1: #faf9f9;
+    --color-grey-light-2: #f4f2f2;
+    --color-grey-dark-1: #333;
+    --color-grey-dark-2: #c5c4c4;
 
-    //Other colors? Too many?
-    --color-secondary: #3c5254; //#4d475f;
-    //lilac
+    //Other colors (need to optimise)
     --color-tertiary: #4d475f;
-    //light blue
-    --color-quaternary: #dde7eb;
-    //pink
-    --color-quinary: #f4c2c2;
-    //--color-green: #68c75b;
+    //blue
     --color-blue: #454955; //#0a2b39;
     //shadow colour
     --shadow-color: 0deg 0% 63%;
@@ -55,6 +47,10 @@
     --font-size-sm: 1.2rem;
     --font-size-md: 1.4rem;
     --font-size-lg: 1.6rem;
+
+    //border radius
+    --br-small: 5px;
+    --br-standard: 10px;
 }
 
 //Global styles
@@ -76,7 +72,7 @@ html {
 }
 
 body {
-    font-size: 1.6rem;
+    font-size: var(--font-size-lg);
     line-height: 1.5;
     background-color: var(--color-white);
     color: var(--color-black);
@@ -97,7 +93,7 @@ header {
     justify-content: space-between;
     align-items: center;
     border-top-right-radius: 10px;
-    background-color: var(--color-gray-light-1);
+    background-color: var(--color-grey-light-1);
     padding-bottom: var(--spacing-xs);
     //padding-top: var(--spacing-md);
     padding-left: var(--spacing-md);
@@ -112,7 +108,7 @@ nav {
     width: 215px;
     //height: 100vh;
     z-index: 0;
-    //border-right: 2px solid var(--color-gray-light-1);
+    //border-right: 2px solid var(--color-grey-light-1);
     padding-right: var(--spacing-md);
     background-color: var(--color-primary);
     border-top-left-radius: 10px;
@@ -164,10 +160,6 @@ h6 {
     font-weight: 600;
 }
 
-// p {
-//     margin-bottom: 1.5rem;
-// }
-
 ul {
     list-style-type: none;
 }
@@ -175,6 +167,10 @@ ul {
 img {
     width: 100%;
     display: block;
+}
+
+table {
+    border-spacing: 0;
 }
 
 //material ui
