@@ -11,6 +11,7 @@ import { TokenContext } from "./contexts/TokenContext";
 function App() {
   const [isAuth, setIsAuth] = useState(false);
   const [name, setName] = useState("John Doe");
+  const [email, setEmail] = useState("");
 
   const [tokenData, setToken] = useState({
     name: "",
@@ -27,6 +28,7 @@ function App() {
   const handleLogin = (email) => {
     const localName = email.split("@")[0];
     setName(localName);
+    setEmail(email);
     setIsAuth(true);
   };
 
@@ -34,7 +36,7 @@ function App() {
     <Layout>
       <TokenContext.Provider value={{ tokenData, setToken: handleSetToken }}>
         <Nav />
-        <Home name={name} />
+        <Home name={name} email={email} />
       </TokenContext.Provider>
     </Layout>
   ) : (
