@@ -1,11 +1,18 @@
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 import { renderMenuItems } from "./Menu";
 
 // MenuItem component
 const MenuItem = ({ item, level, selectedItem, setSelectedItem }) => {
+  const navigate = useNavigate();
+  //console.log("path", item.path);
+
   const handleClick = () => {
     if (level > 1) {
       setSelectedItem(item.name);
+      //navigate(`/${item.path}`);
+
+      navigate(item.path);
     }
   };
 

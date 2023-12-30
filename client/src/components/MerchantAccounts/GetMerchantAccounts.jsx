@@ -4,6 +4,7 @@ import { MerchantAccountContext } from "../../contexts/MerchantAccountContext";
 import { TokenContext } from "../../contexts/TokenContext";
 import { GET_MERCHANT_ACCOUNTS } from "../../graphql/queries/getMerchantAccounts";
 import Card from "../Card/Card";
+import Start from "../Start/Start";
 
 const GetMerchantAccounts = () => {
   const { tokenData } = useContext(TokenContext);
@@ -28,6 +29,9 @@ const GetMerchantAccounts = () => {
     }
   }, [tokenData.accessToken, getMerchantAccounts, setMerchantAccounts]);
 
+  if (!loading && !error && !data) {
+    return <Start type={"routes"} title={"All merchant accounts"} />;
+  }
   if (loading) return <p>Loading accounts...</p>;
   if (error) return <p>An error occurred: {error.message}</p>;
   if (data) {

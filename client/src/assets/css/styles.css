@@ -34,6 +34,29 @@
   }
 }
 
+.start__route {
+  margin-top: 8rem;
+  color: var(--color-primary);
+  padding-top: var(--spacing-xs);
+  padding-right: 4rem;
+  padding-bottom: 11rem;
+  border-radius: var(--br-small);
+  text-align: right;
+  font-weight: 700;
+  font-size: 7rem;
+  line-height: 8rem;
+}
+@media (max-width: 1080px) {
+  .start__route {
+    margin-top: 6rem;
+  }
+}
+@media (max-width: 1080px) {
+  .start__route {
+    font-size: 6rem;
+  }
+}
+
 .start__arrow {
   background-color: var(--color-pink);
   color: var(--color-white);

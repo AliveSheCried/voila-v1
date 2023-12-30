@@ -19,6 +19,27 @@
     line-height: 8rem;
 }
 
+.start__route {
+    //requires a media query for different screen sizes to align the arrow with the payment button.
+    margin-top: 8rem;
+    @media (max-width: 1080px) {
+        margin-top: 6rem;
+    }
+    color: var(--color-primary);
+    padding-top: var(--spacing-xs);
+    padding-right: 4rem;
+    padding-bottom: 11rem;
+    border-radius: var(--br-small);
+    //text
+    text-align: right;
+    font-weight: 700;
+    font-size: 7rem;
+    @media (max-width: 1080px) {
+        font-size: 6rem;
+    }
+    line-height: 8rem;
+}
+
 .start__arrow {
     background-color: var(--color-pink);
     color: var(--color-white);

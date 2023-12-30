@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+// ...
 import "./assets/css/styles.css";
 import Layout from "./components/Layout/Layout";
 import Home from "./pages/Home/Home";
@@ -33,12 +35,16 @@ function App() {
   };
 
   return isAuth ? (
-    <Layout>
-      <TokenContext.Provider value={{ tokenData, setToken: handleSetToken }}>
-        <Nav />
-        <Home name={name} email={email} />
-      </TokenContext.Provider>
-    </Layout>
+    <Router>
+      <Layout>
+        <TokenContext.Provider value={{ tokenData, setToken: handleSetToken }}>
+          <Nav />
+          <Routes>
+            <Route path="/*" element={<Home name={name} email={email} />} />
+          </Routes>
+        </TokenContext.Provider>
+      </Layout>
+    </Router>
   ) : (
     <Login onLogin={handleLogin} />
   );
