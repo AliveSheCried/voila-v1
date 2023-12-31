@@ -59,7 +59,7 @@ export const menuItems = [
         name: "Get - transactions",
         icon: "sort",
         level: 2,
-        path: "transactions",
+        path: "/getTransactions",
         children: [],
       },
       {

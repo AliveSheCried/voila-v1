@@ -119,3 +119,17 @@ $input-width: 90%;
     }
   }
 }
+
+select {
+  border-radius: $input-border-radius;
+  border: $input-border;
+  padding: $input-padding;
+  margin-bottom: $input-margin-bottom;
+  background: var(--color-white); //$input-background;
+  font-family: $input-font-family;
+  // font-weight: $input-font-weight;
+  // font-size: var(--text-size-xxs);
+  color: var(--color-grey-dark-2); //$input-color;
+  //width: $input-width;
+  outline: none;
+}

@@ -29,7 +29,8 @@ const GetMerchantAccount = () => {
           <option value="">-- Select merchant account --</option>
           {merchantAccounts.map((account) => (
             <option key={account.id} value={account.id}>
-              ID: {account.id} - Currency: {account.currency}
+              {"CURRENCY: " + account.currency + " - ID: " + account.id}
+              {/* Change to IBAN / Account Number*/}
             </option>
           ))}
         </select>
@@ -38,7 +39,7 @@ const GetMerchantAccount = () => {
         <Card
           key={selectedAccount.id}
           data={selectedAccount}
-          style="sp-right-sm sp-bottom-md"
+          style="sp-right-sm sp-bottom-md card__merchant-account--detail"
         >
           <div className="merchant-account__title">
             <span className="material-symbols-outlined merchant-account__icon">

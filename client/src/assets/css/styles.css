@@ -4,11 +4,15 @@
   border-radius: var(--br-standard);
   padding: var(--spacing-md);
 }
-
 .card__layout {
   display: flex;
-  justify-content: flex-end;
-  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.card__merchant-account--detail {
+  width: 425px;
 }
 
 .start {
@@ -382,6 +386,17 @@
 }
 .btn--secondary:hover {
   background-color: var(--color-tertiary);
+}
+
+select {
+  border-radius: var(--spacing-xs);
+  border: 1px solid var(--color-grey-light-2);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  background: var(--color-white);
+  font-family: inherit;
+  color: var(--color-grey-dark-2);
+  outline: none;
 }
 
 .token__container {
