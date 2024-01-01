@@ -351,6 +351,28 @@
   cursor: pointer;
 }
 
+.input__merchant-account {
+  position: relative;
+}
+.input__merchant-account input {
+  border-radius: var(--spacing-xs);
+  border: 1px solid var(--color-grey-light-2);
+  padding: var(--spacing-md);
+  margin-right: var(--spacing-xs);
+  background: var(--color-white);
+  font-family: inherit;
+  font-weight: 400;
+  color: var(--color-grey-dark-2);
+  width: 120px;
+  outline: none;
+}
+.input__merchant-account input:focus {
+  border: 1px solid var(--color-primary);
+}
+.input__merchant-account label {
+  color: var(--color-grey-dark-1);
+}
+
 .btn {
   border-radius: var(--spacing-xs);
   border: none;
@@ -386,6 +408,23 @@
 }
 .btn--secondary:hover {
   background-color: var(--color-tertiary);
+}
+.btn--tertiary {
+  padding-top: var(--spacing-sm);
+  padding-bottom: var(--spacing-sm);
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+  display: inline-flex;
+  justify-content: space-between;
+  background-color: var(--color-tertiary);
+  color: var(--color-white);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.btn--tertiary:hover {
+  background-color: var(--color-primary-selected);
 }
 
 select {
@@ -508,6 +547,12 @@ select {
 .content__key--white {
   color: var(--color-primary);
 }
+.content__label {
+  font-size: var(--font-size-sm);
+  color: var(--color-grey-dark-2);
+  margin-bottom: var(--spacing-xs);
+  text-align: left;
+}
 .content__value, .content__value--white {
   font-size: var(--font-size-sm);
   color: var(--color-grey-dark-1);
@@ -558,6 +603,20 @@ select {
   padding: var(--spacing-xs);
   margin-left: var(--spacing-xs);
   margin-right: var(--spacing-sm);
+}
+.merchant-account__search-container {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-sm);
+  margin-left: var(--spacing-lg);
+}
+.merchant-account__search-dates {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 .merchant-account--balance {
   background-color: var(--color-grey-light-1);
@@ -803,6 +862,10 @@ table {
 
 .sp-top-negative-sm {
   margin-top: -10px;
+}
+
+.sp-top-negative-md {
+  margin-top: -15px;
 }
 
 /* Base link styles */

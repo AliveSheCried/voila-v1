@@ -79,6 +79,32 @@ $input-width: 90%;
   }
 }
 
+.input__merchant-account {
+  position: relative;
+
+  input {
+    border-radius: $input-border-radius;
+    border: $input-border;
+    padding: $input-padding;
+
+    margin-right: var(--spacing-xs);
+    background: var(--color-white); //$input-background;
+    font-family: $input-font-family;
+    font-weight: $input-font-weight;
+    color: var(--color-grey-dark-2);
+    width: 120px;
+    outline: none;
+
+    &:focus {
+      border: 1px solid var(--color-primary);
+    }
+  }
+
+  label {
+    color: var(--color-grey-dark-1);
+  }
+}
+
 .btn {
   border-radius: var(--spacing-xs);
   border: none;
@@ -118,6 +144,26 @@ $input-width: 90%;
       background-color: var(--color-tertiary);
     }
   }
+
+  &--tertiary {
+    padding-top: var(--spacing-sm);
+    padding-bottom: var(--spacing-sm);
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+    display: inline-flex;
+    justify-content: space-between;
+    background-color: var(--color-tertiary);
+    color: var(--color-white);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      background-color: var(--color-primary-selected);
+    }
+  }
 }
 
 select {
@@ -127,9 +173,6 @@ select {
   margin-bottom: $input-margin-bottom;
   background: var(--color-white); //$input-background;
   font-family: $input-font-family;
-  // font-weight: $input-font-weight;
-  // font-size: var(--text-size-xxs);
   color: var(--color-grey-dark-2); //$input-color;
-  //width: $input-width;
   outline: none;
 }

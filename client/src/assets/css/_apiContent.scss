@@ -30,6 +30,13 @@
         }
     }
 
+    &__label {
+        font-size: var(--font-size-sm);
+        color: var(--color-grey-dark-2);
+        margin-bottom: var(--spacing-xs);
+        text-align: left;
+    }
+
     &__value {
         font-size: var(--font-size-sm);
         color: var(--color-grey-dark-1);
@@ -86,6 +93,16 @@
         margin-right: var(--spacing-sm);
     }
 
+    &__search-container {
+        @include fbox($direction: row, $items: flex-start, $wrap: wrap);
+        margin-bottom: var(--spacing-sm);
+        margin-left: var(--spacing-lg);
+    }
+
+    &__search-dates {
+        @include fbox($direction: row, $items: center, $wrap: wrap);
+    }
+
     &--balance {
         background-color: var(--color-grey-light-1);
     }
@@ -98,5 +115,5 @@
 }
 
 // .test {
-//     padding-top: var(--spacing-sm);
+//     border: 1px solid red;
 // }
