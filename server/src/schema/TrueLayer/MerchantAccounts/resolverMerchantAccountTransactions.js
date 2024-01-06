@@ -3,6 +3,9 @@ const merchantAccountTransactions = async (
   { id, fromDate, toDate },
   { token, dataSources }
 ) => {
+  console.log("merchantAccountTransactions resolver called");
+  console.log("Arguments:", { id, fromDate, toDate });
+
   //try catch block to handle errors
   try {
     //MongoDB code
@@ -19,13 +22,22 @@ const merchantAccountTransactions = async (
     const decodedFromDate = decodeURIComponent(fromDate);
     const decodedToDate = decodeURIComponent(toDate);
 
+    // Convert the fromDate and toDate values to Date objects
+    const fromDateObj = new Date(decodedFromDate);
+    const toDateObj = new Date(decodedToDate);
+
+    // Format the Date objects in ISO-8601 format
+    const isoFromDate = fromDateObj.toISOString();
+    const isoToDate = toDateObj.toISOString();
+    console.log(isoFromDate, isoToDate);
+
     //Always fetch the transactions from TrueLayer API
     const responseData =
       await dataSources.tlMerchantAccountAPI.getMerchantAccountTransactions(
         id,
         token,
-        fromDate,
-        toDate
+        isoFromDate,
+        isoToDate
       );
 
     if (!responseData.items || responseData.items.length === 0) {
@@ -101,6 +113,7 @@ const merchantAccountTransactions = async (
 
     const allTransactions = [...dbTransactions, ...newTransactions];
 
+    console.log("Response data:", responseData);
     return allTransactions;
   } catch (error) {
     console.log(error);

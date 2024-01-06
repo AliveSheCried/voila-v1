@@ -547,6 +547,14 @@ select {
 .content__key--white {
   color: var(--color-primary);
 }
+.content__key--table {
+  font-size: var(--font-size-sm);
+  color: var(--color-grey-dark-1);
+  font-weight: 600;
+  margin-bottom: var(--spacing-xs);
+  text-align: left;
+  padding-left: var(--spacing-xs);
+}
 .content__label {
   font-size: var(--font-size-sm);
   color: var(--color-grey-dark-2);
@@ -569,15 +577,18 @@ select {
   padding-right: var(--spacing-xs);
 }
 
-.merchant-account {
+.merchant-account, .merchant-account--table {
   border: 1px solid var(--color-grey-light-2);
   border-radius: var(--br-small);
   width: 100%;
 }
-.merchant-account tr:first-child th {
+.merchant-account--table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+.merchant-account tr:first-child th, .merchant-account--table tr:first-child th {
   padding-top: var(--spacing-sm);
 }
-.merchant-account tr:first-child td {
+.merchant-account tr:first-child td, .merchant-account--table tr:first-child td {
   padding-top: var(--spacing-sm);
 }
 .merchant-account__container {
@@ -622,9 +633,11 @@ select {
   background-color: var(--color-grey-light-1);
 }
 
-.blank-row {
+.blank-row, .blank-row--border {
   height: var(--spacing-sm);
   background-color: #fff;
+}
+.blank-row--border {
   border-bottom: 1px solid var(--color-grey-light-2);
 }
 

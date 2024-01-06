@@ -88,7 +88,7 @@ const GetMerchantAccount = () => {
                   )
                 )}
                 <tr>
-                  <td colSpan={2} className="blank-row"></td>
+                  <td colSpan={2} className="blank-row-border"></td>
                 </tr>
 
                 <tr className="merchant-account--balance">

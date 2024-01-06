@@ -29,6 +29,15 @@
             color: var(--color-primary);
         }
     }
+    // Fix this!  This is not working
+    &__key--table {
+        font-size: var(--font-size-sm);
+        color: var(--color-grey-dark-1);
+        font-weight: 600;
+        margin-bottom: var(--spacing-xs);
+        text-align: left;
+        padding-left: var(--spacing-xs);
+    }
 
     &__label {
         font-size: var(--font-size-sm);
@@ -63,6 +72,13 @@
     border: 1px solid var(--color-grey-light-2);
     border-radius: var(--br-small);
     width: 100%;
+
+    &--table {
+        @extend .merchant-account;
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    }
 
     & tr:first-child th {
         padding-top: var(--spacing-sm);
@@ -111,7 +127,11 @@
 .blank-row {
     height: var(--spacing-sm);
     background-color: #fff;
-    border-bottom: 1px solid var(--color-grey-light-2);
+
+    &--border {
+        @extend .blank-row;
+        border-bottom: 1px solid var(--color-grey-light-2);
+    }
 }
 
 // .test {

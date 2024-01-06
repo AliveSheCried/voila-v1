@@ -20,6 +20,7 @@ const types = `
     available_balance_in_minor: String
     current_balance_in_minor: String
     account_holder_name: String
+    transactions(fromDate: String, toDate: String): [MerchantAccountTransactions]
   }
 
   "Payout type; consists of Transaction interface + fields specific to Payouts"

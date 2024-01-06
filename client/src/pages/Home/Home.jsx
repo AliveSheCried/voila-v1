@@ -3,25 +3,30 @@ import { useState } from "react";
 import Content from "../../components/Content/Content";
 import Header from "../../components/Header/Header";
 import { MerchantAccountContext } from "../../contexts/MerchantAccountContext";
+import { MerchantAccountTransactionContext } from "../../contexts/MerchantAccountTransactionContext";
 
 const Home = ({ name, email }) => {
   const [merchantAccounts, setMerchantAccounts] = useState([]);
+  const [merchantAccountTransactions, setMerchantAccountTransactions] =
+    useState([]);
+
   return (
     <div className="container__content">
       <Header name={name} email={email} />
       <MerchantAccountContext.Provider
         value={{ merchantAccounts, setMerchantAccounts }}
       >
-        <Content />
+        <MerchantAccountTransactionContext.Provider
+          value={{
+            merchantAccountTransactions,
+            setMerchantAccountTransactions,
+          }}
+        >
+          <Content />
+        </MerchantAccountTransactionContext.Provider>
       </MerchantAccountContext.Provider>
     </div>
   );
-  // return (
-  //   <div className="container__content">
-  //     <Header name={name} email={email} />
-  //     <Content />
-  //   </div>
-  // );
 };
 
 Home.propTypes = {
