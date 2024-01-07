@@ -164,6 +164,26 @@ $input-width: 90%;
       background-color: var(--color-primary-selected);
     }
   }
+
+  &--quaternary {
+    padding-top: var(--spacing-xs);
+    padding-bottom: var(--spacing-xs);
+    padding-left: var(--spacing-sm);
+    padding-right: var(--spacing-sm);
+    display: inline-flex;
+    justify-content: space-between;
+    background-color: var(--color-tertiary);
+    color: var(--color-white);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      background-color: var(--color-primary-selected);
+    }
+  }
 }
 
 select {

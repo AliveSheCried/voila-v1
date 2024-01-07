@@ -426,6 +426,23 @@
 .btn--tertiary:hover {
   background-color: var(--color-primary-selected);
 }
+.btn--quaternary {
+  padding-top: var(--spacing-xs);
+  padding-bottom: var(--spacing-xs);
+  padding-left: var(--spacing-sm);
+  padding-right: var(--spacing-sm);
+  display: inline-flex;
+  justify-content: space-between;
+  background-color: var(--color-tertiary);
+  color: var(--color-white);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.btn--quaternary:hover {
+  background-color: var(--color-primary-selected);
+}
 
 select {
   border-radius: var(--spacing-xs);
@@ -536,7 +553,7 @@ select {
   padding-left: 5rem;
   padding-right: 1rem;
 }
-.content__key, .content__key--white {
+.content__key, .content__key--table, .content__key--white {
   font-size: var(--font-size-sm);
   color: var(--color-grey-dark-1);
   font-weight: 600;
@@ -548,11 +565,6 @@ select {
   color: var(--color-primary);
 }
 .content__key--table {
-  font-size: var(--font-size-sm);
-  color: var(--color-grey-dark-1);
-  font-weight: 600;
-  margin-bottom: var(--spacing-xs);
-  text-align: left;
   padding-left: var(--spacing-xs);
 }
 .content__label {
@@ -561,7 +573,7 @@ select {
   margin-bottom: var(--spacing-xs);
   text-align: left;
 }
-.content__value, .content__value--white {
+.content__value, .content__value--table--white, .content__value--table, .content__value--white {
   font-size: var(--font-size-sm);
   color: var(--color-grey-dark-1);
   margin-bottom: var(--spacing-xs);
@@ -576,6 +588,30 @@ select {
   padding-left: var(--spacing-xs);
   padding-right: var(--spacing-xs);
 }
+.content__value--table {
+  font-size: var(--font-size-xs);
+  padding-top: var(--spacing-xxs);
+  padding-bottom: var(--spacing-xxs);
+}
+.content__value--table--white {
+  color: var(--color-grey-dark-1);
+  font-weight: 600;
+}
+.content__value--table--white-highlight {
+  background-color: var(--color-green-palette);
+  padding-left: var(--spacing-xs);
+  padding-right: var(--spacing-xs);
+  color: var(--color-grey-dark-1);
+  font-weight: 600;
+  font-size: var(--font-size-xs);
+}
+
+.merchant-account tr:first-child th, .merchant-account--table tr:first-child th,
+.merchant-account tr:first-child td,
+.merchant-account--table tr:first-child td {
+  padding-top: var(--spacing-sm);
+  padding-bottom: var(--spacing-xs);
+}
 
 .merchant-account, .merchant-account--table {
   border: 1px solid var(--color-grey-light-2);
@@ -583,13 +619,11 @@ select {
   width: 100%;
 }
 .merchant-account--table tr:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: var(--color-grey-light-1);
 }
-.merchant-account tr:first-child th, .merchant-account--table tr:first-child th {
-  padding-top: var(--spacing-sm);
-}
-.merchant-account tr:first-child td, .merchant-account--table tr:first-child td {
-  padding-top: var(--spacing-sm);
+.merchant-account--table tr:last-child td {
+  padding-top: var(--spacing-xs);
+  padding-bottom: var(--spacing-xs);
 }
 .merchant-account__container {
   display: flex;
@@ -639,6 +673,10 @@ select {
 }
 .blank-row--border {
   border-bottom: 1px solid var(--color-grey-light-2);
+}
+
+.height_test {
+  min-height: 320px;
 }
 
 :root {
@@ -897,4 +935,20 @@ a:hover {
   background-color: var(--color-pink);
   padding-left: var(--spacing-xs);
   padding-right: var(--spacing-xs);
+}
+
+/* Secondary link style */
+/* Transaction list table icon link style */
+.a--table-icon {
+  color: var(--color-grey-dark-2); /* Replace with your primary color variable */
+  font-weight: 600;
+  padding-left: var(--spacing-xs);
+  padding-right: var(--spacing-xs);
+  margin-right: var(--spacing-xs);
+}
+.a--table-icon:hover {
+  text-decoration: none;
+  color: var(--color-primary);
+  background-color: var(--color-pink);
+  transition: all 0.3s ease-in-out; /* Add smooth transition for color change */
 }/*# sourceMappingURL=styles.css.map */

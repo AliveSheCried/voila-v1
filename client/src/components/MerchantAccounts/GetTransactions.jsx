@@ -6,7 +6,7 @@ import { TokenContext } from "../../contexts/TokenContext";
 import { GET_MERCHANT_ACCOUNT_TRANSACTIONS } from "../../graphql/queries/getMerchantAccountTransactions";
 import Start from "../Start/Start";
 
-const ITEMS_PER_PAGE = 4;
+const ITEMS_PER_PAGE = 10;
 
 const GetTransactions = () => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -30,6 +30,8 @@ const GetTransactions = () => {
     .filter((transaction) => transaction.__typename === "Payout")
     .slice(currentPage * ITEMS_PER_PAGE, (currentPage + 1) * ITEMS_PER_PAGE);
 
+  // console.log("object", currentPage, paginatedTransactions.length);
+
   const handleGetTransactions = () => {
     getMerchantAccountTransactions({
       variables: {
@@ -46,8 +48,21 @@ const GetTransactions = () => {
     });
   };
 
-  //console.log("Transactions", merchantAccountTransactions);
+  // Filter merchant account context to get available balance and currency for selected account
+  const selectedAccount = merchantAccounts.find(
+    (account) => account.id === selectedAccountId
+  );
 
+  let selectedAccountAvailableBalance;
+  let selectedAccountCurrency;
+
+  if (selectedAccount) {
+    selectedAccountAvailableBalance =
+      selectedAccount.available_balance_in_minor;
+    selectedAccountCurrency = selectedAccount.currency;
+  }
+
+  //Form handlers
   const handleAccountChange = (event) => {
     setSelectedAccountId(event.target.value);
   };
@@ -141,36 +156,94 @@ const GetTransactions = () => {
         </div>
 
         {paginatedTransactions.length > 0 && (
-          <div className="sp-bottom-sm">
-            <table className="merchant-account--table">
-              <tbody>
-                <tr>
-                  <th className="content__key--table">Type</th>
-                  <th className="content__key--table">Status</th>
-                  <th className="content__key--table">Created date</th>
-                  <th className="content__key--table">Currency</th>
-                  <th className="content__key--table">Amount</th>
-                  <th className="content__key--table">Account holder name</th>
-                </tr>
-                {paginatedTransactions.map((transaction, index) => (
-                  <tr key={index}>
-                    <td className="content__value">{transaction.type}</td>
-                    <td className="content__value">{transaction.status}</td>
-                    <td className="content__value">
-                      {new Date(transaction.created_at).toLocaleDateString()}
-                    </td>
-                    <td className="content__value">{transaction.currency}</td>
-                    <td className="content__value">
-                      {transaction.amount_in_minor}
-                    </td>
-                    <td className="content__value">
-                      {transaction.beneficiary.account_holder_name}
-                    </td>
+          <>
+            <div className="sp-bottom-sm height_test">
+              <table className="merchant-account--table">
+                <tbody>
+                  <tr>
+                    <th className="content__key--table">Type</th>
+                    <th className="content__key--table">Status</th>
+                    <th className="content__key--table right">Created date</th>
+                    <th className="content__key--table">Currency</th>
+                    <th className="content__key--table right">Amount</th>
+                    <th className="content__key--table">Account holder name</th>
+                    <th className="content__key--table">Payment reference</th>
+                    <th className="content__key--table">Details</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                  {paginatedTransactions.map((transaction) => (
+                    <tr key={transaction.id}>
+                      <td className="content__value--table">
+                        {transaction.type}
+                      </td>
+                      <td className="content__value--table">
+                        {transaction.status}
+                      </td>
+                      <td className="content__value--table right">
+                        {new Date(transaction.created_at).toLocaleDateString()}
+                      </td>
+                      <td className="content__value--table">
+                        {transaction.currency}
+                      </td>
+                      <td className="content__value--table right">
+                        {transaction.amount_in_minor}
+                      </td>
+                      <td className="content__value--table">
+                        {transaction.beneficiary.account_holder_name}
+                      </td>
+                      <td className="content__value--table">
+                        {transaction.beneficiary.reference}
+                      </td>
+                      <td className="content__value--table">
+                        <span className="material-symbols-outlined">
+                          <a
+                            className="a--table-icon"
+                            href="#"
+                            alt="More transaction data"
+                          >
+                            data_info_alert
+                          </a>
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                  {/* <tr>
+                  <td colSpan={6} className="blank-row"></td>
+                </tr> */}
+                  <tr>
+                    <td colSpan={3}></td>
+                    <td className="content__key--table">Available balance</td>
+
+                    <td className="content__value--table--white-highlight right">
+                      {`${selectedAccountCurrency}  ${new Intl.NumberFormat(
+                        "en-GB"
+                      ).format(selectedAccountAvailableBalance)}`}
+                    </td>
+                    <td colSpan={3}></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div className="sp-top-sm right">
+              <button
+                className="btn btn--quaternary sp-right-sm "
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 0}
+              >
+                Previous
+              </button>
+              <button
+                className="btn btn--quaternary"
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={
+                  (currentPage + 1) * ITEMS_PER_PAGE >=
+                    merchantAccountTransactions.length ||
+                  paginatedTransactions.length === 0
+                }
+              >
+                Next
+              </button>
+            </div>
+          </>
         )}
       </div>
     );
@@ -178,113 +251,3 @@ const GetTransactions = () => {
 };
 
 export default GetTransactions;
-
-{
-  /* {paginatedTransactions.length > 0 && (
-          <div>
-            {paginatedTransactions.map((transaction, index) => (
-              <div className="sp-bottom-sm" key={index}>
-                <table className="merchant-account">
-                  <tbody>
-                    <tr>
-                      <th className="content__key">Transaction ID</th>
-                      <td className="content__value">{transaction.id}</td>
-                    </tr>
-                    <tr>
-                      <th className="content__key">Transaction Type</th>
-                      <td className="content__value">{transaction.type}</td>
-                    </tr>
-                    <tr>
-                      <th className="content__key">Transaction Status</th>
-                      <td className="content__value">{transaction.status}</td>
-                    </tr>
-                    <tr>
-                      <th className="content__key">Created date</th>
-                      <td className="content__value">
-                        {transaction.created_at}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th className="content__key">Executed date</th>
-                      <td className="content__value">
-                        {transaction.executed_at}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th className="content__key">Currency</th>
-                      <td className="content__value">{transaction.currency}</td>
-                    </tr>
-                    <tr>
-                      <th className="content__key">Amount</th>
-                      <td className="content__value">
-                        {transaction.amount_in_minor}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th className="content__key">Account holder name</th>
-                      <td className="content__value">
-                        {transaction.beneficiary.account_holder_name}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th className="content__key">Payment reference</th>
-                      <td className="content__value">
-                        {transaction.beneficiary.reference}
-                      </td>
-                    </tr>
-                    {transaction.beneficiary.account_identifiers.map(
-                      (identifier, index) => (
-                        <>
-                          {identifier.type === "sort_code_account_number" ? (
-                            <>
-                              <tr key={`sort-${index}`}>
-                                <th className="content__key">Sort Code</th>
-                                <td className="content__value">
-                                  {identifier.sort_code}
-                                </td>
-                              </tr>
-                              <tr key={`account-${index}`}>
-                                <th className="content__key">Account Number</th>
-                                <td className="content__value">
-                                  {identifier.account_number}
-                                </td>
-                              </tr>
-                            </>
-                          ) : (
-                            <tr key={`iban-${index}`}>
-                              <th className="content__key">IBAN</th>
-                              <td className="content__value">
-                                {identifier.iban}
-                              </td>
-                            </tr>
-                          )}
-                        </>
-                      )
-                    )}
-                    <tr>
-                      <td colSpan={2} className="blank-row"></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            ))}
-            <button
-              className="btn btn--tertiary sp-right-sm "
-              onClick={() => setCurrentPage(currentPage - 1)}
-              disabled={currentPage === 0}
-            >
-              Previous
-            </button>
-            <button
-              className="btn btn--tertiary"
-              onClick={() => setCurrentPage(currentPage + 1)}
-              disabled={
-                (currentPage + 1) * ITEMS_PER_PAGE >=
-                merchantAccountTransactions.length
-              }
-            >
-              Next
-            </button>
-          </div>
-        )} */
-}

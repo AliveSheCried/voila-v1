@@ -16,3 +16,22 @@ a {
     padding-left: var(--spacing-xs);
     padding-right: var(--spacing-xs);
 }
+
+/* Secondary link style */
+// TBC
+
+/* Transaction list table icon link style */
+.a--table-icon {
+    color: var(--color-grey-dark-2); /* Replace with your primary color variable */
+    font-weight: 600;
+    padding-left: var(--spacing-xs);
+    padding-right: var(--spacing-xs);
+    margin-right: var(--spacing-xs);
+
+    &:hover {
+        text-decoration: none;
+        color: var(--color-primary);
+        background-color: var(--color-pink);
+        transition: all 0.3s ease-in-out; /* Add smooth transition for color change */
+    }
+}

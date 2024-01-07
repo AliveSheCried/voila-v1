@@ -29,13 +29,9 @@
             color: var(--color-primary);
         }
     }
-    // Fix this!  This is not working
+
     &__key--table {
-        font-size: var(--font-size-sm);
-        color: var(--color-grey-dark-1);
-        font-weight: 600;
-        margin-bottom: var(--spacing-xs);
-        text-align: left;
+        @extend .content__key;
         padding-left: var(--spacing-xs);
     }
 
@@ -64,28 +60,59 @@
             }
         }
     }
+
+    //fix this awful css!
+
+    &__value--table {
+        @extend .content__value;
+        font-size: var(--font-size-xs);
+        padding-top: var(--spacing-xxs);
+        padding-bottom: var(--spacing-xxs);
+
+        &--white {
+            @extend .content__value;
+            color: var(--color-grey-dark-1);
+            font-weight: 600;
+
+            &-highlight {
+                background-color: var(--color-green-palette);
+                padding-left: var(--spacing-xs);
+                padding-right: var(--spacing-xs);
+                color: var(--color-grey-dark-1);
+                font-weight: 600;
+                font-size: var(--font-size-xs);
+            }
+        }
+    }
 }
 
 //Merchant Account pages styles
 
+%first-child-spacing {
+    tr:first-child th,
+    tr:first-child td {
+        padding-top: var(--spacing-sm);
+        padding-bottom: var(--spacing-xs);
+    }
+}
+
 .merchant-account {
+    @extend %first-child-spacing;
     border: 1px solid var(--color-grey-light-2);
     border-radius: var(--br-small);
     width: 100%;
 
     &--table {
         @extend .merchant-account;
+
         tr:nth-child(even) {
-            background-color: #f2f2f2;
+            background-color: var(--color-grey-light-1);
         }
-    }
 
-    & tr:first-child th {
-        padding-top: var(--spacing-sm);
-    }
-
-    & tr:first-child td {
-        padding-top: var(--spacing-sm);
+        tr:last-child td {
+            padding-top: var(--spacing-xs);
+            padding-bottom: var(--spacing-xs);
+        }
     }
 
     &__container {
@@ -134,6 +161,8 @@
     }
 }
 
-// .test {
-//     border: 1px solid red;
-// }
+.height_test {
+    min-height: 320px;
+    // border-radius: var(--br-small);
+    // border: 1px solid var(--color-grey-light-2);
+}
