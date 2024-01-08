@@ -1,4 +1,10 @@
 // Styles applicable to all API content pages
+%common__content-value {
+    color: var(--color-grey-dark-1);
+    font-weight: 600;
+    padding-left: var(--spacing-xs);
+    padding-right: var(--spacing-xs);
+}
 
 .content {
     &__head {
@@ -50,18 +56,13 @@
 
         &--white {
             @extend .content__value;
-            color: var(--color-grey-dark-1);
-            font-weight: 600;
+            @extend %common__content-value;
 
             &-highlight {
                 background-color: var(--color-green-palette);
-                padding-left: var(--spacing-xs);
-                padding-right: var(--spacing-xs);
             }
         }
     }
-
-    //fix this awful css!
 
     &__value--table {
         @extend .content__value;
@@ -70,16 +71,11 @@
         padding-bottom: var(--spacing-xxs);
 
         &--white {
-            @extend .content__value;
-            color: var(--color-grey-dark-1);
-            font-weight: 600;
+            @extend .content__value--table;
+            @extend %common__content-value;
 
             &-highlight {
                 background-color: var(--color-green-palette);
-                padding-left: var(--spacing-xs);
-                padding-right: var(--spacing-xs);
-                color: var(--color-grey-dark-1);
-                font-weight: 600;
                 font-size: var(--font-size-xs);
             }
         }
@@ -101,6 +97,10 @@
     border: 1px solid var(--color-grey-light-2);
     border-radius: var(--br-small);
     width: 100%;
+
+    &__container {
+        min-height: 320px;
+    }
 
     &--table {
         @extend .merchant-account;
@@ -159,10 +159,4 @@
         @extend .blank-row;
         border-bottom: 1px solid var(--color-grey-light-2);
     }
-}
-
-.height_test {
-    min-height: 320px;
-    // border-radius: var(--br-small);
-    // border: 1px solid var(--color-grey-light-2);
 }

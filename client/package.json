@@ -3,8 +3,6 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
- 
-
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -19,6 +17,7 @@
     "graphql": "^16.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-modal": "^3.16.1",
     "react-router-dom": "^6.21.1"
   },
   "devDependencies": {

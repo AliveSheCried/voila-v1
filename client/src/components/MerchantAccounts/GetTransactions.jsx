@@ -6,9 +6,19 @@ import { TokenContext } from "../../contexts/TokenContext";
 import { GET_MERCHANT_ACCOUNT_TRANSACTIONS } from "../../graphql/queries/getMerchantAccountTransactions";
 import Start from "../Start/Start";
 
+//modal test//
+import Modal from "react-modal";
+
 const ITEMS_PER_PAGE = 10;
 
 const GetTransactions = () => {
+  //modal test//
+  const [modalPosition, setModalPosition] = useState({
+    top: "50%",
+    left: "50%",
+  });
+  const [modalIsOpen, setIsOpen] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(0);
   const { merchantAccounts } = useContext(MerchantAccountContext);
   const { setMerchantAccountTransactions, merchantAccountTransactions } =
@@ -26,7 +36,44 @@ const GetTransactions = () => {
       },
     });
 
-  const paginatedTransactions = merchantAccountTransactions
+  //modal test//
+  // let subtitle;
+
+  const customStyles = {
+    content: {
+      top: modalPosition.top,
+      left: modalPosition.left,
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      width: "150px",
+      height: "150px",
+      backgroundColor: "#ffffff",
+    },
+    overlay: {
+      background: "transparent", //"rgba(255, 255, 255, 0.1)", // Set the background to white with 50% transparency
+    },
+  };
+
+  function openModal(e) {
+    const rect = e.target.getBoundingClientRect();
+    setModalPosition({ top: `${rect.top}px`, left: `${rect.left}px` });
+    console.log("rect", rect);
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  function afterOpenModal() {
+    // references are now sync'd and can be accessed.
+    // subtitle.style.color = "#000000";
+  }
+
+  const paginatedTransactions = [...merchantAccountTransactions]
+    .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
     .filter((transaction) => transaction.__typename === "Payout")
     .slice(currentPage * ITEMS_PER_PAGE, (currentPage + 1) * ITEMS_PER_PAGE);
 
@@ -157,7 +204,7 @@ const GetTransactions = () => {
 
         {paginatedTransactions.length > 0 && (
           <>
-            <div className="sp-bottom-sm height_test">
+            <div className="merchant-account__container sp-bottom-sm">
               <table className="merchant-account--table">
                 <tbody>
                   <tr>
@@ -193,12 +240,28 @@ const GetTransactions = () => {
                       <td className="content__value--table">
                         {transaction.beneficiary.reference}
                       </td>
-                      <td className="content__value--table">
+                      <td className="content__value--table" id="txDetail">
+                        <Modal
+                          parentSelector={() =>
+                            document.querySelector("#txDetail")
+                          }
+                          isOpen={modalIsOpen}
+                          onAfterOpen={afterOpenModal}
+                          onRequestClose={closeModal}
+                          style={customStyles}
+                          contentLabel="Example Modal"
+                          ariaHideApp={false}
+                          // subtitle="Hello"
+                        >
+                          <button onClick={closeModal}>close</button>
+                          <div>I am a modal</div>
+                        </Modal>
                         <span className="material-symbols-outlined">
                           <a
                             className="a--table-icon"
                             href="#"
-                            alt="More transaction data"
+                            title="View transaction details"
+                            onClick={openModal}
                           >
                             data_info_alert
                           </a>
