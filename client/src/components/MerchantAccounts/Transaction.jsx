@@ -1,83 +1,85 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
-import Modal from "react-modal";
 
 const Transaction = ({ transaction }) => {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [modalPosition, setModalPosition] = useState({
-    top: "50%",
-    left: "50%",
-  });
+  const [isDetailVisible, setIsDetailVisible] = useState(false);
 
-  //Modal related code
-  const openModal = (e) => {
-    const rect = e.target.getBoundingClientRect();
-    setModalPosition({ top: `${rect.top}px`, left: `${rect.left}px` });
-    setModalIsOpen(true);
+  const toggleDetail = (e) => {
+    e.preventDefault();
+    setIsDetailVisible(!isDetailVisible);
   };
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
-  const customStyles = {
-    content: {
-      top: modalPosition.top,
-      left: modalPosition.left,
-      right: "auto",
-      bottom: "auto",
-      marginRight: "-50%",
-      transform: "translate(-50%, -50%)",
-      width: "150px",
-      height: "150px",
-      backgroundColor: "#ffffff",
-    },
-    overlay: {
-      background: "transparent", //"rgba(255, 255, 255, 0.1)", // Set the background to white with 50% transparency
-    },
-  };
+
+  console.log(transaction);
 
   return (
-    <tr key={transaction.id}>
-      <td className="content__value--table">{transaction.type}</td>
-      <td className="content__value--table">{transaction.status}</td>
-      <td className="content__value--table right">
-        {new Date(transaction.created_at).toLocaleDateString()}
-      </td>
-      <td className="content__value--table">{transaction.currency}</td>
-      <td className="content__value--table right">
-        {transaction.amount_in_minor}
-      </td>
-      <td className="content__value--table">
-        {transaction.beneficiary.account_holder_name}
-      </td>
-      <td className="content__value--table">
-        {transaction.beneficiary.reference}
-      </td>
-      <td className="content__value--table" id="txDetail">
-        <Modal
-          parentSelector={() => document.querySelector("#txDetail")}
-          isOpen={modalIsOpen}
-          //onAfterOpen={afterOpenModal}
-          onRequestClose={closeModal}
-          style={customStyles}
-          contentLabel="Example Modal"
-          ariaHideApp={false}
-          // subtitle="Hello"
-        >
-          <button onClick={closeModal}>close</button>
-          <div>I am a modal</div>
-        </Modal>
-        <span className="material-symbols-outlined">
-          <a
-            className="a--table-icon"
-            href="#"
-            title="View transaction details"
-            onClick={openModal}
-          >
-            data_info_alert
-          </a>
-        </span>
-      </td>
-    </tr>
+    <>
+      <tr key={transaction.id}>
+        <td className="content__value--table">{transaction.type}</td>
+        <td className="content__value--table">{transaction.status}</td>
+        <td className="content__value--table right">
+          {new Date(transaction.created_at).toLocaleDateString()}
+        </td>
+        <td className="content__value--table">{transaction.currency}</td>
+        <td className="content__value--table right">
+          {transaction.amount_in_minor}
+        </td>
+        <td className="content__value--table">
+          {transaction.beneficiary.account_holder_name}
+        </td>
+        <td className="content__value--table">
+          {transaction.beneficiary.reference}
+        </td>
+        <td className="content__value--table" id="txDetail">
+          <span className="material-symbols-outlined">
+            <a
+              className="a--table-icon"
+              href="#"
+              title="View transaction details"
+              onClick={toggleDetail}
+            >
+              {isDetailVisible ? "expand_circle_up" : "expand_circle_down"}
+            </a>
+          </span>
+        </td>
+      </tr>
+      {isDetailVisible && (
+        <tr>
+          <td colSpan="4"></td>
+          <td colSpan="3">
+            <div className="merchant-account__transaction--detail">
+              <div className="merchant-account__transaction--detail--row ">
+                <div className="text-xxs">
+                  <strong>Account number</strong>
+                </div>
+                <div className="text-xxs">
+                  {
+                    transaction.beneficiary.account_identifiers[0]
+                      .account_number
+                  }
+                </div>
+              </div>
+              <div className="merchant-account__transaction--detail--row ">
+                <div className="text-xxs">
+                  <strong>Sort code</strong>
+                </div>
+                <div className="text-xxs">
+                  {transaction.beneficiary.account_identifiers[0].sort_code}
+                </div>
+              </div>
+              <div className="merchant-account__transaction--detail--row ">
+                <div className="text-xxs">
+                  <strong>IBAN</strong>
+                </div>
+                <div className="text-xxs">
+                  {transaction.beneficiary.account_identifiers[1].iban}
+                </div>
+              </div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+      )}
+    </>
   );
 };
 
