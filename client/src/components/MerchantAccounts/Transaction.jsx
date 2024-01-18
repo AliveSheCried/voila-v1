@@ -9,7 +9,7 @@ const Transaction = ({ transaction }) => {
     setIsDetailVisible(!isDetailVisible);
   };
 
-  console.log(transaction);
+  // console.log(transaction);
 
   return (
     <>
@@ -29,10 +29,12 @@ const Transaction = ({ transaction }) => {
         <td className="content__value--table">
           {transaction.beneficiary.reference}
         </td>
-        <td className="content__value--table" id="txDetail">
+        <td className="content__value--table">
           <span className="material-symbols-outlined">
             <a
-              className="a--table-icon"
+              className={`a--table-icon ${
+                isDetailVisible ? "a--table-icon__selected" : ""
+              }`}
               href="#"
               title="View transaction details"
               onClick={toggleDetail}
@@ -43,41 +45,40 @@ const Transaction = ({ transaction }) => {
         </td>
       </tr>
       {isDetailVisible && (
-        <tr>
-          <td colSpan="4"></td>
-          <td colSpan="3">
-            <div className="merchant-account__transaction--detail">
-              <div className="merchant-account__transaction--detail--row ">
+        <>
+          <tr>
+            <td colSpan="5"></td>
+            <td>
+              <div className="merchant-account__transaction--detail">
                 <div className="text-xxs">
                   <strong>Account number</strong>
                 </div>
+                <div className="text-xxs">
+                  <strong>Sort code</strong>
+                </div>
+                <div className="text-xxs">
+                  <strong>IBAN</strong>
+                </div>
+              </div>
+            </td>
+            <td colSpan="2">
+              <div className="merchant-account__transaction--detail">
                 <div className="text-xxs">
                   {
                     transaction.beneficiary.account_identifiers[0]
                       .account_number
                   }
                 </div>
-              </div>
-              <div className="merchant-account__transaction--detail--row ">
-                <div className="text-xxs">
-                  <strong>Sort code</strong>
-                </div>
                 <div className="text-xxs">
                   {transaction.beneficiary.account_identifiers[0].sort_code}
-                </div>
-              </div>
-              <div className="merchant-account__transaction--detail--row ">
-                <div className="text-xxs">
-                  <strong>IBAN</strong>
                 </div>
                 <div className="text-xxs">
                   {transaction.beneficiary.account_identifiers[1].iban}
                 </div>
               </div>
-            </div>
-          </td>
-          <td></td>
-        </tr>
+            </td>
+          </tr>
+        </>
       )}
     </>
   );
@@ -94,6 +95,13 @@ Transaction.propTypes = {
     beneficiary: PropTypes.shape({
       account_holder_name: PropTypes.string,
       reference: PropTypes.string,
+      account_identifiers: PropTypes.arrayOf(
+        PropTypes.shape({
+          account_number: PropTypes.string,
+          sort_code: PropTypes.string,
+          iban: PropTypes.string,
+        })
+      ),
     }),
   }),
 };

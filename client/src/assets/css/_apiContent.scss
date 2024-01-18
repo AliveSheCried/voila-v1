@@ -151,15 +151,12 @@
     }
 
     &__transaction--detail {
-        @include fbox($direction: column, $items: flex-end);
-        padding: var(--spacing-sm);
-        border-bottom: 1px solid var(--color-grey-light-2);
-        background-color: #edf4ed;
-    }
-
-    &__transaction--detail--row {
-        @include fbox($direction: row);
-        margin-bottom: var(--spacing-xs);
+        @include fbox($direction: column);
+        padding-top: var(--spacing-xxs);
+        padding-bottom: var(--spacing-xs);
+        padding-left: var(--spacing-xs);
+        background-color: #fff7fe; //#cffaf7; //#d6b2d0; //#f5edf1; //#edf4ed;
+        border-left: 1px solid var(--color-grey-light-2);
     }
 }
 

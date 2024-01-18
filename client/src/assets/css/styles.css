@@ -664,16 +664,12 @@ select {
 }
 .merchant-account__transaction--detail {
   display: flex;
-  align-items: flex-end;
   flex-direction: column;
-  padding: var(--spacing-sm);
-  border-bottom: 1px solid var(--color-grey-light-2);
-  background-color: #edf4ed;
-}
-.merchant-account__transaction--detail--row {
-  display: flex;
-  flex-direction: row;
-  margin-bottom: var(--spacing-xs);
+  padding-top: var(--spacing-xxs);
+  padding-bottom: var(--spacing-xs);
+  padding-left: var(--spacing-xs);
+  background-color: #fff7fe;
+  border-left: 1px solid var(--color-grey-light-2);
 }
 
 .blank-row, .blank-row--border {
@@ -956,4 +952,12 @@ a:hover {
   color: var(--color-primary);
   background-color: var(--color-pink);
   transition: all 0.3s ease-in-out; /* Add smooth transition for color change */
+}
+.a--table-icon__selected {
+  color: var(--color-white);
+  background-color: var(--color-grey-dark-2);
+}
+.a--table-icon__selected:hover {
+  color: var(--color-white);
+  background-color: var(--color-yellow);
 }/*# sourceMappingURL=styles.css.map */
