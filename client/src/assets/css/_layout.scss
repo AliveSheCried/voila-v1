@@ -1,18 +1,28 @@
-//////////Layout
+////////// Layout
 
-////Main
-//Media query for other screens (mobile not required)
+//// Main
+// Media query for other screens (mobile not required)
 .container {
-  @include myGrid($height: 90vh, $width: 75vw, $col1: 230px, $col2: 1fr);
-  margin: 0 auto;
-
-  // Media query for laptop screens
-  @media (max-width: 1024px) {
-    width: 95vw;
-  }
+  @include myGrid($width: 75vw, $col1: 230px, $col2: 1fr);
+  margin-inline: auto;
+  // margin: 0 auto;
   margin-top: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
   border: 1px solid var(--color-grey-light-2);
   border-radius: var(--br-standard);
+
+  // Media queries nested inside .container
+  // @media screen and (min-resolution: 2dppx) {
+  //   width: 95vw; // Only changing the width for high-resolution screens
+  // }
+
+  @media screen and (max-width: 1536px) and (max-height: 960px) {
+    width: 95vw; // Only changing the width for high-resolution screens
+  }
+
+  @media screen and (max-width: 1920px) and (max-height: 1080px) and (min-resolution: 1dppx) {
+    width: 75vw; // Only changing the width for larger standard resolution screens
+  }
 
   ////login
   &__login {

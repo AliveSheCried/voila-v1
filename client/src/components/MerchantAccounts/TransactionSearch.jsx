@@ -21,7 +21,7 @@ const TransactionSearch = ({
         Transaction search
       </div>
       <div className="merchant-account__search-container">
-        <div className="test sp-right-md">
+        <div className="sp-right-md">
           <div className="content__label sp-top-sm">Merchant account</div>
           <div>
             <select value={selectedAccountId} onChange={onAccountChange}>
@@ -35,7 +35,7 @@ const TransactionSearch = ({
             </select>
           </div>
         </div>
-        <div className="test">
+        <div>
           <div className="content__label sp-top-sm">Date range - from & to</div>
           <div className="input__merchant-account merchant-account__search-dates text-sm">
             <div>
@@ -59,12 +59,12 @@ const TransactionSearch = ({
               </div>
             </div>
           </div>
+          <div className="absolute-right sp-top-sm">
+            <button className="btn btn--tertiary" onClick={onGetTransactions}>
+              Search transactions
+            </button>
+          </div>
         </div>
-      </div>
-      <div className="right sp-top-negative-md">
-        <button className="btn btn--tertiary" onClick={onGetTransactions}>
-          Get Transactions
-        </button>
       </div>
     </div>
   );

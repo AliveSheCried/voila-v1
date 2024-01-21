@@ -23,10 +23,12 @@
   grid-template-columns: $col1 $col2;
 
   @if $height != null {
-    height: $height;
+    min-height: $height;
   }
 
   @if $width != null {
     width: $width;
   }
+
+  // min-width: 1044px;
 }

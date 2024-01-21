@@ -32,8 +32,24 @@ const GetMerchantAccounts = () => {
   if (!loading && !error && !data) {
     return <Start type={"routes"} title={"All merchant accounts"} />;
   }
-  if (loading) return <p>Loading accounts...</p>;
-  if (error) return <p>An error occurred: {error.message}</p>;
+  if (loading)
+    return (
+      <div>
+        <div className="content__head">
+          <span className="content__arrow">&raquo;</span> All merchant accounts
+        </div>
+        <div>Loading merchant accounts...</div>
+      </div>
+    );
+  if (error)
+    return (
+      <div>
+        <div className="content__head">
+          <span className="content__arrow">&raquo;</span> All merchant accounts
+        </div>
+        <div>An error occurred {error.message} </div>
+      </div>
+    );
   if (data) {
     // Render your merchant accounts data
     //console.log("GetMerchantAccounts", data);

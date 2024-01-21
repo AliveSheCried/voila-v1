@@ -29,7 +29,7 @@ const Transaction = ({ transaction }) => {
         <td className="content__value--table">
           {transaction.beneficiary.reference}
         </td>
-        <td className="content__value--table">
+        <td className="content__value--table absolute-right">
           <span className="material-symbols-outlined">
             <a
               className={`a--table-icon ${
@@ -62,7 +62,7 @@ const Transaction = ({ transaction }) => {
               </div>
             </td>
             <td colSpan="2">
-              <div className="merchant-account__transaction--detail">
+              <div className="merchant-account__transaction--detail padding-right-sm">
                 <div className="text-xxs">
                   {
                     transaction.beneficiary.account_identifiers[0]

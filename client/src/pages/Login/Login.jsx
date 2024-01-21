@@ -87,7 +87,7 @@ function Login({ onLogin }) {
         <div className="container__login--form">
           <span className="login__icon">*</span>
           <h5 className="sp-top-lg">Sign into Voila!</h5>
-          <p className="sp-bottom-md text-xs">
+          <p className="sp-bottom-xxxl text-xs">
             New user?{" "}
             <a href="#" className="a--primary">
               Create an account

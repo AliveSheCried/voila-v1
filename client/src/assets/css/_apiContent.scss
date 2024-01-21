@@ -69,6 +69,7 @@
         font-size: var(--font-size-xs);
         padding-top: var(--spacing-xxs);
         padding-bottom: var(--spacing-xxs);
+        vertical-align: middle;
 
         &--white {
             @extend .content__value--table;

@@ -45,7 +45,7 @@ const TransactionList = ({ transctions, selectedAccountId }) => {
               <th className="content__key--table right">Amount</th>
               <th className="content__key--table">Account holder name</th>
               <th className="content__key--table">Payment reference</th>
-              <th className="content__key--table">Details</th>
+              <th className="content__key--table absolute-right">Details</th>
             </tr>
             {paginatedTransactions.map((transaction) => (
               <Transaction transaction={transaction} key={transaction.id} />
