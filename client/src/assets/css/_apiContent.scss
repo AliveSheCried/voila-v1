@@ -80,6 +80,11 @@
                 font-size: var(--font-size-xs);
             }
         }
+
+        &-balance {
+            display: flex;
+            justify-content: space-between;
+        }
     }
 }
 
@@ -101,6 +106,7 @@
 
     &__container {
         min-height: 320px;
+        @include fbox($direction: row, $items: start, $content: start, $wrap: wrap);
     }
 
     &--table {
@@ -114,10 +120,6 @@
             padding-top: var(--spacing-xs);
             padding-bottom: var(--spacing-xs);
         }
-    }
-
-    &__container {
-        @include fbox($direction: row, $items: start, $content: start, $wrap: wrap);
     }
 
     &__title {

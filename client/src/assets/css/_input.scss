@@ -161,7 +161,7 @@ $input-width: 90%;
     transition: all 0.3s;
 
     &:hover {
-      background-color: var(--color-primary-selected);
+      background-color: var(--color-tertiary-hover);
     }
   }
 
@@ -181,7 +181,7 @@ $input-width: 90%;
     transition: all 0.3s;
 
     &:hover {
-      background-color: var(--color-primary-selected);
+      background-color: var(--color-tertiary-hover);
     }
   }
 }

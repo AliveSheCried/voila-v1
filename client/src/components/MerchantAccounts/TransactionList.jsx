@@ -52,20 +52,22 @@ const TransactionList = ({ transctions, selectedAccountId }) => {
             ))}
 
             <tr>
-              <td colSpan={3}></td>
-              <td className="content__key--table">Available balance</td>
-
+              <td colSpan={2}></td>
+              <td className="content__key--table right">Available balance</td>
+              <td className="content__value--table--white-highlight padding-left-xs">
+                <strong>{selectedAccountCurrency}</strong>
+              </td>
               <td className="content__value--table--white-highlight right">
-                {`${selectedAccountCurrency}  ${new Intl.NumberFormat(
-                  "en-GB"
-                ).format(selectedAccountAvailableBalance)}`}
+                {new Intl.NumberFormat("en-GB").format(
+                  selectedAccountAvailableBalance
+                )}
               </td>
               <td colSpan={3}></td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div className="sp-top-sm right">
+      <div className="sp-top-sm sp-bottom-sm right">
         <button
           className="btn btn--quaternary sp-right-sm "
           onClick={() => setCurrentPage(currentPage - 1)}

@@ -225,22 +225,14 @@
 .container {
   display: grid;
   grid-template-columns: 230px 1fr;
-  width: 75vw;
+  max-width: 1440px;
+  min-width: 1044px;
   margin-inline: auto;
   margin-top: var(--spacing-md);
   margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
   border: 1px solid var(--color-grey-light-2);
   border-radius: var(--br-standard);
-}
-@media screen and (max-width: 1536px) and (max-height: 960px) {
-  .container {
-    width: 95vw;
-  }
-}
-@media screen and (max-width: 1920px) and (max-height: 1080px) and (-webkit-min-device-pixel-ratio: 1), screen and (max-width: 1920px) and (max-height: 1080px) and (min-resolution: 1dppx) {
-  .container {
-    width: 75vw;
-  }
 }
 .container__login {
   display: flex;
@@ -253,7 +245,8 @@
   display: grid;
   grid-template-columns: minmax(300px, 400px) 1fr;
   min-height: 80vh;
-  width: 70vw;
+  max-width: 70vw;
+  min-width: 1044px;
   border-radius: var(--spacing-lg);
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
 }
@@ -429,7 +422,7 @@
   transition: all 0.3s;
 }
 .btn--tertiary:hover {
-  background-color: var(--color-primary-selected);
+  background-color: var(--color-tertiary-hover);
 }
 .btn--quaternary {
   padding-top: var(--spacing-xs);
@@ -446,7 +439,7 @@
   transition: all 0.3s;
 }
 .btn--quaternary:hover {
-  background-color: var(--color-primary-selected);
+  background-color: var(--color-tertiary-hover);
 }
 
 select {
@@ -605,6 +598,10 @@ select {
   background-color: var(--color-green-palette);
   font-size: var(--font-size-xs);
 }
+.content__value--table-balance {
+  display: flex;
+  justify-content: space-between;
+}
 
 .merchant-account tr:first-child th, .merchant-account--table tr:first-child th,
 .merchant-account tr:first-child td,
@@ -620,6 +617,11 @@ select {
 }
 .merchant-account__container {
   min-height: 320px;
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 .merchant-account--table tr:nth-child(even) {
   background-color: var(--color-grey-light-1);
@@ -627,13 +629,6 @@ select {
 .merchant-account--table tr:last-child td {
   padding-top: var(--spacing-xs);
   padding-bottom: var(--spacing-xs);
-}
-.merchant-account__container {
-  display: flex;
-  justify-content: start;
-  align-items: start;
-  flex-direction: row;
-  flex-wrap: wrap;
 }
 .merchant-account__title {
   display: flex;
@@ -703,6 +698,7 @@ select {
   --color-grey-dark-1: #333;
   --color-grey-dark-2: #c5c4c4;
   --color-tertiary: #4d475f;
+  --color-tertiary-hover: #817c91;
   --color-blue: #454955;
   --shadow-color: 0deg 0% 63%;
   --spacing-xxs: 0.25rem;
@@ -946,6 +942,18 @@ table {
 
 .padding-right-sm {
   padding-right: var(--spacing-sm);
+}
+
+.padding-right-md {
+  padding-right: var(--spacing-md);
+}
+
+.padding-right-lg {
+  padding-right: var(--spacing-lg);
+}
+
+.padding-left-xs {
+  padding-left: var(--spacing-xs);
 }
 
 /* Base link styles */

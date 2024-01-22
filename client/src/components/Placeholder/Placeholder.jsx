@@ -1,6 +1,6 @@
 const Placeholder = () => {
   return (
-    <div className="placeholder__container">
+    <div className="placeholder__container sp-bottom-sm">
       <div className="placeholder__title">
         <span className={`material-symbols-outlined placeholder__icon`}>
           star

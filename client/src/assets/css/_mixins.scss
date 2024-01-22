@@ -27,8 +27,8 @@
   }
 
   @if $width != null {
-    width: $width;
+    max-width: $width;
   }
 
-  // min-width: 1044px;
+  min-width: 1044px;
 }
