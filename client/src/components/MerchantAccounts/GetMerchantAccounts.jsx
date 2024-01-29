@@ -116,11 +116,6 @@ const GetMerchantAccounts = () => {
                     <tr>
                       <td colSpan={2} className="blank-row"></td>
                     </tr>
-                    {/* <tr>
-                      <th colSpan={2} className="merchant-account--balance">
-                        Balances
-                      </th>
-                    </tr> */}
 
                     <tr className="merchant-account--balance">
                       <th className="content__key--white">Available</th>
