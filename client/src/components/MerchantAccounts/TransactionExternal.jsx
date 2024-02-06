@@ -11,10 +11,13 @@ const Transaction = ({ transaction }) => {
   };
 
   const date = new Date(transaction.settled_at).toLocaleDateString();
+  // Use optional chaining and provide default values as needed
   const accountNumber =
-    transaction.remitter.account_identifiers[0].account_number;
-  const sortCode = transaction.remitter.account_identifiers[0].sort_code;
-  const iban = transaction.remitter.account_identifiers[1].iban;
+    transaction.remitter.account_identifiers?.[0]?.account_number ?? "N/A";
+  const sortCode =
+    transaction.remitter.account_identifiers?.[0]?.sort_code ?? "N/A";
+  // Safely access the iban of the second account identifier, if it exists
+  const iban = transaction.remitter.account_identifiers?.[1]?.iban ?? "N/A";
 
   return (
     <>

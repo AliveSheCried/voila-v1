@@ -40,6 +40,8 @@ const merchantAccountTransactions = async (
         isoToDate
       );
 
+    console.log("responseData:", responseData);
+
     if (!responseData.items || responseData.items.length === 0) {
       throw new Error(
         `No transactions for the date range ${decodedFromDate} to ${decodedToDate} found`
