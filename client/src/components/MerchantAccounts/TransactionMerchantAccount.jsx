@@ -1,9 +1,17 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
+import { formatCurrency } from "../../utils/formatCurrency";
 import TransactionDetail from "./TransactionDetail";
 
 const Transaction = ({ transaction }) => {
   const [isDetailVisible, setIsDetailVisible] = useState(false);
+
+  const { formattedTransactionAmount } = formatCurrency(
+    transaction.currency,
+    0,
+    0,
+    transaction.amount_in_minor
+  );
 
   const toggleDetail = (e) => {
     e.preventDefault();
@@ -29,7 +37,7 @@ const Transaction = ({ transaction }) => {
         <td className="content__value--table right">{date}</td>
         <td className="content__value--table">{transaction.currency}</td>
         <td className="content__value--table right">
-          {transaction.amount_in_minor}
+          {formattedTransactionAmount}
         </td>
         <td className="content__value--table">
           {transaction.payment_source.account_holder_name}

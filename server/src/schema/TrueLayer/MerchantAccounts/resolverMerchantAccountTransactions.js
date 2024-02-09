@@ -89,6 +89,11 @@ const merchantAccountTransactions = async (
     // If newTransactions do exist, update the database with new transactions from the API
     if (newTransactions.length > 0) {
       try {
+        //add merchantAccountId to each transaction
+        newTransactions.forEach((transaction) => {
+          transaction.merchantAccountId = id;
+        });
+
         const result = await myCollection.insertMany(newTransactions);
 
         //log the number of records inserted into the database and number of records in newTransactions for debugging

@@ -579,7 +579,7 @@ select {
   margin-bottom: var(--spacing-xs);
   text-align: left;
 }
-.content__value, .content__value--table, .content__value--table--white, .content__value--white {
+.content__value, .content__value--table, .content__value--table--green, .content__value--table--red, .content__value--table--white, .content__value--white {
   font-size: var(--font-size-sm);
   color: var(--color-grey-dark-1);
   margin-bottom: var(--spacing-xs);
@@ -588,7 +588,7 @@ select {
 .content__value--white-highlight {
   background-color: var(--color-green-palette);
 }
-.content__value--table, .content__value--table--white {
+.content__value--table, .content__value--table--green, .content__value--table--red, .content__value--table--white {
   font-size: var(--font-size-xs);
   padding-top: var(--spacing-xxs);
   padding-bottom: var(--spacing-xxs);
@@ -597,6 +597,12 @@ select {
 .content__value--table--white-highlight {
   background-color: var(--color-green-palette);
   font-size: var(--font-size-xs);
+}
+.content__value--table--red {
+  color: rgb(146, 0, 0);
+}
+.content__value--table--green {
+  background-color: rgb(229, 248, 229);
 }
 .content__value--table-balance {
   display: flex;

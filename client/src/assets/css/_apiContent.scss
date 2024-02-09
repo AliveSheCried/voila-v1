@@ -81,6 +81,16 @@
             }
         }
 
+        &--red {
+            @extend .content__value--table;
+            color: rgb(146, 0, 0);
+        }
+
+        &--green {
+            @extend .content__value--table;
+            background-color: rgb(229, 248, 229);
+        }
+
         &-balance {
             display: flex;
             justify-content: space-between;
