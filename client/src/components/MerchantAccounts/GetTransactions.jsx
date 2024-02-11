@@ -17,6 +17,8 @@ const GetTransactions = () => {
   const [selectedAccountId, setSelectedAccountId] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  const [availableBalance, setAvailableBalance] = useState(0);
+  const [currency, setCurrency] = useState("");
 
   const [getMerchantAccountTransactions, { loading, data, error }] =
     useLazyQuery(GET_MERCHANT_ACCOUNT_TRANSACTIONS, {
@@ -28,6 +30,14 @@ const GetTransactions = () => {
     });
 
   const handleGetTransactions = () => {
+    const selectedAccount = merchantAccounts.find(
+      (account) => account.id === selectedAccountId
+    );
+    if (selectedAccount) {
+      setCurrency(selectedAccount.currency);
+      setAvailableBalance(selectedAccount.available_balance_in_minor);
+    }
+
     getMerchantAccountTransactions({
       variables: {
         merchantAccountId: selectedAccountId,
@@ -101,7 +111,8 @@ const GetTransactions = () => {
         {merchantAccountTransactions.length > 0 && (
           <TransactionList
             transctions={merchantAccountTransactions}
-            selectedAccountId={selectedAccountId}
+            availableBalance={availableBalance}
+            currency={currency}
           />
         )}
       </div>

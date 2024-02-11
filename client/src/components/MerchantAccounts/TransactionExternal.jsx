@@ -25,7 +25,7 @@ const Transaction = ({ transaction }) => {
   const sortCode =
     transaction.remitter.account_identifiers?.[0]?.sort_code ?? "N/A";
   // Safely access the iban of the second account identifier, if it exists
-  const iban = transaction.remitter.account_identifiers?.[1]?.iban ?? "N/A";
+  const iban = transaction.remitter.account_identifiers?.[0]?.iban ?? "N/A";
 
   return (
     <>

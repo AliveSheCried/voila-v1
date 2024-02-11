@@ -9,6 +9,8 @@ export const formatCurrency = (
   const currentBalanceInMajor = Number(currentBalance) / 100;
   const transactionAmountInMajor = Number(transactionAmount) / 100;
 
+  //console.log("currency:", currency);
+
   const format = (amount) =>
     new Intl.NumberFormat("en-GB", {
       style: "currency",

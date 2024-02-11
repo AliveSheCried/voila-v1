@@ -40,7 +40,7 @@ const merchantAccountTransactions = async (
         isoToDate
       );
 
-    console.log("responseData:", responseData);
+    //console.log("responseData:", responseData);
 
     if (!responseData.items || responseData.items.length === 0) {
       throw new Error(
@@ -56,18 +56,25 @@ const merchantAccountTransactions = async (
     //check if transactions in date range exist in database; note that different transaction types have different date fields
     const dbTransactions = await myCollection
       .find({
-        $or: [
+        $and: [
           {
-            created_at: {
-              $gte: decodedFromDate,
-              $lte: decodedToDate,
-            },
+            merchantAccountId: id,
           },
           {
-            settled_at: {
-              $gte: decodedFromDate,
-              $lte: decodedToDate,
-            },
+            $or: [
+              {
+                created_at: {
+                  $gte: decodedFromDate,
+                  $lte: decodedToDate,
+                },
+              },
+              {
+                settled_at: {
+                  $gte: decodedFromDate,
+                  $lte: decodedToDate,
+                },
+              },
+            ],
           },
         ],
       })
@@ -89,12 +96,18 @@ const merchantAccountTransactions = async (
     // If newTransactions do exist, update the database with new transactions from the API
     if (newTransactions.length > 0) {
       try {
-        //add merchantAccountId to each transaction
+        console.log("id:", id); // Check the value of id
+        console.log("newTransactions:", newTransactions); // Check the contents of newTransactions
+        //add merchant_account_id to each transaction
         newTransactions.forEach((transaction) => {
-          transaction.merchantAccountId = id;
+          transaction.merchant_account_id = id;
         });
 
-        const result = await myCollection.insertMany(newTransactions);
+        const result = await myCollection
+          .insertMany(newTransactions)
+          .catch((err) => console.error("Error during insertMany:", err)); // Check for errors during insertMany
+
+        console.log("Insert result:", result); // Check the result of insertMany
 
         //log the number of records inserted into the database and number of records in newTransactions for debugging
         if (result.insertedCount !== newTransactions.length) {
