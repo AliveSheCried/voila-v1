@@ -4,6 +4,7 @@ import RightPanel from "../RightPanel/RightPanel";
 import Start from "../Start/Start";
 
 //routes
+import CreateMerchantPayment from "../MerchantAccounts/CreateMerchantPayment";
 import GetMerchantAccount from "../MerchantAccounts/GetMerchantAccount";
 import GetMerchantAccounts from "../MerchantAccounts/GetMerchantAccounts";
 import GetTransactions from "../MerchantAccounts/GetTransactions";
@@ -16,6 +17,7 @@ const Content = () => {
           <Route path="getMerchantAccount" element={<GetMerchantAccount />} />
           <Route path="getMerchantAccounts" element={<GetMerchantAccounts />} />
           <Route path="getTransactions" element={<GetTransactions />} />
+          <Route path="payout" element={<CreateMerchantPayment />} />
           <Route path="/" element={<Start type={"home"} />} />
         </Routes>
       </div>

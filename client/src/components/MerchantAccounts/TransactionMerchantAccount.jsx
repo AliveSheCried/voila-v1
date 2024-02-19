@@ -27,7 +27,9 @@ const Transaction = ({ transaction }) => {
     transaction.payment_source.account_identifiers?.[0]?.sort_code ?? "N/A";
   // Safely access the iban of the second account identifier, if it exists
   const iban =
-    transaction.payment_source.account_identifiers?.[1]?.iban ?? "N/A";
+    transaction.payment_source.account_identifiers?.[
+      transaction.payment_source.account_identifiers.length - 1
+    ]?.iban ?? "N/A";
 
   return (
     <>
