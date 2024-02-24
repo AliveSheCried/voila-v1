@@ -1,13 +1,14 @@
 $input-border-radius: var(--spacing-xs);
 $input-border: 1px solid var(--color-grey-light-2);
 $input-padding: var(--spacing-md);
-$input-margin-bottom: var(--spacing-md);
+$input-margin-bottom: var(--spacing-sm);
 $input-background: transparent;
 $input-font-family: inherit;
 $input-font-weight: 400;
 $input-color: var(--color-grey-dark-1);
 $input-width: 90%;
 
+//input for login page
 .input__field {
   position: relative;
 
@@ -79,6 +80,7 @@ $input-width: 90%;
   }
 }
 
+//input for merchant account page
 .input__merchant-account {
   position: relative;
 
@@ -102,6 +104,49 @@ $input-width: 90%;
 
   label {
     color: var(--color-grey-dark-1);
+  }
+}
+
+//input for merchant account payout
+.input__payout {
+  .input-currency {
+    width: 27px; /* adjust as needed */
+  }
+
+  .input-amount {
+    width: 212px; /* adjust as needed */
+    color: var(--color-green);
+    text-align: right;
+    // font-weight: 600;
+  }
+
+  .input-reference {
+    width: 286px; /* adjust as needed */
+  }
+
+  .input-sort-code {
+    width: 100px; /* adjust as needed */
+  }
+
+  .input-account-number {
+    width: 200px; /* adjust as needed */
+  }
+
+  input {
+    border-radius: $input-border-radius;
+    border: $input-border;
+    padding: $input-padding;
+    margin-bottom: $input-margin-bottom;
+
+    background: var(--color-white); //$input-background;
+    font-family: $input-font-family;
+    font-weight: $input-font-weight;
+    color: var(--color-grey-dark-2);
+    outline: none;
+
+    &:focus {
+      border: 1px solid var(--color-primary);
+    }
   }
 }
 
@@ -190,9 +235,13 @@ select {
   border-radius: $input-border-radius;
   border: $input-border;
   padding: $input-padding;
-  margin-bottom: $input-margin-bottom;
+  // margin-bottom: $input-margin-bottom;
   background: var(--color-white); //$input-background;
   font-family: $input-font-family;
   color: var(--color-grey-dark-2); //$input-color;
   outline: none;
+}
+
+.test {
+  border: 1px solid red;
 }

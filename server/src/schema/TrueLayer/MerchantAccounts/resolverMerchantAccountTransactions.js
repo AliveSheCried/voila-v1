@@ -18,7 +18,7 @@ const merchantAccountTransactions = async (
   // Format the Date objects in ISO-8601 format
   const isoFromDate = fromDateObj.toISOString();
   const isoToDate = toDateObj.toISOString();
-  console.log(isoFromDate, isoToDate);
+  //console.log(isoFromDate, isoToDate);
 
   // Fetch the transactions from TrueLayer API
   const responseData =

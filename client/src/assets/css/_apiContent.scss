@@ -41,6 +41,12 @@
         padding-left: var(--spacing-xs);
     }
 
+    &__key--payout {
+        @extend .content__key;
+        padding-left: 0px;
+        margin-bottom: 0px;
+    }
+
     &__label {
         font-size: var(--font-size-sm);
         color: var(--color-grey-dark-2);
@@ -180,5 +186,22 @@
     &--border {
         @extend .blank-row;
         border-bottom: 1px solid var(--color-grey-light-2);
+    }
+}
+
+//Merchant Account payout page styles
+.payout {
+    &__search-container {
+        @include fbox($direction: row, $items: flex-start, $wrap: wrap, $content: space-between);
+        width: 666px;
+    }
+
+    &__search-container--right {
+        @include fbox($direction: row, $content: flex-end, $wrap: wrap);
+        width: 666px;
+    }
+
+    &__search-container--method {
+        @include fbox($direction: row, $wrap: wrap, $content: flex-end);
     }
 }

@@ -294,7 +294,7 @@
   border-radius: var(--spacing-xs);
   border: 1px solid var(--color-grey-light-2);
   padding: var(--spacing-md);
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
   background: transparent;
   font-family: inherit;
   font-weight: 400;
@@ -369,6 +369,38 @@
 }
 .input__merchant-account label {
   color: var(--color-grey-dark-1);
+}
+
+.input__payout .input-currency {
+  width: 27px; /* adjust as needed */
+}
+.input__payout .input-amount {
+  width: 212px; /* adjust as needed */
+  color: var(--color-green);
+  text-align: right;
+}
+.input__payout .input-reference {
+  width: 286px; /* adjust as needed */
+}
+.input__payout .input-sort-code {
+  width: 100px; /* adjust as needed */
+}
+.input__payout .input-account-number {
+  width: 200px; /* adjust as needed */
+}
+.input__payout input {
+  border-radius: var(--spacing-xs);
+  border: 1px solid var(--color-grey-light-2);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  background: var(--color-white);
+  font-family: inherit;
+  font-weight: 400;
+  color: var(--color-grey-dark-2);
+  outline: none;
+}
+.input__payout input:focus {
+  border: 1px solid var(--color-primary);
 }
 
 .btn {
@@ -446,11 +478,14 @@ select {
   border-radius: var(--spacing-xs);
   border: 1px solid var(--color-grey-light-2);
   padding: var(--spacing-md);
-  margin-bottom: var(--spacing-md);
   background: var(--color-white);
   font-family: inherit;
   color: var(--color-grey-dark-2);
   outline: none;
+}
+
+.test {
+  border: 1px solid red;
 }
 
 .token__container {
@@ -559,7 +594,7 @@ select {
   padding-left: 5rem;
   padding-right: 1rem;
 }
-.content__key, .content__key--table, .content__key--white {
+.content__key, .content__key--payout, .content__key--table, .content__key--white {
   font-size: var(--font-size-sm);
   color: var(--color-grey-dark-1);
   font-weight: 600;
@@ -572,6 +607,10 @@ select {
 }
 .content__key--table {
   padding-left: var(--spacing-xs);
+}
+.content__key--payout {
+  padding-left: 0px;
+  margin-bottom: 0px;
 }
 .content__label {
   font-size: var(--font-size-sm);
@@ -686,6 +725,28 @@ select {
 }
 .blank-row--border {
   border-bottom: 1px solid var(--color-grey-light-2);
+}
+
+.payout__search-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 666px;
+}
+.payout__search-container--right {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 666px;
+}
+.payout__search-container--method {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 :root {
@@ -960,6 +1021,14 @@ table {
 
 .padding-left-xs {
   padding-left: var(--spacing-xs);
+}
+
+.input-width--sm {
+  width: 20px;
+}
+
+.input-width--md {
+  width: 40px;
 }
 
 /* Base link styles */
