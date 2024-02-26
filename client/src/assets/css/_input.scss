@@ -69,6 +69,7 @@ $input-width: 90%;
     margin-top: -15px;
     margin-bottom: 1rem;
     color: red;
+    padding-top: 3px;
   }
 
   &--toggle-password {
@@ -109,6 +110,13 @@ $input-width: 90%;
 
 //input for merchant account payout
 .input__payout {
+  &--error input {
+    border: 1px solid red;
+
+    &:focus {
+      border: 2px solid red;
+    }
+  }
   .input-currency {
     width: 27px; /* adjust as needed */
   }

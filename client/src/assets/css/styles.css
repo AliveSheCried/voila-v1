@@ -340,6 +340,7 @@
   margin-top: -15px;
   margin-bottom: 1rem;
   color: red;
+  padding-top: 3px;
 }
 .input__field--toggle-password {
   position: absolute;
