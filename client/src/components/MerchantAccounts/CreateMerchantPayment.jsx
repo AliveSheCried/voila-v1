@@ -18,6 +18,14 @@ const CreateMerchantPayment = () => {
   const [ibanIsValid, setIbanIsValid] = useState(true);
   const [formIsValid, setFormIsValid] = useState(false);
 
+  // Define states for the input field values
+  const [sortCode, setSortCode] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [iban, setIban] = useState("");
+  const [amount, setAmount] = useState("");
+  const [payeeName, setPayeeName] = useState("");
+  const [reference, setReference] = useState("");
+
   //form validation
   const validatePaymentAmount = (amount) => {
     const regex = /^\d+\.\d{2}$/;
@@ -77,6 +85,20 @@ const CreateMerchantPayment = () => {
     accountNumberIsValid,
     ibanIsValid,
   ]);
+
+  //reset input fields' state when payment method changes
+  useEffect(() => {
+    setSortCodeIsValid(true);
+    setAccountNumberIsValid(true);
+    setIbanIsValid(true);
+  }, [method]);
+
+  // Reset input fields when payment method changes
+  useEffect(() => {
+    setSortCode("");
+    setAccountNumber("");
+    setIban("");
+  }, [method]);
 
   //handlers
   const handleCreatePayment = () => {
@@ -157,19 +179,17 @@ const CreateMerchantPayment = () => {
           </div>
           <div className="sp-right-md">
             <div className="content__label sp-top-sm right">Payment amount</div>
-            <div
-              className={`input__payout ${
-                !amountIsValid ? "input__payout--error" : ""
-              }`}
-            >
+            <div className="input__payout">
               <input
-                className="input-amount"
+                className={`input-amount ${!amountIsValid ? "error" : ""}`}
                 type="number"
                 id="amountInMinor"
                 pattern="\d*" //only allow numbers
                 min="0"
                 max="50000"
+                value={amount}
                 onChange={(e) => {
+                  setAmount(e.target.value);
                   if (!validatePaymentAmount(e.target.value)) {
                     console.error("Invalid input");
                     setAmountIsValid(false);
@@ -184,7 +204,7 @@ const CreateMerchantPayment = () => {
             </div>
             {!amountIsValid && (
               <div className="input__field--error-message text-xxs right">
-                Enter a valid amount
+                Must be a number with 2 decimal places
               </div>
             )}
           </div>
@@ -195,17 +215,17 @@ const CreateMerchantPayment = () => {
         <div className="payout__search-container sp-left-lg">
           <div className="sp-right-md">
             <div className="content__label">Payee name</div>
-            <div
-              className={`input__payout ${
-                !payeeNameIsValid ? "input__payout--error" : ""
-              }`}
-            >
+            <div className="input__payout">
               <input
-                className="input-reference"
+                className={`input-reference ${
+                  !payeeNameIsValid ? "error" : ""
+                }`}
                 type="text"
                 id="accountHolderName"
                 maxLength={selectedCurrency === "GBP" ? 140 : 70}
+                value={payeeName}
                 onChange={(e) => {
+                  setPayeeName(e.target.value);
                   if (!validatePayeeName(e.target.value)) {
                     console.error("Invalid input");
                     setPayeeNameIsValid(false);
@@ -224,17 +244,17 @@ const CreateMerchantPayment = () => {
           </div>
           <div className="sp-right-md">
             <div className="content__label">Payee reference</div>
-            <div
-              className={`input__payout ${
-                !referenceIsValid ? "input__payout--error" : ""
-              }`}
-            >
+            <div className="input__payout">
               <input
-                className="input-reference"
+                className={`input-reference ${
+                  !referenceIsValid ? "error" : ""
+                }`}
                 type="text"
                 id="reference"
                 maxLength={selectedCurrency === "GBP" ? 18 : 140}
+                value={reference}
                 onChange={(e) => {
+                  setReference(e.target.value);
                   if (!validateReference(e.target.value)) {
                     console.error("Invalid input");
                     setReferenceIsValid(false);
@@ -277,17 +297,17 @@ const CreateMerchantPayment = () => {
             <div className="payout__search-container--method">
               <div className="sp-right-md">
                 <div className="content__label">Sort code</div>
-                <div
-                  className={`input__payout ${
-                    !sortCodeIsValid ? "input__payout--error" : ""
-                  }`}
-                >
+                <div className="input__payout">
                   <input
-                    className="input-sort-code"
+                    className={`input-sort-code ${
+                      !sortCodeIsValid ? "error" : ""
+                    }`}
                     type="number"
                     pattern="\d*"
                     id="reference"
+                    value={sortCode}
                     onChange={(e) => {
+                      setSortCode(e.target.value);
                       if (!validateSortCode(e.target.value)) {
                         console.error("Invalid input");
                         setSortCodeIsValid(false);
@@ -304,23 +324,23 @@ const CreateMerchantPayment = () => {
                 </div>
                 {!sortCodeIsValid && (
                   <div className="input__field--error-message text-xxs">
-                    Enter a valid sort code
+                    6 digits only
                   </div>
                 )}
               </div>
               <div className="sp-right-md">
                 <div className="content__label">Account number</div>
-                <div
-                  className={`input__payout ${
-                    !accountNumberIsValid ? "input__payout--error" : ""
-                  }`}
-                >
+                <div className="input__payout">
                   <input
-                    className="input-account-number"
+                    className={`input-account-number ${
+                      !accountNumberIsValid ? "error" : ""
+                    }`}
                     type="number"
                     pattern="\d*"
                     id="accountNumber"
+                    value={accountNumber}
                     onChange={(e) => {
+                      setAccountNumber(e.target.value);
                       if (!validateAccountNumber(e.target.value)) {
                         console.error("Invalid input");
                         setAccountNumberIsValid(false);
@@ -346,17 +366,15 @@ const CreateMerchantPayment = () => {
             <div className="payout__search-container--method">
               <div className="sp-right-md">
                 <div className="content__label">IBAN</div>
-                <div
-                  className={`input__payout ${
-                    !ibanIsValid ? "input__payout--error" : ""
-                  }`}
-                >
+                <div className="input__payout">
                   <input
-                    className="input-reference"
+                    className={`input-reference ${!ibanIsValid ? "error" : ""}`}
                     type="number"
                     pattern="\d*"
                     id="iban"
+                    value={iban}
                     onChange={(e) => {
+                      setIban(e.target.value);
                       if (!validateIban(e.target.value)) {
                         console.error("Invalid input");
                         setIbanIsValid(false);

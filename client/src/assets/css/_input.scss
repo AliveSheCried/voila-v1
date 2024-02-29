@@ -110,13 +110,6 @@ $input-width: 90%;
 
 //input for merchant account payout
 .input__payout {
-  &--error input {
-    border: 1px solid red;
-
-    &:focus {
-      border: 2px solid red;
-    }
-  }
   .input-currency {
     width: 27px; /* adjust as needed */
   }
@@ -154,6 +147,11 @@ $input-width: 90%;
 
     &:focus {
       border: 1px solid var(--color-primary);
+    }
+
+    &.error:focus {
+      border: 1px solid red;
+      color: red;
     }
   }
 }
