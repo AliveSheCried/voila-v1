@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import SelectMerchantAccount from "../SelectMerchantAccount/SelectMerchantAccount";
 
 const TransactionSearch = ({
   onAccountChange,
@@ -22,18 +23,12 @@ const TransactionSearch = ({
       </div>
       <div className="merchant-account__search-container">
         <div className="sp-right-md">
-          <div className="content__label sp-top-sm">Merchant account</div>
-          <div>
-            <select value={selectedAccountId} onChange={onAccountChange}>
-              <option value="">-- Select merchant account --</option>
-              {merchantAccounts.map((account) => (
-                <option key={account.id} value={account.id}>
-                  {"CURRENCY: " + account.currency + " - ID: " + account.id}
-                  {/* Change to IBAN / Account Number*/}
-                </option>
-              ))}
-            </select>
-          </div>
+          <SelectMerchantAccount
+            label={"Select merchant account"}
+            selectedAccountId={selectedAccountId}
+            onAccountChange={onAccountChange}
+            merchantAccounts={merchantAccounts}
+          />
         </div>
         <div>
           <div className="content__label sp-top-sm">Date range - from & to</div>

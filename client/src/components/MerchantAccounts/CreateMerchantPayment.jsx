@@ -1,30 +1,21 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useReducer } from "react";
 import { MerchantAccountContext } from "../../contexts/MerchantAccountContext";
 import { TokenContext } from "../../contexts/TokenContext";
+import {
+  initialPaymentFormState,
+  paymentFormReducer,
+} from "../../reducers/paymentFormReducer";
 //components
+import SelectMerchantAccount from "../SelectMerchantAccount/SelectMerchantAccount";
 import Start from "../Start/Start";
 
 const CreateMerchantPayment = () => {
   const { merchantAccounts } = useContext(MerchantAccountContext);
   const { tokenData } = useContext(TokenContext);
-  const [selectedAccountId, setSelectedAccountId] = useState("");
-  const [selectedCurrency, setSelectedCurrency] = useState("");
-  const [method, setMethod] = useState("");
-  const [amountIsValid, setAmountIsValid] = useState(true);
-  const [payeeNameIsValid, setPayeeNameIsValid] = useState(true);
-  const [referenceIsValid, setReferenceIsValid] = useState(true);
-  const [sortCodeIsValid, setSortCodeIsValid] = useState(true);
-  const [accountNumberIsValid, setAccountNumberIsValid] = useState(true);
-  const [ibanIsValid, setIbanIsValid] = useState(true);
-  const [formIsValid, setFormIsValid] = useState(false);
-
-  // Define states for the input field values
-  const [sortCode, setSortCode] = useState("");
-  const [accountNumber, setAccountNumber] = useState("");
-  const [iban, setIban] = useState("");
-  const [amount, setAmount] = useState("");
-  const [payeeName, setPayeeName] = useState("");
-  const [reference, setReference] = useState("");
+  const [state, dispatch] = useReducer(
+    paymentFormReducer,
+    initialPaymentFormState
+  );
 
   //form validation
   const validatePaymentAmount = (amount) => {
@@ -33,7 +24,7 @@ const CreateMerchantPayment = () => {
   };
 
   const validatePayeeName = (name) => {
-    if (selectedCurrency === "GBP") {
+    if (state.selectedCurrency === "GBP") {
       const regex = /^[a-zA-Z0-9/-?:().,’+\s#=!"%&*<>;{@\r\n]*$/;
       return regex.test(name);
     } else {
@@ -43,7 +34,7 @@ const CreateMerchantPayment = () => {
   };
 
   const validateReference = (reference) => {
-    if (selectedCurrency === "GBP") {
+    if (state.selectedCurrency === "GBP") {
       const regex = /^[a-zA-Z0-9/-?:().,’+\s#=!"%&*<>;{@\r\n]*$/;
       return regex.test(reference);
     } else {
@@ -67,42 +58,33 @@ const CreateMerchantPayment = () => {
     return regex.test(iban);
   };
 
-  //form validation - all fields
-  useEffect(() => {
-    setFormIsValid(
-      amountIsValid &&
-        payeeNameIsValid &&
-        referenceIsValid &&
-        sortCodeIsValid &&
-        accountNumberIsValid &&
-        ibanIsValid
-    );
+  const validateForm = useCallback(() => {
+    const formIsValid =
+      state.amountIsValid &&
+      state.payeeNameIsValid &&
+      state.referenceIsValid &&
+      state.sortCodeIsValid &&
+      state.accountNumberIsValid &&
+      state.ibanIsValid;
+    dispatch({ type: "VALIDATE_FORM", payload: { formIsValid } });
   }, [
-    amountIsValid,
-    payeeNameIsValid,
-    referenceIsValid,
-    sortCodeIsValid,
-    accountNumberIsValid,
-    ibanIsValid,
+    state.amountIsValid,
+    state.payeeNameIsValid,
+    state.referenceIsValid,
+    state.sortCodeIsValid,
+    state.accountNumberIsValid,
+    state.ibanIsValid,
+    dispatch,
   ]);
 
-  //reset input fields' state when payment method changes
+  // Call validateForm whenever a field is updated
   useEffect(() => {
-    setSortCodeIsValid(true);
-    setAccountNumberIsValid(true);
-    setIbanIsValid(true);
-  }, [method]);
-
-  // Reset input fields when payment method changes
-  useEffect(() => {
-    setSortCode("");
-    setAccountNumber("");
-    setIban("");
-  }, [method]);
+    validateForm();
+  }, [validateForm]);
 
   //handlers
   const handleCreatePayment = () => {
-    if (!formIsValid) {
+    if (!state.formIsValid) {
       console.error("Form is not valid");
       return;
     }
@@ -110,13 +92,33 @@ const CreateMerchantPayment = () => {
   };
 
   const togglePaymentMethod = (e) => {
-    setMethod(e.target.value);
+    dispatch({
+      type: "SELECT_METHOD",
+      payload: {
+        method: e.target.value,
+      },
+    });
   };
 
   function handleAccountChange(account) {
-    setSelectedAccountId(account.id);
-    setSelectedCurrency(account.currency);
+    dispatch({
+      type: "SELECT_ACCOUNT",
+      payload: {
+        selectedAccountId: account.id,
+        selectedCurrency: account.currency,
+      },
+    });
   }
+
+  //useEffect(() => {
+  //   console.log(
+  //     "bank data",
+  //     state.method,
+  //     state.sortCode,
+  //     state.accountNumber,
+  //     state.iban
+  //   );
+  // }, [state]);
 
   if (!tokenData.accessToken || !merchantAccounts.length) {
     return <Start type={"routes"} title={"Merchant account payout"} />;
@@ -141,29 +143,12 @@ const CreateMerchantPayment = () => {
 
         <div className="payout__search-container sp-left-lg">
           <div className="sp-right-md">
-            <div className="content__label sp-top-sm">
-              Select disbursement account
-            </div>
-            <div>
-              <select
-                value={selectedAccountId}
-                onChange={(event) =>
-                  handleAccountChange(
-                    merchantAccounts.find(
-                      (account) => account.id === event.target.value
-                    )
-                  )
-                }
-              >
-                <option value="">-- Select merchant account --</option>
-                {merchantAccounts.map((account) => (
-                  <option key={account.id} value={account.id}>
-                    {account.id}
-                    {/* Change to IBAN / Account Number*/}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <SelectMerchantAccount
+              label={"Select disbursement account"}
+              selectedAccountId={state.selectedAccountId}
+              onAccountChange={handleAccountChange}
+              merchantAccounts={merchantAccounts}
+            />
           </div>
           <div className="sp-right-md">
             <div className="content__label sp-top-sm">Currency</div>
@@ -172,7 +157,7 @@ const CreateMerchantPayment = () => {
                 className="input-currency"
                 type="text"
                 id="currency"
-                value={selectedCurrency}
+                value={state.selectedCurrency}
                 readOnly
               />
             </div>
@@ -181,28 +166,31 @@ const CreateMerchantPayment = () => {
             <div className="content__label sp-top-sm right">Payment amount</div>
             <div className="input__payout">
               <input
-                className={`input-amount ${!amountIsValid ? "error" : ""}`}
+                className={`input-amount ${
+                  !state.amountIsValid ? "error" : ""
+                }`}
                 type="number"
                 id="amountInMinor"
                 pattern="\d*" //only allow numbers
                 min="0"
                 max="50000"
-                value={amount}
+                value={state.amount}
                 onChange={(e) => {
-                  setAmount(e.target.value);
-                  if (!validatePaymentAmount(e.target.value)) {
+                  const isValid = validatePaymentAmount(e.target.value);
+                  if (!isValid) {
                     console.error("Invalid input");
-                    setAmountIsValid(false);
-                  } else {
-                    setAmountIsValid(true);
                   }
+                  dispatch({
+                    type: "UPDATE_AMOUNT",
+                    payload: { amount: e.target.value, amountIsValid: isValid },
+                  });
                 }}
                 required
                 inputMode="numeric"
                 style={{ appearance: "textfield" }}
               />
             </div>
-            {!amountIsValid && (
+            {!state.amountIsValid && (
               <div className="input__field--error-message text-xxs right">
                 Must be a number with 2 decimal places
               </div>
@@ -218,25 +206,29 @@ const CreateMerchantPayment = () => {
             <div className="input__payout">
               <input
                 className={`input-reference ${
-                  !payeeNameIsValid ? "error" : ""
+                  !state.payeeNameIsValid ? "error" : ""
                 }`}
                 type="text"
                 id="accountHolderName"
-                maxLength={selectedCurrency === "GBP" ? 140 : 70}
-                value={payeeName}
+                maxLength={state.selectedCurrency === "GBP" ? 140 : 70}
+                value={state.payeeName}
                 onChange={(e) => {
-                  setPayeeName(e.target.value);
-                  if (!validatePayeeName(e.target.value)) {
+                  const isValid = validatePayeeName(e.target.value);
+                  if (!isValid) {
                     console.error("Invalid input");
-                    setPayeeNameIsValid(false);
-                  } else {
-                    setPayeeNameIsValid(true);
                   }
+                  dispatch({
+                    type: "UPDATE_PAYEE_NAME",
+                    payload: {
+                      payeeName: e.target.value,
+                      payeeNameIsValid: isValid,
+                    },
+                  });
                 }}
                 required
               />
             </div>
-            {!payeeNameIsValid && (
+            {!state.payeeNameIsValid && (
               <div className="input__field--error-message text-xxs">
                 Enter a valid name
               </div>
@@ -247,27 +239,31 @@ const CreateMerchantPayment = () => {
             <div className="input__payout">
               <input
                 className={`input-reference ${
-                  !referenceIsValid ? "error" : ""
+                  !state.referenceIsValid ? "error" : ""
                 }`}
                 type="text"
                 id="reference"
-                maxLength={selectedCurrency === "GBP" ? 18 : 140}
-                value={reference}
+                maxLength={state.selectedCurrency === "GBP" ? 18 : 140}
+                value={state.reference}
                 onChange={(e) => {
-                  setReference(e.target.value);
-                  if (!validateReference(e.target.value)) {
+                  const isValid = validateReference(e.target.value);
+                  if (!isValid) {
                     console.error("Invalid input");
-                    setReferenceIsValid(false);
-                  } else {
-                    setReferenceIsValid(true);
                   }
+                  dispatch({
+                    type: "UPDATE_REFERENCE",
+                    payload: {
+                      reference: e.target.value,
+                      referenceIsValid: isValid,
+                    },
+                  });
                 }}
                 required
               />
             </div>
-            {!referenceIsValid && (
+            {!state.referenceIsValid && (
               <>
-                {selectedCurrency === "GBP" ? (
+                {state.selectedCurrency === "GBP" ? (
                   <div className="input__field--error-message text-xxs">
                     Max reference length is 18 characters
                   </div>
@@ -293,27 +289,31 @@ const CreateMerchantPayment = () => {
             </div>
           </div>
 
-          {method === "SORT_CODE" ? (
+          {state.method === "SORT_CODE" ? (
             <div className="payout__search-container--method">
               <div className="sp-right-md">
                 <div className="content__label">Sort code</div>
                 <div className="input__payout">
                   <input
                     className={`input-sort-code ${
-                      !sortCodeIsValid ? "error" : ""
+                      !state.sortCodeIsValid ? "error" : ""
                     }`}
                     type="number"
                     pattern="\d*"
                     id="reference"
-                    value={sortCode}
+                    value={state.sortCode}
                     onChange={(e) => {
-                      setSortCode(e.target.value);
-                      if (!validateSortCode(e.target.value)) {
+                      const isValid = validateSortCode(e.target.value);
+                      if (!isValid) {
                         console.error("Invalid input");
-                        setSortCodeIsValid(false);
-                      } else {
-                        setSortCodeIsValid(true);
                       }
+                      dispatch({
+                        type: "UPDATE_SORT_CODE",
+                        payload: {
+                          sortCode: e.target.value,
+                          sortCodeIsValid: isValid,
+                        },
+                      });
                     }}
                     required
                     inputMode="numeric"
@@ -322,7 +322,7 @@ const CreateMerchantPayment = () => {
                     maxLength={6}
                   />
                 </div>
-                {!sortCodeIsValid && (
+                {!state.sortCodeIsValid && (
                   <div className="input__field--error-message text-xxs">
                     6 digits only
                   </div>
@@ -333,20 +333,24 @@ const CreateMerchantPayment = () => {
                 <div className="input__payout">
                   <input
                     className={`input-account-number ${
-                      !accountNumberIsValid ? "error" : ""
+                      !state.accountNumberIsValid ? "error" : ""
                     }`}
                     type="number"
                     pattern="\d*"
                     id="accountNumber"
-                    value={accountNumber}
+                    value={state.accountNumber}
                     onChange={(e) => {
-                      setAccountNumber(e.target.value);
-                      if (!validateAccountNumber(e.target.value)) {
+                      const isValid = validateAccountNumber(e.target.value);
+                      if (!isValid) {
                         console.error("Invalid input");
-                        setAccountNumberIsValid(false);
-                      } else {
-                        setAccountNumberIsValid(true);
                       }
+                      dispatch({
+                        type: "UPDATE_ACCOUNT_NUMBER",
+                        payload: {
+                          accountNumber: e.target.value,
+                          accountNumberIsValid: isValid,
+                        },
+                      });
                     }}
                     required
                     inputMode="numeric"
@@ -355,32 +359,38 @@ const CreateMerchantPayment = () => {
                     maxLength={8}
                   />
                 </div>
-                {!accountNumberIsValid && (
+                {!state.accountNumberIsValid && (
                   <div className="input__field--error-message text-xxs">
                     Enter a valid account number
                   </div>
                 )}
               </div>
             </div>
-          ) : method === "IBAN" ? (
+          ) : state.method === "IBAN" ? (
             <div className="payout__search-container--method">
               <div className="sp-right-md">
                 <div className="content__label">IBAN</div>
                 <div className="input__payout">
                   <input
-                    className={`input-reference ${!ibanIsValid ? "error" : ""}`}
-                    type="number"
+                    className={`input-reference ${
+                      !state.ibanIsValid ? "error" : ""
+                    }`}
+                    type="text"
                     pattern="\d*"
                     id="iban"
-                    value={iban}
+                    value={state.iban}
                     onChange={(e) => {
-                      setIban(e.target.value);
-                      if (!validateIban(e.target.value)) {
+                      const isValid = validateIban(e.target.value);
+                      if (!isValid) {
                         console.error("Invalid input");
-                        setIbanIsValid(false);
-                      } else {
-                        setIbanIsValid(true);
                       }
+                      dispatch({
+                        type: "UPDATE_IBAN",
+                        payload: {
+                          iban: e.target.value,
+                          ibanIsValid: isValid,
+                        },
+                      });
                     }}
                     required
                     inputMode="numeric"
@@ -388,7 +398,7 @@ const CreateMerchantPayment = () => {
                     maxLength={30}
                   />
                 </div>
-                {!ibanIsValid && (
+                {!state.ibanIsValid && (
                   <div className="input__field--error-message text-xxs">
                     Enter a valid IBAN
                   </div>

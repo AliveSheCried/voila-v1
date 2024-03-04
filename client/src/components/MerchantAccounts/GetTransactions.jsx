@@ -51,8 +51,8 @@ const GetTransactions = () => {
   };
 
   //Form handlers
-  const handleAccountChange = (event) => {
-    setSelectedAccountId(event.target.value);
+  const handleAccountChange = (account) => {
+    setSelectedAccountId(account.id);
   };
 
   const handleDateFromChange = (event) => {
