@@ -1,52 +1,42 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
 
 const InputField = ({
   label,
-  className,
-  type,
+  type = "text",
   id,
+  value,
+  onChange,
+  isValid = true,
+  errorMessage = "",
+  readOnly = false,
   pattern,
   min,
   max,
-  value,
-  onChange,
-  required,
+  required = false,
   inputMode,
-  style,
-  errorMessage,
+  className = "",
+  minLength,
+  maxLength,
 }) => {
-  const [isValid, setIsValid] = useState(true);
-
-  const handleInputChange = (e) => {
-    const inputValue = e.target.value;
-    if (onChange) {
-      onChange(inputValue);
-    }
-
-    if (pattern && !new RegExp(pattern).test(inputValue)) {
-      setIsValid(false);
-    } else {
-      setIsValid(true);
-    }
-  };
-
   return (
-    <div className={`input__field ${className}`}>
-      <div className="content__label sp-top-sm right">{label}</div>
+    <div className="sp-right-md">
+      <div className={`content__label`}>{label}</div>
       <div className="input__payout">
         <input
-          className={`input-amount ${!isValid ? "error" : ""}`}
+          className={`${className} ${!isValid ? "error" : ""}`}
           type={type}
           id={id}
+          value={value}
+          onChange={onChange}
+          readOnly={readOnly}
           pattern={pattern}
           min={min}
           max={max}
-          value={value}
-          onChange={handleInputChange}
           required={required}
           inputMode={inputMode}
-          style={style}
+          style={{ appearance: "textfield" }} // Consider moving to CSS file
+          minLength={minLength}
+          maxLength={maxLength}
         />
       </div>
       {!isValid && (
@@ -59,19 +49,22 @@ const InputField = ({
 };
 
 InputField.propTypes = {
-  label: PropTypes.string.isRequired,
-  className: PropTypes.string,
-  type: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  type: PropTypes.string,
+  id: PropTypes.string,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func,
+  isValid: PropTypes.bool,
+  errorMessage: PropTypes.string,
+  readOnly: PropTypes.bool,
   pattern: PropTypes.string,
   min: PropTypes.string,
   max: PropTypes.string,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func,
   required: PropTypes.bool,
   inputMode: PropTypes.string,
-  style: PropTypes.object,
-  errorMessage: PropTypes.string,
+  className: PropTypes.string,
+  minLength: PropTypes.number,
+  maxLength: PropTypes.number,
 };
 
 export default InputField;

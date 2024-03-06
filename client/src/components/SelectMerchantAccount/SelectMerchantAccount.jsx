@@ -8,7 +8,7 @@ const SelectMerchantAccount = ({
 }) => {
   return (
     <>
-      <div className="content__label sp-top-sm">{label}</div>
+      <div className="content__label">{label}</div>
       <div>
         <select
           value={selectedAccountId}

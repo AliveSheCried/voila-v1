@@ -6,6 +6,7 @@ import {
   paymentFormReducer,
 } from "../../reducers/paymentFormReducer";
 //components
+import InputField from "../InputField/InputField";
 import SelectMerchantAccount from "../SelectMerchantAccount/SelectMerchantAccount";
 import Start from "../Start/Start";
 
@@ -110,16 +111,6 @@ const CreateMerchantPayment = () => {
     });
   }
 
-  //useEffect(() => {
-  //   console.log(
-  //     "bank data",
-  //     state.method,
-  //     state.sortCode,
-  //     state.accountNumber,
-  //     state.iban
-  //   );
-  // }, [state]);
-
   if (!tokenData.accessToken || !merchantAccounts.length) {
     return <Start type={"routes"} title={"Merchant account payout"} />;
   }
@@ -139,9 +130,9 @@ const CreateMerchantPayment = () => {
           Merchant account payout - external
         </div>
 
-        {/* Disbursement account, currency and amount */}
+        {/*******  Disbursement account, currency and amount *******/}
 
-        <div className="payout__search-container sp-left-lg">
+        <div className="payout__search-container sp-left-lg sp-top-sm">
           <div className="sp-right-md">
             <SelectMerchantAccount
               label={"Select disbursement account"}
@@ -150,132 +141,92 @@ const CreateMerchantPayment = () => {
               merchantAccounts={merchantAccounts}
             />
           </div>
-          <div className="sp-right-md">
-            <div className="content__label sp-top-sm">Currency</div>
-            <div className="input__payout">
-              <input
-                className="input-currency"
-                type="text"
-                id="currency"
-                value={state.selectedCurrency}
-                readOnly
-              />
-            </div>
-          </div>
-          <div className="sp-right-md">
-            <div className="content__label sp-top-sm right">Payment amount</div>
-            <div className="input__payout">
-              <input
-                className={`input-amount ${
-                  !state.amountIsValid ? "error" : ""
-                }`}
-                type="number"
-                id="amountInMinor"
-                pattern="\d*" //only allow numbers
-                min="0"
-                max="50000"
-                value={state.amount}
-                onChange={(e) => {
-                  const isValid = validatePaymentAmount(e.target.value);
-                  if (!isValid) {
-                    console.error("Invalid input");
-                  }
-                  dispatch({
-                    type: "UPDATE_AMOUNT",
-                    payload: { amount: e.target.value, amountIsValid: isValid },
-                  });
-                }}
-                required
-                inputMode="numeric"
-                style={{ appearance: "textfield" }}
-              />
-            </div>
-            {!state.amountIsValid && (
-              <div className="input__field--error-message text-xxs right">
-                Must be a number with 2 decimal places
-              </div>
-            )}
-          </div>
+
+          <InputField
+            label="Currency"
+            id="currency"
+            value={state.selectedCurrency}
+            readOnly={true}
+            className="input-currency"
+          />
+          <InputField
+            label="Payment amount"
+            type="number"
+            id="amountInMinor"
+            pattern="\d*"
+            min="0"
+            max="50000"
+            value={state.amount}
+            onChange={(e) => {
+              const isValid = validatePaymentAmount(e.target.value);
+              if (!isValid) {
+                console.error("Invalid input");
+              }
+              dispatch({
+                type: "UPDATE_AMOUNT",
+                payload: { amount: e.target.value, amountIsValid: isValid },
+              });
+            }}
+            isValid={state.amountIsValid}
+            errorMessage="Must be a number with 2 decimal places"
+            required={true}
+            inputMode="numeric"
+            className="input-amount"
+          />
         </div>
 
-        {/* Payee name and reference */}
+        {/***************  Payee name and reference ************/}
 
         <div className="payout__search-container sp-left-lg">
-          <div className="sp-right-md">
-            <div className="content__label">Payee name</div>
-            <div className="input__payout">
-              <input
-                className={`input-reference ${
-                  !state.payeeNameIsValid ? "error" : ""
-                }`}
-                type="text"
-                id="accountHolderName"
-                maxLength={state.selectedCurrency === "GBP" ? 140 : 70}
-                value={state.payeeName}
-                onChange={(e) => {
-                  const isValid = validatePayeeName(e.target.value);
-                  if (!isValid) {
-                    console.error("Invalid input");
-                  }
-                  dispatch({
-                    type: "UPDATE_PAYEE_NAME",
-                    payload: {
-                      payeeName: e.target.value,
-                      payeeNameIsValid: isValid,
-                    },
-                  });
-                }}
-                required
-              />
-            </div>
-            {!state.payeeNameIsValid && (
-              <div className="input__field--error-message text-xxs">
-                Enter a valid name
-              </div>
-            )}
-          </div>
-          <div className="sp-right-md">
-            <div className="content__label">Payee reference</div>
-            <div className="input__payout">
-              <input
-                className={`input-reference ${
-                  !state.referenceIsValid ? "error" : ""
-                }`}
-                type="text"
-                id="reference"
-                maxLength={state.selectedCurrency === "GBP" ? 18 : 140}
-                value={state.reference}
-                onChange={(e) => {
-                  const isValid = validateReference(e.target.value);
-                  if (!isValid) {
-                    console.error("Invalid input");
-                  }
-                  dispatch({
-                    type: "UPDATE_REFERENCE",
-                    payload: {
-                      reference: e.target.value,
-                      referenceIsValid: isValid,
-                    },
-                  });
-                }}
-                required
-              />
-            </div>
-            {!state.referenceIsValid && (
-              <>
-                {state.selectedCurrency === "GBP" ? (
-                  <div className="input__field--error-message text-xxs">
-                    Max reference length is 18 characters
-                  </div>
-                ) : (
-                  <div className="input__field--error-message text-xxs">
-                    Max reference length is 140 characters
-                  </div>
-                )}
-              </>
-            )}
-          </div>
+          <InputField
+            label="Payment name"
+            type="text"
+            id="accountHolderName"
+            value={state.payeeName}
+            onChange={(e) => {
+              const isValid = validatePayeeName(e.target.value);
+              if (!isValid) {
+                console.error("Invalid input");
+              }
+              dispatch({
+                type: "UPDATE_PAYEE_NAME",
+                payload: {
+                  payeeName: e.target.value,
+                  payeeNameIsValid: isValid,
+                },
+              });
+            }}
+            isValid={state.payeeNameIsValid}
+            errorMessage="Enter a valid name"
+            required={true}
+            className="input-reference"
+          />
+          <InputField
+            label="Payee reference"
+            type="text"
+            id="reference"
+            value={state.reference}
+            onChange={(e) => {
+              const isValid = validateReference(e.target.value);
+              if (!isValid) {
+                console.error("Invalid input");
+              }
+              dispatch({
+                type: "UPDATE_REFERENCE",
+                payload: {
+                  reference: e.target.value,
+                  referenceIsValid: isValid,
+                },
+              });
+            }}
+            isValid={state.referenceIsValid}
+            errorMessage="GBP 18 characters, other currencies 140 characters"
+            required={true}
+            className="input-reference"
+          />
         </div>
+
+        {/***************  Payee method selection and subsequent fields ************/}
 
         <div className="payout__search-container sp-left-lg">
           <div className="sp-right-md">
@@ -291,119 +242,89 @@ const CreateMerchantPayment = () => {
 
           {state.method === "SORT_CODE" ? (
             <div className="payout__search-container--method">
-              <div className="sp-right-md">
-                <div className="content__label">Sort code</div>
-                <div className="input__payout">
-                  <input
-                    className={`input-sort-code ${
-                      !state.sortCodeIsValid ? "error" : ""
-                    }`}
-                    type="number"
-                    pattern="\d*"
-                    id="reference"
-                    value={state.sortCode}
-                    onChange={(e) => {
-                      const isValid = validateSortCode(e.target.value);
-                      if (!isValid) {
-                        console.error("Invalid input");
-                      }
-                      dispatch({
-                        type: "UPDATE_SORT_CODE",
-                        payload: {
-                          sortCode: e.target.value,
-                          sortCodeIsValid: isValid,
-                        },
-                      });
-                    }}
-                    required
-                    inputMode="numeric"
-                    style={{ appearance: "textfield" }}
-                    minLength={6}
-                    maxLength={6}
-                  />
-                </div>
-                {!state.sortCodeIsValid && (
-                  <div className="input__field--error-message text-xxs">
-                    6 digits only
-                  </div>
-                )}
-              </div>
-              <div className="sp-right-md">
-                <div className="content__label">Account number</div>
-                <div className="input__payout">
-                  <input
-                    className={`input-account-number ${
-                      !state.accountNumberIsValid ? "error" : ""
-                    }`}
-                    type="number"
-                    pattern="\d*"
-                    id="accountNumber"
-                    value={state.accountNumber}
-                    onChange={(e) => {
-                      const isValid = validateAccountNumber(e.target.value);
-                      if (!isValid) {
-                        console.error("Invalid input");
-                      }
-                      dispatch({
-                        type: "UPDATE_ACCOUNT_NUMBER",
-                        payload: {
-                          accountNumber: e.target.value,
-                          accountNumberIsValid: isValid,
-                        },
-                      });
-                    }}
-                    required
-                    inputMode="numeric"
-                    style={{ appearance: "textfield" }}
-                    minLength={8}
-                    maxLength={8}
-                  />
-                </div>
-                {!state.accountNumberIsValid && (
-                  <div className="input__field--error-message text-xxs">
-                    Enter a valid account number
-                  </div>
-                )}
-              </div>
+              <InputField
+                label="Sort code"
+                type="number"
+                id="sortCode"
+                minLength={6}
+                maxLength={6}
+                pattern="\d*"
+                value={state.sortCode}
+                onChange={(e) => {
+                  const isValid = validateSortCode(e.target.value);
+                  if (!isValid) {
+                    console.error("Invalid input");
+                  }
+                  dispatch({
+                    type: "UPDATE_SORT_CODE",
+                    payload: {
+                      sortCode: e.target.value,
+                      sortCodeIsValid: isValid,
+                    },
+                  });
+                }}
+                isValid={state.sortCodeIsValid}
+                errorMessage="6 digits only"
+                required={true}
+                inputMode="numeric"
+                className="input-sort-code"
+              />
+              <InputField
+                label="Account number"
+                type="number"
+                id="accountNumber"
+                minLength={8}
+                maxLength={8}
+                pattern="\d*"
+                value={state.accountNumber}
+                onChange={(e) => {
+                  const isValid = validateAccountNumber(e.target.value);
+                  if (!isValid) {
+                    console.error("Invalid input");
+                  }
+                  dispatch({
+                    type: "UPDATE_ACCOUNT_NUMBER",
+                    payload: {
+                      accountNumber: e.target.value,
+                      accountNumberIsValid: isValid,
+                    },
+                  });
+                }}
+                isValid={state.accountNumberIsValid}
+                errorMessage="8 digits only"
+                required={true}
+                inputMode="numeric"
+                className="input-account-number"
+              />
             </div>
           ) : state.method === "IBAN" ? (
             <div className="payout__search-container--method">
-              <div className="sp-right-md">
-                <div className="content__label">IBAN</div>
-                <div className="input__payout">
-                  <input
-                    className={`input-reference ${
-                      !state.ibanIsValid ? "error" : ""
-                    }`}
-                    type="text"
-                    pattern="\d*"
-                    id="iban"
-                    value={state.iban}
-                    onChange={(e) => {
-                      const isValid = validateIban(e.target.value);
-                      if (!isValid) {
-                        console.error("Invalid input");
-                      }
-                      dispatch({
-                        type: "UPDATE_IBAN",
-                        payload: {
-                          iban: e.target.value,
-                          ibanIsValid: isValid,
-                        },
-                      });
-                    }}
-                    required
-                    inputMode="numeric"
-                    style={{ appearance: "textfield" }}
-                    maxLength={30}
-                  />
-                </div>
-                {!state.ibanIsValid && (
-                  <div className="input__field--error-message text-xxs">
-                    Enter a valid IBAN
-                  </div>
-                )}
-              </div>
+              <InputField
+                label="IBAN"
+                type="text"
+                id="iban"
+                maxLength={30}
+                pattern="\d*"
+                value={state.iban}
+                onChange={(e) => {
+                  const isValid = validateIban(e.target.value);
+                  if (!isValid) {
+                    console.error("Invalid input");
+                  }
+                  dispatch({
+                    type: "UPDATE_IBAN",
+                    payload: {
+                      iban: e.target.value,
+                      ibanIsValid: isValid,
+                    },
+                  });
+                }}
+                isValid={state.ibanIsValid}
+                errorMessage="Enter a valid IBAN"
+                required={true}
+                inputMode="numeric"
+                className="input-reference"
+              />
             </div>
           ) : (
             <div style={{ height: "81px" }}></div>
