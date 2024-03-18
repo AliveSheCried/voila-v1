@@ -31,7 +31,7 @@ const TransactionSearch = ({
           />
         </div>
         <div>
-          <div className="content__label sp-top-sm">Date range - from & to</div>
+          <div className="content__label">Date range - from & to</div>
           <div className="input__merchant-account merchant-account__search-dates text-sm">
             <div>
               <div>
