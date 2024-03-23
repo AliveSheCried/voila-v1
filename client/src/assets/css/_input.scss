@@ -25,7 +25,7 @@ $input-width: 90%;
     outline: none;
 
     &:focus {
-      border: 2px solid var(--color-primary);
+      border: 1px solid var(--color-primary);
     }
   }
 
@@ -52,7 +52,7 @@ $input-width: 90%;
     border: 1px solid red;
 
     &:focus {
-      border: 2px solid red;
+      border: 1px solid red;
     }
   }
 
@@ -69,7 +69,7 @@ $input-width: 90%;
     margin-top: -15px;
     margin-bottom: 1rem;
     color: red;
-    padding-top: 3px;
+    padding-top: 5px;
   }
 
   &--toggle-password {
@@ -94,7 +94,7 @@ $input-width: 90%;
     background: var(--color-white); //$input-background;
     font-family: $input-font-family;
     font-weight: $input-font-weight;
-    color: var(--color-grey-dark-2);
+    color: var(--color-primary);
     width: 120px;
     outline: none;
 
@@ -115,14 +115,18 @@ $input-width: 90%;
   }
 
   .input-amount {
-    width: 212px; /* adjust as needed */
+    width: 120px; /* adjust as needed */
     color: var(--color-green);
     text-align: right;
     // font-weight: 600;
   }
 
+  .input-name {
+    width: 200px; /* adjust as needed */
+  }
+
   .input-reference {
-    width: 286px; /* adjust as needed */
+    width: 346px; /* adjust as needed */
   }
 
   .input-sort-code {
@@ -133,16 +137,20 @@ $input-width: 90%;
     width: 200px; /* adjust as needed */
   }
 
+  .input-iban {
+    width: 346px; /* adjust as needed */
+  }
+
   input {
     border-radius: $input-border-radius;
     border: $input-border;
     padding: $input-padding;
-    margin-bottom: $input-margin-bottom;
+    //margin-bottom: $input-margin-bottom;
 
     background: var(--color-white); //$input-background;
     font-family: $input-font-family;
     font-weight: $input-font-weight;
-    color: var(--color-grey-dark-2);
+    color: var(--color-primary);
     outline: none;
 
     &:focus {
@@ -153,6 +161,9 @@ $input-width: 90%;
       border: 1px solid red;
       color: red;
     }
+  }
+  &--error-message {
+    color: red;
   }
 }
 
@@ -244,7 +255,7 @@ select {
   // margin-bottom: $input-margin-bottom;
   background: var(--color-white); //$input-background;
   font-family: $input-font-family;
-  color: var(--color-grey-dark-2); //$input-color;
+  color: var(--color-primary); //$input-color;
   outline: none;
 }
 

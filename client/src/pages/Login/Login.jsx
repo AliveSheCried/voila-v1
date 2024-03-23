@@ -108,11 +108,12 @@ function Login({ onLogin }) {
                 required
               />
               <label htmlFor="email">Email</label>
-              {!isEmailValid && (
-                <div className="input__field--error-message text-xxs">
-                  Please enter a valid email
-                </div>
-              )}
+              <div
+                className="input__field--error-message text-xxs"
+                style={{ height: "20px" }}
+              >
+                {!isEmailValid && "Please enter a valid email"}
+              </div>
             </div>
             <div
               className={`input__field text-sm ${
@@ -128,11 +129,14 @@ function Login({ onLogin }) {
                 required
               />
               <label htmlFor="password">Password</label>
-              {isPasswordValid && (
-                <div className="input__field--error-message text-xxs">
-                  Please enter a valid password - min 8 characters
-                </div>
-              )}
+              <div
+                className="input__field--error-message text-xxs"
+                style={{ height: "16px" }}
+              >
+                {isPasswordValid &&
+                  "Please enter a valid password - min 8 characters"}
+              </div>
+
               <span
                 className="input__field--toggle-password"
                 onClick={togglePasswordVisibility}
@@ -144,7 +148,7 @@ function Login({ onLogin }) {
                 />
               </span>
             </div>
-            <p className="sp-top-negative-sm sp-bottom-md text-xs right">
+            <p className="text-xs right">
               <a href="#">Forgot password?</a>
             </p>
             <button className="btn btn--primary btn--icon sp-top-sm">

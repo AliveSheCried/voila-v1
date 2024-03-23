@@ -302,7 +302,7 @@
   outline: none;
 }
 .input__field input:focus {
-  border: 2px solid var(--color-primary);
+  border: 1px solid var(--color-primary);
 }
 .input__field label {
   position: absolute;
@@ -325,7 +325,7 @@
   border: 1px solid red;
 }
 .input__field--error input:focus {
-  border: 2px solid red;
+  border: 1px solid red;
 }
 .input__field--error label {
   color: red;
@@ -339,7 +339,7 @@
   margin-top: -15px;
   margin-bottom: 1rem;
   color: red;
-  padding-top: 3px;
+  padding-top: 5px;
 }
 .input__field--toggle-password {
   position: absolute;
@@ -360,7 +360,7 @@
   background: var(--color-white);
   font-family: inherit;
   font-weight: 400;
-  color: var(--color-grey-dark-2);
+  color: var(--color-primary);
   width: 120px;
   outline: none;
 }
@@ -375,12 +375,15 @@
   width: 27px; /* adjust as needed */
 }
 .input__payout .input-amount {
-  width: 212px; /* adjust as needed */
+  width: 120px; /* adjust as needed */
   color: var(--color-green);
   text-align: right;
 }
+.input__payout .input-name {
+  width: 200px; /* adjust as needed */
+}
 .input__payout .input-reference {
-  width: 286px; /* adjust as needed */
+  width: 346px; /* adjust as needed */
 }
 .input__payout .input-sort-code {
   width: 100px; /* adjust as needed */
@@ -388,15 +391,17 @@
 .input__payout .input-account-number {
   width: 200px; /* adjust as needed */
 }
+.input__payout .input-iban {
+  width: 346px; /* adjust as needed */
+}
 .input__payout input {
   border-radius: var(--spacing-xs);
   border: 1px solid var(--color-grey-light-2);
   padding: var(--spacing-md);
-  margin-bottom: var(--spacing-sm);
   background: var(--color-white);
   font-family: inherit;
   font-weight: 400;
-  color: var(--color-grey-dark-2);
+  color: var(--color-primary);
   outline: none;
 }
 .input__payout input:focus {
@@ -404,6 +409,9 @@
 }
 .input__payout input.error:focus {
   border: 1px solid red;
+  color: red;
+}
+.input__payout--error-message {
   color: red;
 }
 
@@ -484,7 +492,7 @@ select {
   padding: var(--spacing-md);
   background: var(--color-white);
   font-family: inherit;
-  color: var(--color-grey-dark-2);
+  color: var(--color-primary);
   outline: none;
 }
 
@@ -733,18 +741,18 @@ select {
 
 .payout__search-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: flex-start;
   flex-direction: row;
   flex-wrap: wrap;
-  width: 666px;
+  width: 800px;
 }
 .payout__search-container--right {
   display: flex;
   justify-content: flex-end;
   flex-direction: row;
   flex-wrap: wrap;
-  width: 666px;
+  width: 635px;
 }
 .payout__search-container--method {
   display: flex;
@@ -775,6 +783,7 @@ select {
   --spacing-xxs: 0.25rem;
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
+  --spacing-sm-1: 1.25rem;
   --spacing-md: 1.5rem;
   --spacing-lg: 2rem;
   --spacing-xl: 2.5rem;

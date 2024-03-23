@@ -102,11 +102,15 @@ const CreateMerchantPayment = () => {
   };
 
   function handleAccountChange(account) {
+    const selectedIban = account.account_identifiers.find(
+      (identifier) => identifier.type === "iban"
+    ).iban;
     dispatch({
       type: "SELECT_ACCOUNT",
       payload: {
         selectedAccountId: account.id,
         selectedCurrency: account.currency,
+        selectedIban: selectedIban,
       },
     });
   }
@@ -136,7 +140,8 @@ const CreateMerchantPayment = () => {
           <div className="sp-right-md">
             <SelectMerchantAccount
               label={"Select disbursement account"}
-              selectedAccountId={state.selectedAccountId}
+              //selectedAccountId={state.selectedAccountId}
+              selectedIban={state.selectedIban}
               onAccountChange={handleAccountChange}
               merchantAccounts={merchantAccounts}
             />
@@ -179,7 +184,7 @@ const CreateMerchantPayment = () => {
 
         <div className="payout__search-container sp-left-lg">
           <InputField
-            label="Payment name"
+            label="Payee name"
             type="text"
             id="accountHolderName"
             value={state.payeeName}
@@ -199,7 +204,7 @@ const CreateMerchantPayment = () => {
             isValid={state.payeeNameIsValid}
             errorMessage="Enter a valid name"
             required={true}
-            className="input-reference"
+            className="input-name"
           />
           <InputField
             label="Payee reference"
@@ -232,103 +237,104 @@ const CreateMerchantPayment = () => {
           <div className="sp-right-md">
             <div className="content__label">Payment method</div>
             <div className="input__payout">
-              <select id="paymentMethod" onClick={togglePaymentMethod}>
+              <select id="paymentMethod" onChange={togglePaymentMethod}>
                 <option value="">-- Select payment method --</option>
                 <option value="SORT_CODE">Sort code</option>
                 <option value="IBAN">IBAN</option>
               </select>
             </div>
           </div>
-
-          {state.method === "SORT_CODE" ? (
-            <div className="payout__search-container--method">
-              <InputField
-                label="Sort code"
-                type="number"
-                id="sortCode"
-                minLength={6}
-                maxLength={6}
-                pattern="\d*"
-                value={state.sortCode}
-                onChange={(e) => {
-                  const isValid = validateSortCode(e.target.value);
-                  if (!isValid) {
-                    console.error("Invalid input");
-                  }
-                  dispatch({
-                    type: "UPDATE_SORT_CODE",
-                    payload: {
-                      sortCode: e.target.value,
-                      sortCodeIsValid: isValid,
-                    },
-                  });
-                }}
-                isValid={state.sortCodeIsValid}
-                errorMessage="6 digits only"
-                required={true}
-                inputMode="numeric"
-                className="input-sort-code"
-              />
-              <InputField
-                label="Account number"
-                type="number"
-                id="accountNumber"
-                minLength={8}
-                maxLength={8}
-                pattern="\d*"
-                value={state.accountNumber}
-                onChange={(e) => {
-                  const isValid = validateAccountNumber(e.target.value);
-                  if (!isValid) {
-                    console.error("Invalid input");
-                  }
-                  dispatch({
-                    type: "UPDATE_ACCOUNT_NUMBER",
-                    payload: {
-                      accountNumber: e.target.value,
-                      accountNumberIsValid: isValid,
-                    },
-                  });
-                }}
-                isValid={state.accountNumberIsValid}
-                errorMessage="8 digits only"
-                required={true}
-                inputMode="numeric"
-                className="input-account-number"
-              />
-            </div>
-          ) : state.method === "IBAN" ? (
-            <div className="payout__search-container--method">
-              <InputField
-                label="IBAN"
-                type="text"
-                id="iban"
-                maxLength={30}
-                pattern="\d*"
-                value={state.iban}
-                onChange={(e) => {
-                  const isValid = validateIban(e.target.value);
-                  if (!isValid) {
-                    console.error("Invalid input");
-                  }
-                  dispatch({
-                    type: "UPDATE_IBAN",
-                    payload: {
-                      iban: e.target.value,
-                      ibanIsValid: isValid,
-                    },
-                  });
-                }}
-                isValid={state.ibanIsValid}
-                errorMessage="Enter a valid IBAN"
-                required={true}
-                inputMode="numeric"
-                className="input-reference"
-              />
-            </div>
-          ) : (
-            <div style={{ height: "81px" }}></div>
-          )}
+          <div style={{ minHeight: "95px" }}>
+            {state.method === "SORT_CODE" ? (
+              <div className="payout__search-container--method">
+                <InputField
+                  label="Sort code"
+                  type="number"
+                  id="sortCode"
+                  minLength={6}
+                  maxLength={6}
+                  pattern="\d*"
+                  value={state.sortCode}
+                  onChange={(e) => {
+                    const isValid = validateSortCode(e.target.value);
+                    if (!isValid) {
+                      console.error("Invalid input");
+                    }
+                    dispatch({
+                      type: "UPDATE_SORT_CODE",
+                      payload: {
+                        sortCode: e.target.value,
+                        sortCodeIsValid: isValid,
+                      },
+                    });
+                  }}
+                  isValid={state.sortCodeIsValid}
+                  errorMessage="6 digits only"
+                  required={true}
+                  inputMode="numeric"
+                  className="input-sort-code"
+                />
+                <InputField
+                  label="Account number"
+                  type="number"
+                  id="accountNumber"
+                  minLength={8}
+                  maxLength={8}
+                  pattern="\d*"
+                  value={state.accountNumber}
+                  onChange={(e) => {
+                    const isValid = validateAccountNumber(e.target.value);
+                    if (!isValid) {
+                      console.error("Invalid input");
+                    }
+                    dispatch({
+                      type: "UPDATE_ACCOUNT_NUMBER",
+                      payload: {
+                        accountNumber: e.target.value,
+                        accountNumberIsValid: isValid,
+                      },
+                    });
+                  }}
+                  isValid={state.accountNumberIsValid}
+                  errorMessage="8 digits only"
+                  required={true}
+                  inputMode="numeric"
+                  className="input-account-number"
+                />
+              </div>
+            ) : state.method === "IBAN" ? (
+              <div className="payout__search-container--method">
+                <InputField
+                  label="IBAN"
+                  type="text"
+                  id="iban"
+                  maxLength={30}
+                  pattern="\d*"
+                  value={state.iban}
+                  onChange={(e) => {
+                    const isValid = validateIban(e.target.value);
+                    if (!isValid) {
+                      console.error("Invalid input");
+                    }
+                    dispatch({
+                      type: "UPDATE_IBAN",
+                      payload: {
+                        iban: e.target.value,
+                        ibanIsValid: isValid,
+                      },
+                    });
+                  }}
+                  isValid={state.ibanIsValid}
+                  errorMessage="Enter a valid IBAN"
+                  required={true}
+                  inputMode="numeric"
+                  className="input-iban"
+                />
+              </div>
+            ) : (
+              <div style={{ height: "81px" }}></div>
+            )}
+          </div>
         </div>
         <div className="payout__search-container--right sp-left-lg">
           <div className="right">

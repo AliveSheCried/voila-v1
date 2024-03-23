@@ -192,13 +192,13 @@
 //Merchant Account payout page styles
 .payout {
     &__search-container {
-        @include fbox($direction: row, $items: flex-start, $wrap: wrap, $content: space-between);
-        width: 666px;
+        @include fbox($direction: row, $items: flex-start, $wrap: wrap, $content: flex-start);
+        width: 800px;
     }
 
     &__search-container--right {
         @include fbox($direction: row, $content: flex-end, $wrap: wrap);
-        width: 666px;
+        width: 635px;
     }
 
     &__search-container--method {

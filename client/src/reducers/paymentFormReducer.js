@@ -26,6 +26,7 @@ export const paymentFormReducer = (state, action) => {
         ...state,
         selectedAccountId: action.payload.selectedAccountId,
         selectedCurrency: action.payload.selectedCurrency,
+        selectedIban: action.payload.selectedIban,
       };
     case "SELECT_METHOD":
       return {

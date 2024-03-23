@@ -39,11 +39,12 @@ const InputField = ({
           maxLength={maxLength}
         />
       </div>
-      {!isValid && (
-        <div className="input__field--error-message text-xxs right">
-          {errorMessage}
-        </div>
-      )}
+      <div
+        className="input__payout--error-message text-xxs right"
+        style={{ height: "20px" }}
+      >
+        {!isValid && errorMessage}
+      </div>
     </div>
   );
 };
