@@ -448,6 +448,19 @@
   cursor: pointer;
   transition: all 0.3s;
 }
+.btn--secondary-inactive {
+  padding-top: var(--spacing-xs);
+  padding-bottom: var(--spacing-xs);
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+  display: inline-flex;
+  justify-content: space-between;
+  background-color: var(--color-grey-light-2);
+  color: var(--color-grey-dark-3);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  cursor: not-allowed;
+}
 .btn--secondary:hover {
   background-color: var(--color-tertiary);
 }
@@ -464,6 +477,19 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
+}
+.btn--tertiary-inactive {
+  padding-top: var(--spacing-sm);
+  padding-bottom: var(--spacing-sm);
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+  display: inline-flex;
+  justify-content: space-between;
+  background-color: var(--color-grey-light-2);
+  color: var(--color-grey-dark-3);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: not-allowed;
 }
 .btn--tertiary:hover {
   background-color: var(--color-tertiary-hover);
@@ -776,6 +802,7 @@ select {
   --color-grey-light-2: #f4f2f2;
   --color-grey-dark-1: #333;
   --color-grey-dark-2: #c5c4c4;
+  --color-grey-dark-3: #555;
   --color-tertiary: #4d475f;
   --color-tertiary-hover: #817c91;
   --color-blue: #454955;

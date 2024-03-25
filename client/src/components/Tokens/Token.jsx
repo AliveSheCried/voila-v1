@@ -54,9 +54,13 @@ const Token = ({ name, loading, onCreateToken }) => {
       </div>
       <div className="token__button">
         <button
-          className="btn btn--secondary"
+          className={`btn ${
+            loading || timeLeft > 0
+              ? "btn--secondary-inactive"
+              : "btn--secondary"
+          }`}
           onClick={onCreateToken}
-          disabled={loading}
+          disabled={loading || timeLeft > 0}
         >
           Create
         </button>

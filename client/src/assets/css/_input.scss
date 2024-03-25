@@ -202,6 +202,20 @@ $input-width: 90%;
     cursor: pointer;
     transition: all 0.3s;
 
+    &-inactive {
+      padding-top: var(--spacing-xs);
+      padding-bottom: var(--spacing-xs);
+      padding-left: var(--spacing-md);
+      padding-right: var(--spacing-md);
+      display: inline-flex;
+      justify-content: space-between;
+      background-color: var(--color-grey-light-2);
+      color: var(--color-grey-dark-3);
+      font-size: var(--font-size-sm);
+      font-weight: 700;
+      cursor: not-allowed;
+    }
+
     &:hover {
       background-color: var(--color-tertiary);
     }
@@ -218,9 +232,22 @@ $input-width: 90%;
     color: var(--color-white);
     font-size: var(--font-size-sm);
     font-weight: 600;
-
     cursor: pointer;
     transition: all 0.3s;
+
+    &-inactive {
+      padding-top: var(--spacing-sm);
+      padding-bottom: var(--spacing-sm);
+      padding-left: var(--spacing-md);
+      padding-right: var(--spacing-md);
+      display: inline-flex;
+      justify-content: space-between;
+      background-color: var(--color-grey-light-2);
+      color: var(--color-grey-dark-3);
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      cursor: not-allowed;
+    }
 
     &:hover {
       background-color: var(--color-tertiary-hover);

@@ -189,7 +189,11 @@ const CreateMerchantPayment = () => {
             id="accountHolderName"
             value={state.payeeName}
             onChange={(e) => {
-              const isValid = validatePayeeName(e.target.value);
+              const inputValue = e.target.value;
+              let isValid = false;
+              if (inputValue !== null && inputValue !== "") {
+                isValid = validatePayeeName(inputValue);
+              }
               if (!isValid) {
                 console.error("Invalid input");
               }
@@ -212,7 +216,11 @@ const CreateMerchantPayment = () => {
             id="reference"
             value={state.reference}
             onChange={(e) => {
-              const isValid = validateReference(e.target.value);
+              const inputValue = e.target.value;
+              let isValid = false;
+              if (inputValue !== null && inputValue !== "") {
+                isValid = validateReference(inputValue);
+              }
               if (!isValid) {
                 console.error("Invalid input");
               }
@@ -338,7 +346,12 @@ const CreateMerchantPayment = () => {
         </div>
         <div className="payout__search-container--right sp-left-lg">
           <div className="right">
-            <button className="btn btn--tertiary" onClick={handleCreatePayment}>
+            <button
+              className={`btn ${
+                !state.formIsValid ? "btn--tertiary-inactive" : "btn--tertiary"
+              }`}
+              onClick={handleCreatePayment}
+            >
               Create payment
             </button>
           </div>
