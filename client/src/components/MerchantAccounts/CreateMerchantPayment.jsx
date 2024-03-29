@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useReducer } from "react";
 import { MerchantAccountContext } from "../../contexts/MerchantAccountContext";
-import { TokenContext } from "../../contexts/TokenContext";
+import { PaymentTokenContext } from "../../contexts/TokenContext";
 import {
   initialPaymentFormState,
   paymentFormReducer,
@@ -12,7 +12,7 @@ import Start from "../Start/Start";
 
 const CreateMerchantPayment = () => {
   const { merchantAccounts } = useContext(MerchantAccountContext);
-  const { tokenData } = useContext(TokenContext);
+  const { token } = useContext(PaymentTokenContext);
   const [state, dispatch] = useReducer(
     paymentFormReducer,
     initialPaymentFormState
@@ -83,6 +83,15 @@ const CreateMerchantPayment = () => {
     validateForm();
   }, [validateForm]);
 
+  //Reset the state when component unmounts
+  useEffect(() => {
+    // This function is called when the component is unmounted
+    return () => {
+      // Reset the state here...
+      dispatch({ type: "RESET_FORM" });
+    };
+  }, []); // Empty dependency array means this effect runs once on mount and cleanup on unmount
+
   //handlers
   const handleCreatePayment = () => {
     if (!state.formIsValid) {
@@ -115,7 +124,7 @@ const CreateMerchantPayment = () => {
     });
   }
 
-  if (!tokenData.accessToken || !merchantAccounts.length) {
+  if (!token.accessToken || !merchantAccounts.length) {
     return <Start type={"routes"} title={"Merchant account payout"} />;
   }
 

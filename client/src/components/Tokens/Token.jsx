@@ -1,14 +1,18 @@
 import PropTypes from "prop-types";
 import { useContext, useEffect, useState } from "react";
-import { TokenContext } from "../../contexts/TokenContext";
+import {
+  DataTokenContext,
+  PaymentTokenContext,
+} from "../../contexts/TokenContext";
 
 const Token = ({ name, loading, onCreateToken }) => {
   const [timeLeft, setTimeLeft] = useState(null);
-  const { tokenData } = useContext(TokenContext);
-
+  const { token } = useContext(
+    name === "payment" ? PaymentTokenContext : DataTokenContext
+  );
   // Function to calculate and set the time left
   const calculateTimeLeft = () => {
-    const expiryTimestamp = Number(tokenData.expiry);
+    const expiryTimestamp = Number(token.expiry);
     const currentTime = Date.now();
     // console.log("Expiry timestamp:", expiryTimestamp);
     //console.log("Current time:", currentTime);
@@ -27,7 +31,7 @@ const Token = ({ name, loading, onCreateToken }) => {
     const timer = setInterval(calculateTimeLeft, 1000); // Set up the interval
 
     return () => clearInterval(timer); // Clean up the interval on component unmount
-  }, [tokenData.expiry]);
+  }, [token.expiry]);
 
   return (
     <div className="token__container">
@@ -48,7 +52,7 @@ const Token = ({ name, loading, onCreateToken }) => {
       <div className="token__text">
         {loading
           ? "Generating..."
-          : name === "payment" && timeLeft !== null && tokenData.accessToken
+          : name === "payment" && timeLeft !== null && token.accessToken
           ? `Time remaining: ${timeLeft}s`
           : "No active token"}
       </div>

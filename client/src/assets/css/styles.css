@@ -664,6 +664,7 @@ select {
 }
 .content__value--white-highlight {
   background-color: var(--color-green-palette);
+  padding-top: 2px;
 }
 .content__value--table, .content__value--table--green, .content__value--table--red, .content__value--table--white {
   font-size: var(--font-size-xs);
@@ -785,6 +786,14 @@ select {
   justify-content: flex-end;
   flex-direction: row;
   flex-wrap: wrap;
+}
+
+.hack-1 {
+  width: 137px;
+}
+
+.hack-2 {
+  width: 230px;
 }
 
 :root {

@@ -6,18 +6,27 @@ import MerchantAccount from "./MerchantAccount";
 
 const GetMerchantAccount = () => {
   const { merchantAccounts } = useContext(MerchantAccountContext);
-  const [selectedAccountId, setSelectedAccountId] = useState("");
+
+  const [selectedIban, setSelectedIban] = useState("");
 
   const handleAccountChange = (account) => {
-    setSelectedAccountId(account.id);
+    const ibanIdentifier = account.account_identifiers.find(
+      (identifier) => identifier.type === "iban"
+    );
+    if (ibanIdentifier) {
+      setSelectedIban(ibanIdentifier.iban);
+    }
   };
 
   if (!merchantAccounts.length) {
     return <Start type={"routes"} title={"Merchant account detail"} />;
   }
 
-  const selectedAccount = merchantAccounts.find(
-    (account) => account.id === selectedAccountId
+  const selectedAccount = merchantAccounts.find((account) =>
+    account.account_identifiers.some(
+      (identifier) =>
+        identifier.type === "iban" && identifier.iban === selectedIban
+    )
   );
 
   return (
@@ -27,7 +36,7 @@ const GetMerchantAccount = () => {
       </div>
       <SelectMerchantAccount
         label=""
-        selectedAccountId={selectedAccountId}
+        selectedIban={selectedIban}
         onAccountChange={handleAccountChange}
         merchantAccounts={merchantAccounts}
       />
@@ -36,7 +45,7 @@ const GetMerchantAccount = () => {
         <MerchantAccount
           key={selectedAccount.id}
           data={selectedAccount}
-          style="sp-right-sm sp-bottom-md card__merchant-account--detail"
+          className="sp-right-sm sp-bottom-md card__merchant-account--detail"
         />
       )}
     </div>

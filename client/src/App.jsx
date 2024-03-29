@@ -8,14 +8,14 @@ import Login from "./pages/Login/Login";
 import Nav from "./pages/Nav/Nav";
 
 // contexts
-import { TokenContext } from "./contexts/TokenContext";
+import { DataTokenContext, PaymentTokenContext } from "./contexts/TokenContext";
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
   const [name, setName] = useState("John Doe");
   const [email, setEmail] = useState("");
 
-  const [tokenData, setToken] = useState({
+  const [dataToken, setDataToken] = useState({
     name: "",
     type: "",
     expiry: "",
@@ -23,9 +23,17 @@ function App() {
     accessToken: "",
   });
 
-  const handleSetToken = (newTokenData) => {
-    setToken(newTokenData);
-  };
+  const [paymentToken, setPaymentToken] = useState({
+    name: "",
+    type: "",
+    expiry: "",
+    state: "",
+    accessToken: "",
+  });
+
+  // const handleSetToken = (newTokenData) => {
+  //   setToken(newTokenData);
+  // };
 
   const handleLogin = (email) => {
     const localName = email.split("@")[0];
@@ -37,12 +45,18 @@ function App() {
   return isAuth ? (
     <Router>
       <Layout>
-        <TokenContext.Provider value={{ tokenData, setToken: handleSetToken }}>
-          <Nav />
-          <Routes>
-            <Route path="/*" element={<Home name={name} email={email} />} />
-          </Routes>
-        </TokenContext.Provider>
+        <DataTokenContext.Provider
+          value={{ token: dataToken, setToken: setDataToken }}
+        >
+          <PaymentTokenContext.Provider
+            value={{ token: paymentToken, setToken: setPaymentToken }}
+          >
+            <Nav />
+            <Routes>
+              <Route path="/*" element={<Home name={name} email={email} />} />
+            </Routes>
+          </PaymentTokenContext.Provider>
+        </DataTokenContext.Provider>
       </Layout>
     </Router>
   ) : (

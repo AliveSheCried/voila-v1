@@ -66,6 +66,7 @@
 
             &-highlight {
                 background-color: var(--color-green-palette);
+                padding-top: 2px;
             }
         }
     }
@@ -204,4 +205,12 @@
     &__search-container--method {
         @include fbox($direction: row, $wrap: wrap, $content: flex-end);
     }
+}
+
+.hack-1 {
+    width: 137px;
+}
+
+.hack-2 {
+    width: 230px;
 }

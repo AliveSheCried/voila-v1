@@ -8,7 +8,8 @@ const TransactionSearch = ({
   onGetTransactions,
   dateFrom,
   dateTo,
-  selectedAccountId,
+  //selectedAccountId,
+  selectedIban,
   merchantAccounts,
 }) => {
   return (
@@ -25,7 +26,8 @@ const TransactionSearch = ({
         <div className="sp-right-md">
           <SelectMerchantAccount
             label={"Select merchant account"}
-            selectedAccountId={selectedAccountId}
+            //selectedAccountId={selectedAccountId}
+            selectedIban={selectedIban}
             onAccountChange={onAccountChange}
             merchantAccounts={merchantAccounts}
           />
@@ -72,7 +74,8 @@ TransactionSearch.propTypes = {
   onGetTransactions: PropTypes.func.isRequired,
   dateFrom: PropTypes.string.isRequired,
   dateTo: PropTypes.string.isRequired,
-  selectedAccountId: PropTypes.string.isRequired,
+  //selectedAccountId: PropTypes.string.isRequired,
+  selectedIban: PropTypes.string.isRequired,
   merchantAccounts: PropTypes.array.isRequired,
 };
 

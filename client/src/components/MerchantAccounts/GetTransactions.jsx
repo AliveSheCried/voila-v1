@@ -1,10 +1,11 @@
 import { useLazyQuery } from "@apollo/client";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MerchantAccountContext } from "../../contexts/MerchantAccountContext";
 import { MerchantAccountTransactionContext } from "../../contexts/MerchantAccountTransactionContext";
-import { TokenContext } from "../../contexts/TokenContext";
+import { PaymentTokenContext } from "../../contexts/TokenContext";
 import { GET_MERCHANT_ACCOUNT_TRANSACTIONS } from "../../graphql/queries/getMerchantAccountTransactions";
 //components
+import ErrorBoundary from "../../utils/ErrorBoundary";
 import Start from "../Start/Start";
 import TransactionList from "./TransactionList";
 import TransactionSearch from "./TransactionSearch";
@@ -13,8 +14,9 @@ const GetTransactions = () => {
   const { merchantAccounts } = useContext(MerchantAccountContext);
   const { setMerchantAccountTransactions, merchantAccountTransactions } =
     useContext(MerchantAccountTransactionContext);
-  const { tokenData } = useContext(TokenContext);
-  const [selectedAccountId, setSelectedAccountId] = useState("");
+  const { token } = useContext(PaymentTokenContext);
+  // const [selectedAccountId, setSelectedAccountId] = useState("");
+  const [selectedIban, setSelectedIban] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [availableBalance, setAvailableBalance] = useState(0);
@@ -24,23 +26,44 @@ const GetTransactions = () => {
     useLazyQuery(GET_MERCHANT_ACCOUNT_TRANSACTIONS, {
       context: {
         headers: {
-          Authorization: `${tokenData.accessToken}`,
+          Authorization: `${token.accessToken}`,
         },
       },
     });
 
+  //Reset the state when component unmounts
+  useEffect(() => {
+    // This function is called when the component is unmounted
+    return () => {
+      // Reset the state here...
+      setAvailableBalance(0);
+      setCurrency("");
+      //setSelectedAccountId("");
+      setSelectedIban("");
+      setDateFrom("");
+      setDateTo("");
+      setMerchantAccountTransactions([]);
+    };
+  }, []); // Empty dependency array means this effect runs once on mount and cleanup on unmount
+
   const handleGetTransactions = () => {
-    const selectedAccount = merchantAccounts.find(
-      (account) => account.id === selectedAccountId
+    const selectedAccount = merchantAccounts.find((account) =>
+      account.account_identifiers.find(
+        (identifier) =>
+          identifier.type === "iban" && identifier.iban === selectedIban // replace selectedAccountId with selectedIban
+      )
     );
-    if (selectedAccount) {
-      setCurrency(selectedAccount.currency);
-      setAvailableBalance(selectedAccount.available_balance_in_minor);
+    if (!selectedAccount) {
+      console.error("No account found with the selected IBAN");
+      return;
     }
+
+    setCurrency(selectedAccount.currency);
+    setAvailableBalance(selectedAccount.available_balance_in_minor);
 
     getMerchantAccountTransactions({
       variables: {
-        merchantAccountId: selectedAccountId,
+        merchantAccountId: selectedAccount.id,
         fromDate: dateFrom,
         toDate: dateTo,
       },
@@ -51,8 +74,22 @@ const GetTransactions = () => {
   };
 
   //Form handlers
-  const handleAccountChange = (account) => {
-    setSelectedAccountId(account.id);
+  const handleAccountChange = (selectedAccount) => {
+    if (!selectedAccount) {
+      console.error("No account selected");
+      return;
+    }
+
+    const ibanIdentifier = selectedAccount.account_identifiers.find(
+      (identifier) => identifier.type === "iban"
+    );
+
+    if (!ibanIdentifier) {
+      console.error("Selected account does not have an IBAN");
+      return;
+    }
+
+    setSelectedIban(ibanIdentifier.iban);
   };
 
   const handleDateFromChange = (event) => {
@@ -104,16 +141,19 @@ const GetTransactions = () => {
           onGetTransactions={handleGetTransactions}
           dateFrom={dateFrom}
           dateTo={dateTo}
-          selectedAccountId={selectedAccountId}
+          // selectedAccountId={selectedAccountId}
+          selectedIban={selectedIban}
           merchantAccounts={merchantAccounts}
         />
 
         {merchantAccountTransactions.length > 0 && (
-          <TransactionList
-            transctions={merchantAccountTransactions}
-            availableBalance={availableBalance}
-            currency={currency}
-          />
+          <ErrorBoundary>
+            <TransactionList
+              transctions={merchantAccountTransactions}
+              availableBalance={availableBalance}
+              currency={currency}
+            />
+          </ErrorBoundary>
         )}
       </div>
     );

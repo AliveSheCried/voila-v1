@@ -1,33 +1,33 @@
 import { useLazyQuery } from "@apollo/client"; // Notice useLazyQuery instead of useQuery
 import { useContext, useEffect } from "react";
 import { MerchantAccountContext } from "../../contexts/MerchantAccountContext";
-import { TokenContext } from "../../contexts/TokenContext";
+import { PaymentTokenContext } from "../../contexts/TokenContext";
 import { GET_MERCHANT_ACCOUNTS } from "../../graphql/queries/getMerchantAccounts";
 import Start from "../Start/Start";
 import MerchantAccount from "./MerchantAccount";
 
 const GetMerchantAccounts = () => {
-  const { tokenData } = useContext(TokenContext);
+  const { token } = useContext(PaymentTokenContext);
   const { setMerchantAccounts } = useContext(MerchantAccountContext);
   const [getMerchantAccounts, { loading, data, error }] = useLazyQuery(
     GET_MERCHANT_ACCOUNTS,
     {
       context: {
         headers: {
-          Authorization: `${tokenData.accessToken}`,
+          Authorization: `${token.accessToken}`,
         },
       },
     }
   );
 
   useEffect(() => {
-    if (tokenData.accessToken) {
+    if (token.accessToken) {
       getMerchantAccounts().then((response) => {
         const data = response.data.merchantAccounts;
         setMerchantAccounts(data);
       });
     }
-  }, [tokenData.accessToken, getMerchantAccounts, setMerchantAccounts]);
+  }, [token.accessToken, getMerchantAccounts, setMerchantAccounts]);
 
   if (!loading && !error && !data) {
     return <Start type={"routes"} title={"All merchant accounts"} />;
@@ -62,8 +62,9 @@ const GetMerchantAccounts = () => {
           {data.merchantAccounts.map((account) => (
             <MerchantAccount
               key={account.id}
+              id={account.id}
               data={account}
-              style="sp-right-sm sp-bottom-md"
+              className="sp-right-sm sp-bottom-md"
             />
           ))}
         </div>

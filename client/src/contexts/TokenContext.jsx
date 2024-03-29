@@ -1,7 +1,19 @@
 import { createContext } from "react";
 
-export const TokenContext = createContext({
-  tokenData: {
+// const TokenContext = createContext({
+//   tokenData: {
+//     name: "",
+//     type: "",
+//     expiry: "",
+//     state: "",
+//     accessToken: "",
+//   },
+
+//   setToken: () => {},
+// });
+
+const DataTokenContext = createContext({
+  token: {
     name: "",
     type: "",
     expiry: "",
@@ -11,3 +23,17 @@ export const TokenContext = createContext({
 
   setToken: () => {},
 });
+
+const PaymentTokenContext = createContext({
+  token: {
+    name: "",
+    type: "",
+    expiry: "",
+    state: "",
+    accessToken: "",
+  },
+
+  setToken: () => {},
+});
+
+export { DataTokenContext, PaymentTokenContext };
