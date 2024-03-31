@@ -2,12 +2,12 @@ export const initialPaymentFormState = {
   selectedAccountId: "",
   selectedCurrency: "",
   method: "",
-  amountIsValid: true,
-  payeeNameIsValid: true,
-  referenceIsValid: true,
-  sortCodeIsValid: true,
-  accountNumberIsValid: true,
-  ibanIsValid: true,
+  amountIsValid: false,
+  payeeNameIsValid: false,
+  referenceIsValid: false,
+  sortCodeIsValid: false,
+  accountNumberIsValid: false,
+  ibanIsValid: false,
   formIsValid: false,
   sortCode: "",
   accountNumber: "",
@@ -15,6 +15,12 @@ export const initialPaymentFormState = {
   amount: "",
   payeeName: "",
   reference: "",
+  amountIsTouched: false,
+  payeeNameIsTouched: false,
+  referenceIsTouched: false,
+  sortCodeIsTouched: false,
+  accountNumberIsTouched: false,
+  ibanIsTouched: false,
 };
 
 export const paymentFormReducer = (state, action) => {
@@ -36,45 +42,51 @@ export const paymentFormReducer = (state, action) => {
         sortCode: "",
         accountNumber: "",
         iban: "",
-        sortCodeIsValid: true,
-        accountNumberIsValid: true,
-        ibanIsValid: true,
+        sortCodeIsValid: false,
+        accountNumberIsValid: false,
+        ibanIsValid: false,
       };
     case "UPDATE_AMOUNT":
       return {
         ...state,
         amount: action.payload.amount,
         amountIsValid: action.payload.amountIsValid,
+        amountIsTouched: action.payload.amountIsTouched,
       };
     case "UPDATE_PAYEE_NAME":
       return {
         ...state,
         payeeName: action.payload.payeeName,
         payeeNameIsValid: action.payload.payeeNameIsValid,
+        payeeNameIsTouched: action.payload.payeeNameIsTouched,
       };
     case "UPDATE_REFERENCE":
       return {
         ...state,
         reference: action.payload.reference,
         referenceIsValid: action.payload.referenceIsValid,
+        referenceIsTouched: action.payload.referenceIsTouched,
       };
     case "UPDATE_SORT_CODE":
       return {
         ...state,
         sortCode: action.payload.sortCode,
         sortCodeIsValid: action.payload.sortCodeIsValid,
+        sortCodeIsTouched: action.payload.sortCodeIsTouched,
       };
     case "UPDATE_ACCOUNT_NUMBER":
       return {
         ...state,
         accountNumber: action.payload.accountNumber,
         accountNumberIsValid: action.payload.accountNumberIsValid,
+        accountNumberIsTouched: action.payload.accountNumberIsTouched,
       };
     case "UPDATE_IBAN":
       return {
         ...state,
         iban: action.payload.iban,
         ibanIsValid: action.payload.ibanIsValid,
+        ibanIsTouched: action.payload.ibanIsTouched,
       };
     case "VALIDATE_FORM":
       return {

@@ -49,7 +49,7 @@ const SelectMerchantAccount = ({
 SelectMerchantAccount.propTypes = {
   label: PropTypes.string,
   //selectedAccountId: PropTypes.string.isRequired,
-  selectedIban: PropTypes.string.isRequired,
+  selectedIban: PropTypes.string.optional,
   onAccountChange: PropTypes.func.isRequired,
   merchantAccounts: PropTypes.array.isRequired,
 };

@@ -15,6 +15,9 @@ const merchantAccountTransactions = async (
   const fromDateObj = new Date(decodedFromDate);
   const toDateObj = new Date(decodedToDate);
 
+  // Set toDateObj to the end of the day
+  toDateObj.setHours(23, 59, 59, 999);
+
   // Format the Date objects in ISO-8601 format
   const isoFromDate = fromDateObj.toISOString();
   const isoToDate = toDateObj.toISOString();

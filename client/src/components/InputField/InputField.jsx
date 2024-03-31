@@ -17,6 +17,7 @@ const InputField = ({
   className = "",
   minLength,
   maxLength,
+  isTouched,
 }) => {
   return (
     <div className="sp-right-md">
@@ -43,7 +44,7 @@ const InputField = ({
         className="input__payout--error-message text-xxs right"
         style={{ height: "20px" }}
       >
-        {!isValid && errorMessage}
+        {!isValid && isTouched && errorMessage}
       </div>
     </div>
   );
@@ -66,6 +67,7 @@ InputField.propTypes = {
   className: PropTypes.string,
   minLength: PropTypes.number,
   maxLength: PropTypes.number,
+  isTouched: PropTypes.bool,
 };
 
 export default InputField;

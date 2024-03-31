@@ -60,13 +60,19 @@ const CreateMerchantPayment = () => {
   };
 
   const validateForm = useCallback(() => {
-    const formIsValid =
+    let formIsValid =
       state.amountIsValid &&
       state.payeeNameIsValid &&
       state.referenceIsValid &&
-      state.sortCodeIsValid &&
-      state.accountNumberIsValid &&
-      state.ibanIsValid;
+      state.method !== ""; // Ensure a payment method has been selected
+
+    if (state.method === "SORT_CODE") {
+      formIsValid =
+        formIsValid && state.sortCodeIsValid && state.accountNumberIsValid;
+    } else if (state.method === "IBAN") {
+      formIsValid = formIsValid && state.ibanIsValid;
+    }
+
     dispatch({ type: "VALIDATE_FORM", payload: { formIsValid } });
   }, [
     state.amountIsValid,
@@ -75,6 +81,7 @@ const CreateMerchantPayment = () => {
     state.sortCodeIsValid,
     state.accountNumberIsValid,
     state.ibanIsValid,
+    state.method,
     dispatch,
   ]);
 
@@ -178,7 +185,11 @@ const CreateMerchantPayment = () => {
               }
               dispatch({
                 type: "UPDATE_AMOUNT",
-                payload: { amount: e.target.value, amountIsValid: isValid },
+                payload: {
+                  amount: e.target.value,
+                  amountIsValid: isValid,
+                  amountIsTouched: true,
+                },
               });
             }}
             isValid={state.amountIsValid}
@@ -186,6 +197,7 @@ const CreateMerchantPayment = () => {
             required={true}
             inputMode="numeric"
             className="input-amount"
+            isTouched={state.amountIsTouched}
           />
         </div>
 
@@ -211,6 +223,7 @@ const CreateMerchantPayment = () => {
                 payload: {
                   payeeName: e.target.value,
                   payeeNameIsValid: isValid,
+                  payeeNameIsTouched: true,
                 },
               });
             }}
@@ -218,6 +231,7 @@ const CreateMerchantPayment = () => {
             errorMessage="Enter a valid name"
             required={true}
             className="input-name"
+            isTouched={state.payeeNameIsTouched}
           />
           <InputField
             label="Payee reference"
@@ -238,6 +252,7 @@ const CreateMerchantPayment = () => {
                 payload: {
                   reference: e.target.value,
                   referenceIsValid: isValid,
+                  referenceIsTouched: true,
                 },
               });
             }}
@@ -245,6 +260,7 @@ const CreateMerchantPayment = () => {
             errorMessage="GBP 18 characters, other currencies 140 characters"
             required={true}
             className="input-reference"
+            isTouched={state.referenceIsTouched}
           />
         </div>
 
@@ -282,6 +298,7 @@ const CreateMerchantPayment = () => {
                       payload: {
                         sortCode: e.target.value,
                         sortCodeIsValid: isValid,
+                        sortCodeIsTouched: true,
                       },
                     });
                   }}
@@ -290,6 +307,7 @@ const CreateMerchantPayment = () => {
                   required={true}
                   inputMode="numeric"
                   className="input-sort-code"
+                  isTouched={state.sortCodeIsTouched}
                 />
                 <InputField
                   label="Account number"
@@ -309,6 +327,7 @@ const CreateMerchantPayment = () => {
                       payload: {
                         accountNumber: e.target.value,
                         accountNumberIsValid: isValid,
+                        accountNumberIsTouched: true,
                       },
                     });
                   }}
@@ -317,6 +336,7 @@ const CreateMerchantPayment = () => {
                   required={true}
                   inputMode="numeric"
                   className="input-account-number"
+                  isTouched={state.accountNumberIsTouched}
                 />
               </div>
             ) : state.method === "IBAN" ? (
@@ -338,6 +358,7 @@ const CreateMerchantPayment = () => {
                       payload: {
                         iban: e.target.value,
                         ibanIsValid: isValid,
+                        ibanIsTouched: true,
                       },
                     });
                   }}
@@ -346,6 +367,7 @@ const CreateMerchantPayment = () => {
                   required={true}
                   inputMode="numeric"
                   className="input-iban"
+                  isTouched={state.ibanIsTouched}
                 />
               </div>
             ) : (

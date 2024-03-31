@@ -57,7 +57,14 @@ const TransactionSearch = ({
             </div>
           </div>
           <div className="absolute-right sp-top-sm">
-            <button className="btn btn--tertiary" onClick={onGetTransactions}>
+            <button
+              className={`btn ${
+                !selectedIban || !dateFrom || !dateTo
+                  ? "btn--tertiary-inactive"
+                  : "btn--tertiary"
+              }`}
+              onClick={onGetTransactions}
+            >
               Search transactions
             </button>
           </div>

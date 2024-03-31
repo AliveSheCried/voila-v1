@@ -12,6 +12,17 @@ const createPayoutExternalAccount = async (
   },
   { token, dataSources }
 ) => {
+  //logging
+  console.log("createPayout resolver called");
+  console.log("Arguments:", {
+    reference,
+    account_holder_name,
+    merchant_account_id,
+    amount_in_minor,
+    currency,
+    account_identifier,
+  });
+
   // Validate currency is 3 characters long and only contains uppercase letters
   if (!validator.isUppercase(currency) || currency.length !== 3) {
     throw new Error("Currency must be a 3 character uppercase code");
