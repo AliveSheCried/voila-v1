@@ -1,103 +1,31 @@
-import { useCallback, useContext, useEffect, useReducer } from "react";
+import { useMutation } from "@apollo/client";
+import { useContext } from "react";
 import { MerchantAccountContext } from "../../contexts/MerchantAccountContext";
 import { PaymentTokenContext } from "../../contexts/TokenContext";
-import {
-  initialPaymentFormState,
-  paymentFormReducer,
-} from "../../reducers/paymentFormReducer";
-//components
+import usePaymentForm from "../../hooks/usePaymentForm";
+import { formatToSnakeCase } from "../../utils/formatToSnakeCase";
 import InputField from "../InputField/InputField";
 import SelectMerchantAccount from "../SelectMerchantAccount/SelectMerchantAccount";
 import Start from "../Start/Start";
 
+import { CREATE_MERCHANT_ACCOUNT_PAYOUT } from "../../graphql/mutations/createMerchantAccountPayout";
+
 const CreateMerchantPayment = () => {
+  const [createPayoutExternalAccount] = useMutation(
+    CREATE_MERCHANT_ACCOUNT_PAYOUT
+  );
   const { merchantAccounts } = useContext(MerchantAccountContext);
   const { token } = useContext(PaymentTokenContext);
-  const [state, dispatch] = useReducer(
-    paymentFormReducer,
-    initialPaymentFormState
-  );
-
-  //form validation
-  const validatePaymentAmount = (amount) => {
-    const regex = /^\d+\.\d{2}$/;
-    return regex.test(amount);
-  };
-
-  const validatePayeeName = (name) => {
-    if (state.selectedCurrency === "GBP") {
-      const regex = /^[a-zA-Z0-9/-?:().,’+\s#=!"%&*<>;{@\r\n]*$/;
-      return regex.test(name);
-    } else {
-      const regex = /^[a-zA-Z0-9/-?:().,'+ éèêëïîôöüûçñõãýÿáíóúàòìùäöüß\s]*$/;
-      return regex.test(name);
-    }
-  };
-
-  const validateReference = (reference) => {
-    if (state.selectedCurrency === "GBP") {
-      const regex = /^[a-zA-Z0-9/-?:().,’+\s#=!"%&*<>;{@\r\n]*$/;
-      return regex.test(reference);
-    } else {
-      const regex = /^[a-zA-Z0-9/-?:().,'+ éèêëïîôöüûçñõãýÿáíóúàòìùäöüß\s]*$/;
-      return regex.test(reference);
-    }
-  };
-
-  const validateSortCode = (sortCode) => {
-    const regex = /^[0-9]{6}$/;
-    return regex.test(sortCode);
-  };
-
-  const validateAccountNumber = (accountNumber) => {
-    const regex = /^[0-9]{8}$/;
-    return regex.test(accountNumber);
-  };
-
-  const validateIban = (iban) => {
-    const regex = /^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$/;
-    return regex.test(iban);
-  };
-
-  const validateForm = useCallback(() => {
-    let formIsValid =
-      state.amountIsValid &&
-      state.payeeNameIsValid &&
-      state.referenceIsValid &&
-      state.method !== ""; // Ensure a payment method has been selected
-
-    if (state.method === "SORT_CODE") {
-      formIsValid =
-        formIsValid && state.sortCodeIsValid && state.accountNumberIsValid;
-    } else if (state.method === "IBAN") {
-      formIsValid = formIsValid && state.ibanIsValid;
-    }
-
-    dispatch({ type: "VALIDATE_FORM", payload: { formIsValid } });
-  }, [
-    state.amountIsValid,
-    state.payeeNameIsValid,
-    state.referenceIsValid,
-    state.sortCodeIsValid,
-    state.accountNumberIsValid,
-    state.ibanIsValid,
-    state.method,
+  const {
+    state,
     dispatch,
-  ]);
-
-  // Call validateForm whenever a field is updated
-  useEffect(() => {
-    validateForm();
-  }, [validateForm]);
-
-  //Reset the state when component unmounts
-  useEffect(() => {
-    // This function is called when the component is unmounted
-    return () => {
-      // Reset the state here...
-      dispatch({ type: "RESET_FORM" });
-    };
-  }, []); // Empty dependency array means this effect runs once on mount and cleanup on unmount
+    validatePaymentAmount,
+    validatePayeeName,
+    validateReference,
+    validateSortCode,
+    validateAccountNumber,
+    validateIban,
+  } = usePaymentForm();
 
   //handlers
   const handleCreatePayment = () => {
@@ -105,7 +33,50 @@ const CreateMerchantPayment = () => {
       console.error("Form is not valid");
       return;
     }
+
+    const accountIdentifier = formatToSnakeCase({
+      type: state.method,
+      iban: state.iban,
+      sortCode: state.sortCode,
+      accountNumber: state.accountNumber,
+    });
+
+    // Convert input value to a float, then to an integer representing minor units
+    const amountInMinorUnits = Math.round(parseFloat(state.amount) * 100);
+
+    createPayoutExternalAccount({
+      variables: {
+        merchantAccountId: state.selectedAccountId,
+        amountInMinor: amountInMinorUnits,
+        currency: state.selectedCurrency,
+        type: "external_account",
+        reference: state.reference,
+        accountHolderName: state.payeeName,
+        accountIdentifier,
+      },
+      context: {
+        headers: {
+          authorization: `${token.accessToken}`, // Ensure you are accessing the token correctly
+        },
+      },
+    });
+
     console.log("Create payment");
+    console.log("variables", {
+      merchantAccountId: state.selectedAccountId,
+      amountInMinor: state.amount,
+      currency: state.selectedCurrency,
+      type: "external_account",
+      reference: state.reference,
+
+      accountHolderName: state.payeeName,
+      accountIdentifier: {
+        type: state.method,
+        iban: state.iban,
+        sortCode: state.sortCode,
+        accountNumber: state.accountNumber,
+      },
+    });
   };
 
   const togglePaymentMethod = (e) => {
@@ -172,21 +143,38 @@ const CreateMerchantPayment = () => {
           />
           <InputField
             label="Payment amount"
-            type="number"
+            type="text"
             id="amountInMinor"
-            pattern="\d*"
+            pattern="^\d+(\.\d{2})?$"
             min="0"
             max="50000"
             value={state.amount}
             onChange={(e) => {
-              const isValid = validatePaymentAmount(e.target.value);
+              const inputValue = e.target.value;
+
+              //Check if the input is not a number
+              if (isNaN(inputValue)) {
+                console.error("Invalid input");
+                dispatch({
+                  type: "RESET_AMOUNT",
+                });
+                return;
+              }
+
+              //Validate the string for currency amount
+              const isValid = validatePaymentAmount(inputValue);
               if (!isValid) {
                 console.error("Invalid input");
+                dispatch({
+                  type: "RESET_AMOUNT",
+                });
               }
+
+              // Update the state with the new amount
               dispatch({
                 type: "UPDATE_AMOUNT",
                 payload: {
-                  amount: e.target.value,
+                  amount: inputValue,
                   amountIsValid: isValid,
                   amountIsTouched: true,
                 },
@@ -195,7 +183,7 @@ const CreateMerchantPayment = () => {
             isValid={state.amountIsValid}
             errorMessage="Must be a number with 2 decimal places"
             required={true}
-            inputMode="numeric"
+            inputMode="decimal"
             className="input-amount"
             isTouched={state.amountIsTouched}
           />
@@ -272,13 +260,13 @@ const CreateMerchantPayment = () => {
             <div className="input__payout">
               <select id="paymentMethod" onChange={togglePaymentMethod}>
                 <option value="">-- Select payment method --</option>
-                <option value="SORT_CODE">Sort code</option>
-                <option value="IBAN">IBAN</option>
+                <option value="sort_code_account_number">Sort code</option>
+                <option value="iban">IBAN</option>
               </select>
             </div>
           </div>
           <div style={{ minHeight: "95px" }}>
-            {state.method === "SORT_CODE" ? (
+            {state.method === "sort_code_account_number" ? (
               <div className="payout__search-container--method">
                 <InputField
                   label="Sort code"
@@ -339,7 +327,7 @@ const CreateMerchantPayment = () => {
                   isTouched={state.accountNumberIsTouched}
                 />
               </div>
-            ) : state.method === "IBAN" ? (
+            ) : state.method === "iban" ? (
               <div className="payout__search-container--method">
                 <InputField
                   label="IBAN"

@@ -53,6 +53,13 @@ export const paymentFormReducer = (state, action) => {
         amountIsValid: action.payload.amountIsValid,
         amountIsTouched: action.payload.amountIsTouched,
       };
+    case "RESET_AMOUNT":
+      return {
+        ...state,
+        amount: initialPaymentFormState.amount,
+        amountIsValid: initialPaymentFormState.amountIsValid,
+        amountIsTouched: initialPaymentFormState.amountIsTouched,
+      };
     case "UPDATE_PAYEE_NAME":
       return {
         ...state,

@@ -50,7 +50,7 @@ export class TLPayoutAPI extends RESTDataSource {
       kid,
       privateKeyPem,
       method: "POST",
-      path: "/payouts",
+      path: "/v3/payouts",
       headers: {
         "Idempotency-Key": idKey,
       },
