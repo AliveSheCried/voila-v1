@@ -21,6 +21,9 @@ export const initialPaymentFormState = {
   sortCodeIsTouched: false,
   accountNumberIsTouched: false,
   ibanIsTouched: false,
+  submitting: false,
+  error: null,
+  submissionData: null,
 };
 
 export const paymentFormReducer = (state, action) => {
@@ -99,6 +102,26 @@ export const paymentFormReducer = (state, action) => {
       return {
         ...state,
         formIsValid: action.payload.formIsValid,
+      };
+    //Action types for form submission
+    case "SUBMIT_START":
+      return {
+        ...state,
+        submitting: true,
+        error: null,
+      };
+    case "SUBMIT_SUCCESS":
+      return {
+        ...state,
+        submitting: false,
+        submissionData: action.payload.submissionData,
+        error: null,
+      };
+    case "SUBMIT_FAILURE":
+      return {
+        ...state,
+        submitting: false,
+        error: action.payload.error,
       };
 
     case "RESET_FORM":

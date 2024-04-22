@@ -27,13 +27,21 @@ const CreateMerchantPayment = () => {
     validateIban,
   } = usePaymentForm();
 
-  //handlers
+  //Form submission handler
   const handleCreatePayment = () => {
+    // Check if the form is valid
     if (!state.formIsValid) {
       console.error("Form is not valid");
       return;
     }
 
+    //Start the submission process
+    dispatch({
+      type: "SUBMIT_START",
+    });
+
+    /////////////////////////////Prepare the data for submission///////////////////////////
+    // Change the accountIdentifier object keys to snake_case from camelCase for use by GraphQL
     const accountIdentifier = formatToSnakeCase({
       type: state.method,
       iban: state.iban,
@@ -44,39 +52,59 @@ const CreateMerchantPayment = () => {
     // Convert input value to a float, then to an integer representing minor units
     const amountInMinorUnits = Math.round(parseFloat(state.amount) * 100);
 
-    createPayoutExternalAccount({
-      variables: {
-        merchantAccountId: state.selectedAccountId,
-        amountInMinor: amountInMinorUnits,
-        currency: state.selectedCurrency,
-        type: "external_account",
-        reference: state.reference,
-        accountHolderName: state.payeeName,
-        accountIdentifier,
-      },
-      context: {
-        headers: {
-          authorization: `${token.accessToken}`, // Ensure you are accessing the token correctly
-        },
-      },
-    });
-
-    console.log("Create payment");
-    console.log("variables", {
+    //variable to hold the submission data
+    const variables = {
       merchantAccountId: state.selectedAccountId,
-      amountInMinor: state.amount,
+      amountInMinor: amountInMinorUnits,
       currency: state.selectedCurrency,
       type: "external_account",
       reference: state.reference,
-
       accountHolderName: state.payeeName,
-      accountIdentifier: {
-        type: state.method,
-        iban: state.iban,
-        sortCode: state.sortCode,
-        accountNumber: state.accountNumber,
-      },
-    });
+      accountIdentifier,
+    };
+
+    /////////////////////////////Submit the payment data///////////////////////////
+    try {
+      createPayoutExternalAccount({
+        variables,
+        context: {
+          headers: {
+            authorization: `${token.accessToken}`, // Ensure you are accessing the token correctly
+          },
+        },
+      });
+
+      dispatch({
+        type: "SUBMIT_SUCCESS",
+        payload: {
+          submissionData: variables,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: "SUBMIT_ERROR",
+        payload: {
+          error: error.message,
+        },
+      });
+    }
+
+    // console.log("Create payment");
+    // console.log("variables", {
+    //   merchantAccountId: state.selectedAccountId,
+    //   amountInMinor: state.amount,
+    //   currency: state.selectedCurrency,
+    //   type: "external_account",
+    //   reference: state.reference,
+
+    //   accountHolderName: state.payeeName,
+    //   accountIdentifier: {
+    //     type: state.method,
+    //     iban: state.iban,
+    //     sortCode: state.sortCode,
+    //     accountNumber: state.accountNumber,
+    //   },
+    // });
   };
 
   const togglePaymentMethod = (e) => {
@@ -104,6 +132,21 @@ const CreateMerchantPayment = () => {
 
   if (!token.accessToken || !merchantAccounts.length) {
     return <Start type={"routes"} title={"Merchant account payout"} />;
+  }
+
+  if (state.error) {
+    return <div>Error: {state.error}</div>;
+  }
+
+  if (state.submissionData) {
+    return (
+      <div>
+        <h1>Payment Submitted Successfully</h1>
+        <p>Amount: {state.submissionData.amountInMinor / 100}</p>
+        <p>Payee: {state.submissionData.accountHolderName}</p>
+        {/* Display other relevant data */}
+      </div>
+    );
   }
 
   return (
