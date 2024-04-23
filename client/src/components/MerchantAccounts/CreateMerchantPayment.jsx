@@ -7,6 +7,7 @@ import { formatToSnakeCase } from "../../utils/formatToSnakeCase";
 import InputField from "../InputField/InputField";
 import SelectMerchantAccount from "../SelectMerchantAccount/SelectMerchantAccount";
 import Start from "../Start/Start";
+import PaymentSuccess from "./PaymentSuccess";
 
 import { CREATE_MERCHANT_ACCOUNT_PAYOUT } from "../../graphql/mutations/createMerchantAccountPayout";
 
@@ -140,12 +141,25 @@ const CreateMerchantPayment = () => {
 
   if (state.submissionData) {
     return (
-      <div>
-        <h1>Payment Submitted Successfully</h1>
-        <p>Amount: {state.submissionData.amountInMinor / 100}</p>
-        <p>Payee: {state.submissionData.accountHolderName}</p>
-        {/* Display other relevant data */}
-      </div>
+      <>
+        <div className="content__head">
+          <span className="content__arrow">&raquo;</span> Merchant account
+          payout
+        </div>
+        <div className="token__container">
+          <div className="token__title">
+            <span
+              className={`material-symbols-outlined token__icon token__icon--bank`}
+            >
+              attach_money
+            </span>
+            Merchant account payout - external
+          </div>
+          <div className="payout__search-container sp-left-lg">
+            <PaymentSuccess data={state.submissionData} />
+          </div>
+        </div>
+      </>
     );
   }
 
