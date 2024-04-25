@@ -66,18 +66,50 @@ const createPayoutExternalAccount = async (
     throw new Error("Invalid account identifier type");
   }
 
-  const responseData =
-    await dataSources.tlPayoutAPI.createMerchantAccountPayout(
+  try {
+    const responseData =
+      await dataSources.tlPayoutAPI.createMerchantAccountPayout(
+        reference,
+        account_holder_name,
+        merchant_account_id,
+        amount_in_minor,
+        currency,
+        account_identifier,
+        token
+      );
+
+    console.log("Response data:", responseData);
+    // Confirm connection to MongoDB
+    const { dbClient } = global;
+    if (!dbClient) {
+      throw new Error("No database client");
+    }
+
+    const myDb = dbClient.db("VoilaDev");
+    const myCollection = myDb.collection("MerchantPayouts");
+
+    // Prepare data to be saved in MongoDB
+    const document = {
       reference,
       account_holder_name,
       merchant_account_id,
       amount_in_minor,
       currency,
       account_identifier,
-      token
-    );
+      payoutId: responseData.id,
 
-  return responseData;
+      created_at: new Date(), // Record the time of the transaction
+    };
+
+    // Insert document into MongoDB
+    const result = await myCollection.insertOne(document);
+    console.log("MongoDB insert result:", result);
+
+    return responseData;
+  } catch (error) {
+    console.error("Error in createPayoutExternalAccount:", error);
+    throw new Error(error.message);
+  }
 };
 
 export { createPayoutExternalAccount };

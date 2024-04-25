@@ -3,6 +3,7 @@
   border: 1px solid var(--color-grey-light-2);
   border-radius: var(--br-standard);
   padding: var(--spacing-md);
+  background-color: var(--color-white);
 }
 .card__layout {
   display: flex;
@@ -747,6 +748,9 @@ select {
 }
 .merchant-account--balance {
   background-color: var(--color-grey-light-1);
+}
+.merchant-account--balance-white {
+  background-color: var(--color-white);
 }
 .merchant-account__transaction--detail {
   display: flex;

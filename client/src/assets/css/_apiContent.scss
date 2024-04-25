@@ -170,6 +170,10 @@
         background-color: var(--color-grey-light-1);
     }
 
+    &--balance-white {
+        background-color: var(--color-white);
+    }
+
     &__transaction--detail {
         @include fbox($direction: column);
         padding-top: var(--spacing-xxs);

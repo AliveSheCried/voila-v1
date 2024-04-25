@@ -1,18 +1,14 @@
 import PropTypes from "prop-types";
-import React from "react";
 import Card from "../Card/Card";
 
 const PaymentSuccess = ({ data }) => {
   return (
-    <Card
-      data={data}
-      className="card sp-right-sm sp-bottom-md card__merchant-account--detail"
-    >
+    <Card data={data} className="card card__merchant-account--detail">
       <div className="merchant-account__title">
         <span className="material-symbols-outlined merchant-account__icon">
           {data.currency === "GBP" ? "currency_pound" : "euro"}
         </span>
-        {data.merchantAccountId}
+        Payment Successful
       </div>
       <div>
         <table className="merchant-account">
@@ -52,16 +48,26 @@ const PaymentSuccess = ({ data }) => {
               )}
             </>
             <tr>
+              <th className="content__key">Payment date</th>
+              <td className="content__value">{new Date().toLocaleString()}</td>
+            </tr>
+            <tr>
+              <td colSpan={2} className="blank-row"></td>
+            </tr>
+            <tr>
               <th className="content__key">Currency</th>
               <td className="content__value">{data.currency}</td>
             </tr>
-            <tr className="merchant-account--balance">
+            <tr className="merchant-account--balance-white">
               <th className="content__key--white">Payment amount</th>
               <td className="content__value--white sp-bottom-md ">
                 <span className="content__value--white-highlight">
-                  {data.amountInMinor / 100}
+                  {(data.amountInMinor / 100).toFixed(2)}
                 </span>
               </td>
+            </tr>
+            <tr>
+              <td colSpan={2} className="blank-row"></td>
             </tr>
           </tbody>
         </table>

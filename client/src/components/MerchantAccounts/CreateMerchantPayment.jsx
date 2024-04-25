@@ -136,7 +136,27 @@ const CreateMerchantPayment = () => {
   }
 
   if (state.error) {
-    return <div>Error: {state.error}</div>;
+    return (
+      <>
+        <div className="content__head">
+          <span className="content__arrow">&raquo;</span> Merchant account
+          payout
+        </div>
+        <div className="token__container">
+          <div className="token__title sp-bottom-sm">
+            <span
+              className={`material-symbols-outlined token__icon token__icon--bank`}
+            >
+              attach_money
+            </span>
+            Merchant account payout - external
+          </div>
+          <div className="payout__search-container sp-left-lg">
+            <div>Error: {state.error}</div>;
+          </div>
+        </div>
+      </>
+    );
   }
 
   if (state.submissionData) {
@@ -147,7 +167,7 @@ const CreateMerchantPayment = () => {
           payout
         </div>
         <div className="token__container">
-          <div className="token__title">
+          <div className="token__title sp-bottom-sm">
             <span
               className={`material-symbols-outlined token__icon token__icon--bank`}
             >
