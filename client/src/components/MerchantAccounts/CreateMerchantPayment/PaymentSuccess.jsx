@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import Card from "../Card/Card";
+import Card from "../../Card/Card";
 
 const PaymentSuccess = ({ data }) => {
   return (

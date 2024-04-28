@@ -1,15 +1,15 @@
 import { useMutation } from "@apollo/client";
 import { useContext } from "react";
-import { MerchantAccountContext } from "../../contexts/MerchantAccountContext";
-import { PaymentTokenContext } from "../../contexts/TokenContext";
-import usePaymentForm from "../../hooks/usePaymentForm";
-import { formatToSnakeCase } from "../../utils/formatToSnakeCase";
-import InputField from "../InputField/InputField";
-import SelectMerchantAccount from "../SelectMerchantAccount/SelectMerchantAccount";
-import Start from "../Start/Start";
+import { MerchantAccountContext } from "../../../contexts/MerchantAccountContext";
+import { PaymentTokenContext } from "../../../contexts/TokenContext";
+import usePaymentForm from "../../../hooks/usePaymentForm";
+import { formatToSnakeCase } from "../../../utils/formatToSnakeCase";
+import InputField from "../../InputField/InputField";
+import SelectMerchantAccount from "../../SelectMerchantAccount/SelectMerchantAccount";
+import Start from "../../Start/Start";
 import PaymentSuccess from "./PaymentSuccess";
 
-import { CREATE_MERCHANT_ACCOUNT_PAYOUT } from "../../graphql/mutations/createMerchantAccountPayout";
+import { CREATE_MERCHANT_ACCOUNT_PAYOUT } from "../../../graphql/mutations/createMerchantAccountPayout";
 
 const CreateMerchantPayment = () => {
   const [createPayoutExternalAccount] = useMutation(
@@ -29,7 +29,7 @@ const CreateMerchantPayment = () => {
   } = usePaymentForm();
 
   //Form submission handler
-  const handleCreatePayment = () => {
+  const handleCreatePayment = async () => {
     // Check if the form is valid
     if (!state.formIsValid) {
       console.error("Form is not valid");
@@ -66,7 +66,7 @@ const CreateMerchantPayment = () => {
 
     /////////////////////////////Submit the payment data///////////////////////////
     try {
-      createPayoutExternalAccount({
+      const response = await createPayoutExternalAccount({
         variables,
         context: {
           headers: {
@@ -75,37 +75,34 @@ const CreateMerchantPayment = () => {
         },
       });
 
-      dispatch({
-        type: "SUBMIT_SUCCESS",
-        payload: {
-          submissionData: variables,
-        },
-      });
+      // Check if the mutation was successful and response contains the necessary data
+      if (
+        response.data.createPayoutExternalAccount &&
+        response.data.createPayoutExternalAccount.id
+      ) {
+        dispatch({
+          type: "SUBMIT_SUCCESS",
+          payload: {
+            submissionData: variables,
+          },
+        });
+      } else {
+        dispatch({
+          type: "SUBMIT_FAILURE",
+          payload: {
+            error: "Server responded without the expected data.",
+          },
+        });
+      }
     } catch (error) {
       dispatch({
         type: "SUBMIT_ERROR",
         payload: {
-          error: error.message,
+          error:
+            error.message || "An error occurred while processing the payment",
         },
       });
     }
-
-    // console.log("Create payment");
-    // console.log("variables", {
-    //   merchantAccountId: state.selectedAccountId,
-    //   amountInMinor: state.amount,
-    //   currency: state.selectedCurrency,
-    //   type: "external_account",
-    //   reference: state.reference,
-
-    //   accountHolderName: state.payeeName,
-    //   accountIdentifier: {
-    //     type: state.method,
-    //     iban: state.iban,
-    //     sortCode: state.sortCode,
-    //     accountNumber: state.accountNumber,
-    //   },
-    // });
   };
 
   const togglePaymentMethod = (e) => {
@@ -201,7 +198,7 @@ const CreateMerchantPayment = () => {
         {/*******  Disbursement account, currency and amount *******/}
 
         <div className="payout__search-container sp-left-lg sp-top-sm">
-          <div className="sp-right-md">
+          <div className="sp-right-sm">
             <SelectMerchantAccount
               label={"Select disbursement account"}
               //selectedAccountId={state.selectedAccountId}

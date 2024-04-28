@@ -521,6 +521,7 @@ select {
   font-family: inherit;
   color: var(--color-primary);
   outline: none;
+  margin-right: var(--spacing-xs);
 }
 
 .test {

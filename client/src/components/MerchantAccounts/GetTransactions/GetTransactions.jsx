@@ -1,12 +1,12 @@
 import { useLazyQuery } from "@apollo/client";
 import { useContext, useEffect, useState } from "react";
-import { MerchantAccountContext } from "../../contexts/MerchantAccountContext";
-import { MerchantAccountTransactionContext } from "../../contexts/MerchantAccountTransactionContext";
-import { PaymentTokenContext } from "../../contexts/TokenContext";
-import { GET_MERCHANT_ACCOUNT_TRANSACTIONS } from "../../graphql/queries/getMerchantAccountTransactions";
+import { MerchantAccountContext } from "../../../contexts/MerchantAccountContext";
+import { MerchantAccountTransactionContext } from "../../../contexts/MerchantAccountTransactionContext";
+import { PaymentTokenContext } from "../../../contexts/TokenContext";
+import { GET_MERCHANT_ACCOUNT_TRANSACTIONS } from "../../../graphql/queries/getMerchantAccountTransactions";
 //components
-import ErrorBoundary from "../../utils/ErrorBoundary";
-import Start from "../Start/Start";
+import ErrorBoundary from "../../../utils/ErrorBoundary";
+import Start from "../../Start/Start";
 import TransactionList from "./TransactionList";
 import TransactionSearch from "./TransactionSearch";
 

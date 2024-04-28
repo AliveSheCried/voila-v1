@@ -4,10 +4,11 @@ import RightPanel from "../RightPanel/RightPanel";
 import Start from "../Start/Start";
 
 //routes
-import CreateMerchantPayment from "../MerchantAccounts/CreateMerchantPayment";
+import CreateMerchantPayment from "../MerchantAccounts/CreateMerchantPayment/CreateMerchantPayment";
 import GetMerchantAccount from "../MerchantAccounts/GetMerchantAccount";
 import GetMerchantAccounts from "../MerchantAccounts/GetMerchantAccounts";
-import GetTransactions from "../MerchantAccounts/GetTransactions";
+import GetPayoutDetail from "../MerchantAccounts/GetPayoutDetail/GetPayoutDetail";
+import GetTransactions from "../MerchantAccounts/GetTransactions/GetTransactions";
 
 const Content = () => {
   return (
@@ -18,6 +19,7 @@ const Content = () => {
           <Route path="getMerchantAccounts" element={<GetMerchantAccounts />} />
           <Route path="getTransactions" element={<GetTransactions />} />
           <Route path="payout" element={<CreateMerchantPayment />} />
+          <Route path="getPayoutDetails" element={<GetPayoutDetail />} />
           <Route path="/" element={<Start type={"home"} />} />
         </Routes>
       </div>

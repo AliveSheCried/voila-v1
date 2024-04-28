@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { formatCurrency } from "../../utils/formatCurrency";
+import { formatCurrency } from "../../../utils/formatCurrency";
 
 //components
 import TransactionExternal from "./TransactionExternal";

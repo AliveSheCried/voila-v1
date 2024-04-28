@@ -284,6 +284,7 @@ select {
   font-family: $input-font-family;
   color: var(--color-primary); //$input-color;
   outline: none;
+  margin-right: var(--spacing-xs);
 }
 
 .test {

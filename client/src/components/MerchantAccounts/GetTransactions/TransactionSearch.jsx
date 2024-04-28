@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import SelectMerchantAccount from "../SelectMerchantAccount/SelectMerchantAccount";
+import SelectMerchantAccount from "../../SelectMerchantAccount/SelectMerchantAccount";
 
 const TransactionSearch = ({
   onAccountChange,
@@ -23,7 +23,7 @@ const TransactionSearch = ({
         Transaction search
       </div>
       <div className="merchant-account__search-container">
-        <div className="sp-right-md">
+        <div>
           <SelectMerchantAccount
             label={"Select merchant account"}
             //selectedAccountId={selectedAccountId}

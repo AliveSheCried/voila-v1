@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { formatCurrency } from "../../utils/formatCurrency";
+import { formatCurrency } from "../../../utils/formatCurrency";
 import TransactionDetail from "./TransactionDetail";
 
 const Transaction = ({ transaction }) => {
@@ -18,16 +18,16 @@ const Transaction = ({ transaction }) => {
     setIsDetailVisible(!isDetailVisible);
   };
 
-  const date = new Date(transaction.settled_at).toLocaleDateString();
+  const date = new Date(transaction.executed_at).toLocaleDateString();
   // Use optional chaining and provide default values as needed
   const accountNumber =
-    transaction.remitter.account_identifiers?.[0]?.account_number ?? "N/A";
+    transaction.beneficiary.account_identifiers?.[0]?.account_number ?? "N/A";
   const sortCode =
-    transaction.remitter.account_identifiers?.[0]?.sort_code ?? "N/A";
+    transaction.beneficiary.account_identifiers?.[0]?.sort_code ?? "N/A";
   // Safely access the iban of the second account identifier, if it exists
   const iban =
-    transaction.remitter.account_identifiers?.[
-      transaction.remitter.account_identifiers.length - 1
+    transaction.beneficiary.account_identifiers?.[
+      transaction.beneficiary.account_identifiers.length - 1
     ]?.iban ?? "N/A";
 
   return (
@@ -37,14 +37,14 @@ const Transaction = ({ transaction }) => {
         <td className="content__value--table">{transaction.status}</td>
         <td className="content__value--table right">{date}</td>
         <td className="content__value--table">{transaction.currency}</td>
-        <td className="content__value--table right">
+        <td className="content__value--table--red right">
           {formattedTransactionAmount}
         </td>
         <td className="content__value--table">
-          {transaction.remitter.account_holder_name}
+          {transaction.beneficiary.account_holder_name}
         </td>
         <td className="content__value--table">
-          {transaction.remitter.reference}
+          {transaction.beneficiary.reference}
         </td>
         <td className="content__value--table absolute-right">
           <span className="material-symbols-outlined">
@@ -83,7 +83,7 @@ Transaction.propTypes = {
     settled_at: PropTypes.string,
     currency: PropTypes.string,
     amount_in_minor: PropTypes.number,
-    remitter: PropTypes.shape({
+    beneficiary: PropTypes.shape({
       account_holder_name: PropTypes.string,
       reference: PropTypes.string,
       account_identifiers: PropTypes.arrayOf(

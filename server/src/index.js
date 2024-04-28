@@ -74,6 +74,41 @@ async function startServer() {
   });
   await server.start();
 
+  // REST endpoint for fetching payout transactions; this will, in turn, be used to search the graphQL endpoint to get transaction detail / status from TL
+  app.get("/api/transactions", async (req, res) => {
+    try {
+      const { page = 1, pageSize = 10, search = "" } = req.query;
+      const db = client.db("VoilaDev");
+      const transactionsCollection = db.collection("MerchantPayouts");
+
+      // Convert page and pageSize to numbers to use in skip and limit
+      const pageNum = parseInt(page);
+      const pageSizeNum = parseInt(pageSize);
+      const skip = (pageNum - 1) * pageSizeNum;
+
+      // Building the query for search functionality
+      let query = {};
+      if (search) {
+        query.$or = [
+          { account_holder_name: { $regex: search, $options: "i" } },
+          { reference: { $regex: search, $options: "i" } },
+        ];
+      }
+
+      const transactions = await transactionsCollection
+        .find(query)
+        .skip(skip)
+        .limit(pageSizeNum)
+        .toArray();
+      const total = await transactionsCollection.countDocuments(query);
+
+      res.status(200).json({ transactions, total });
+    } catch (error) {
+      console.error("Error fetching transactions:", error);
+      res.status(500).json({ message: "Failed to fetch transactions" });
+    }
+  });
+
   app.use(
     "/graphql",
     cors(),
