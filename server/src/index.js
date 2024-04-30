@@ -74,6 +74,13 @@ async function startServer() {
   });
   await server.start();
 
+  const corsOptions = {
+    origin: "http://127.0.0.1:5173", // Your client URL
+    optionsSuccessStatus: 200,
+  };
+
+  app.use(cors(corsOptions));
+
   // REST endpoint for fetching payout transactions; this will, in turn, be used to search the graphQL endpoint to get transaction detail / status from TL
   app.get("/api/transactions", async (req, res) => {
     try {
