@@ -83,7 +83,17 @@ $input-width: 90%;
 
 //input for merchant account page
 .input__merchant-account {
-  position: relative;
+  .input-currency {
+    width: 27px; /* adjust as needed */
+  }
+
+  .input-payee-name {
+    width: 200px; /* adjust as needed */
+  }
+
+  .input-created-date {
+    width: 80px; /* adjust as needed */
+  }
 
   input {
     border-radius: $input-border-radius;
@@ -275,6 +285,11 @@ $input-width: 90%;
   }
 }
 
+.btn__align-bottom {
+  align-self: flex-end;
+  margin-bottom: 2px;
+}
+
 select {
   border-radius: $input-border-radius;
   border: $input-border;
@@ -285,8 +300,4 @@ select {
   color: var(--color-primary); //$input-color;
   outline: none;
   margin-right: var(--spacing-xs);
-}
-
-.test {
-  border: 1px solid red;
 }
