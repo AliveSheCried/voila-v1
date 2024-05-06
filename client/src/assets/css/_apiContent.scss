@@ -209,35 +209,35 @@
     &__search-container--method {
         @include fbox($direction: row, $wrap: wrap, $content: flex-end);
     }
-}
 
-.test1 {
-    background-color: #fff;
-    color: var(--color-grey-dark-2);
-    padding: var(--spacing-sm);
-    border-radius: var(--spacing-xs);
-    border: 1px solid var(--color-grey-light-2);
-}
+    &__search-autocomplete-list {
+        background-color: #fff;
+        color: var(--color-grey-dark-2);
+        padding: var(--spacing-sm);
+        border-radius: var(--spacing-xs);
+        border: 1px solid var(--color-grey-light-2);
+    }
 
-.test2 {
-    display: inline-block;
-    width: 105px;
-    font-weight: 600;
-    margin-right: var(--spacing-md);
-    color: var(--color-green-light);
-}
+    &__search-autocomplete-name {
+        display: inline-block;
+        width: 105px;
+        font-weight: 600;
+        margin-right: var(--spacing-md);
+        color: var(--color-green-light);
+    }
 
-.test3 {
-    display: inline-block;
-    width: 27px;
-    font-weight: 600;
-    margin-right: var(--spacing-xxs);
-    color: var(--color-grey-dark-2);
-}
+    &__search-autocomplete-currency {
+        display: inline-block;
+        width: 27px;
+        font-weight: 600;
+        margin-right: var(--spacing-xxs);
+        color: var(--color-grey-dark-2);
+    }
 
-.test4 {
-    display: inline-block;
-    width: 50px;
-    margin-right: var(--spacing-xs);
-    color: var(--color-grey-dark-2);
+    &__search-autocomplete-amount {
+        display: inline-block;
+        width: 50px;
+        margin-right: var(--spacing-xs);
+        color: var(--color-grey-dark-2);
+    }
 }

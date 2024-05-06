@@ -1,8 +1,11 @@
-//import PropTypes from "prop-types";
+import { useLazyQuery } from "@apollo/client";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { PaymentTokenContext } from "../../../contexts/TokenContext";
+import { GET_PAYOUT_DETAIL } from "../../../graphql/queries/getPayout";
 
 const PayoutSearch = () => {
+  const { token } = useContext(PaymentTokenContext);
   const [transactions, setTransactions] = useState([]);
   const [error, setError] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
@@ -14,6 +17,17 @@ const PayoutSearch = () => {
     payoutId: "",
   });
 
+  const [getPayoutDetail, { loading, data, ApiError }] = useLazyQuery(
+    GET_PAYOUT_DETAIL,
+    {
+      context: {
+        headers: {
+          Authorization: `${token.accessToken}`,
+        },
+      },
+    }
+  );
+
   useEffect(() => {
     axios
       .get("http://localhost:4000/api/transactions")
@@ -21,7 +35,7 @@ const PayoutSearch = () => {
       .catch((error) => setError(error));
   }, []);
 
-  // console.log("error", error);
+  console.log("payoutId", search.payoutId);
 
   const handleInputChange = (event) => {
     const value = event.target.value;
@@ -36,7 +50,24 @@ const PayoutSearch = () => {
     }
   };
 
-  if (error) return <div>Something went wrong. D'oh!</div>;
+  //Payout search hanlder
+  const handleSearch = async () => {
+    try {
+      const response = await getPayoutDetail({
+        variables: { id: search.payoutId },
+        context: {
+          headers: {
+            Authorization: `${token.accessToken}`,
+          },
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  if (error || ApiError) return <div>Something went wrong. D'oh!</div>;
 
   return (
     <div className="token__container">
@@ -122,16 +153,18 @@ const PayoutSearch = () => {
             className={`btn ${
               !search.payoutId ? "btn--tertiary-inactive" : "btn--tertiary"
             }`}
-            onClick={() => {
-              console.log("Search transactions");
-            }}
+            onClick={handleSearch}
           >
             Search transactions
           </button>
         </div>
       </div>
       <div className="merchant-account__search-container">
-        <ul className={`text-sm ${suggestions.length != 0 ? "test1" : ""}`}>
+        <ul
+          className={`text-sm ${
+            suggestions.length != 0 ? "payout__search-autocomplete-list" : ""
+          }`}
+        >
           {suggestions.map((suggestion) => (
             <li
               key={suggestion._id}
@@ -147,9 +180,13 @@ const PayoutSearch = () => {
                 setSuggestions([]);
               }}
             >
-              <span className="test2">{suggestion.account_holder_name}</span>
-              <span className="test3">{suggestion.currency}</span>
-              <span className="test4">
+              <span className="payout__search-autocomplete-name">
+                {suggestion.account_holder_name}
+              </span>
+              <span className="payout__search-autocomplete-currency">
+                {suggestion.currency}
+              </span>
+              <span className="payout__search-autocomplete-amount">
                 {(suggestion.amount_in_minor / 100).toFixed(2)}
               </span>
 
@@ -160,7 +197,27 @@ const PayoutSearch = () => {
           ))}
         </ul>
       </div>
-      <div className="merchant-account__search-container"></div>
+      <div className="merchant-account__search-container">
+        {loading && <div>Loading...</div>}
+        {data && (
+          <div>
+            <div className="content__label">Payout ID</div>
+            <div className="input__merchant-account text-sm">
+              <div>
+                <div>
+                  <input
+                    className="input-payout-id"
+                    type="text"
+                    id="payoutId"
+                    value={data.payout.status}
+                    readOnly={true}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
