@@ -3,7 +3,7 @@ const merchantAccounts = async (_, __, { token, dataSources }) => {
     const responseData =
       await dataSources.tlMerchantAccountAPI.getMerchantAccounts(token);
 
-    console.log("Response data:", responseData); // Add this to debug
+    //console.log("Response data:", responseData); // Add this to debug
 
     // Check if responseData is defined and has an 'items' property that is an array
     if (!responseData || !Array.isArray(responseData.items)) {
