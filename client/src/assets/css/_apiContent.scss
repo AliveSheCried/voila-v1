@@ -34,11 +34,36 @@
             @extend .content__key;
             color: var(--color-primary);
         }
-    }
 
-    &__key--table {
-        @extend .content__key;
-        padding-left: var(--spacing-xs);
+        &--payout-key {
+            @extend .content__key;
+            padding-left: 0px;
+            margin-bottom: 0px;
+        }
+
+        &--payout-status {
+            text-align: left;
+            padding-left: 2rem;
+            font-size: var(--font-size-md);
+            font-weight: 600;
+            color: var(--color-primary);
+
+            &-key {
+                @extend .content__key--payout-status;
+                background-color: #faf9f9;
+            }
+
+            &-success {
+                @extend .content__key--payout-status;
+                background-color: var(--color-green-palette);
+            }
+
+            &-fail {
+                @extend .content__key--payout-status;
+                color: var(--color-red-palette);
+                background-color: #f9e6e6;
+            }
+        }
     }
 
     &__key--payout {
@@ -210,12 +235,24 @@
         @include fbox($direction: row, $wrap: wrap, $content: flex-end);
     }
 
+    &__search-autocomplete-container {
+        position: relative;
+        @include fbox($direction: row, $items: flex-start, $wrap: wrap);
+        margin-bottom: var(--spacing-sm);
+        margin-left: var(--spacing-lg);
+    }
+
     &__search-autocomplete-list {
         background-color: #fff;
         color: var(--color-grey-dark-2);
         padding: var(--spacing-sm);
         border-radius: var(--spacing-xs);
-        border: 1px solid var(--color-grey-light-2);
+        border: 1px solid var(--color-pink);
+        //positioning
+        position: absolute; /* Step 2 */
+        z-index: 999; /* Step 3 */
+        top: 100%; /* Adjust based on your layout */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     &__search-autocomplete-name {

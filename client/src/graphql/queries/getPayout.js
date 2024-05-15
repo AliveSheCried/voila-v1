@@ -5,7 +5,7 @@ export const GET_PAYOUT_DETAIL = gql`
     payoutDetail(id: $id) {
       id
       merchant_account_id
-      pay_amount_in_minor
+      amount_in_minor
       currency
       beneficiary {
         type

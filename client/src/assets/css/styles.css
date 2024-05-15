@@ -641,7 +641,7 @@ select {
   padding-left: 5rem;
   padding-right: 1rem;
 }
-.content__key, .content__key--payout, .content__key--table, .content__key--white {
+.content__key, .content__key--payout, .content__key--payout-key, .content__key--white {
   font-size: var(--font-size-sm);
   color: var(--color-grey-dark-1);
   font-weight: 600;
@@ -652,8 +652,26 @@ select {
 .content__key--white {
   color: var(--color-primary);
 }
-.content__key--table {
-  padding-left: var(--spacing-xs);
+.content__key--payout-key {
+  padding-left: 0px;
+  margin-bottom: 0px;
+}
+.content__key--payout-status, .content__key--payout-status-fail, .content__key--payout-status-success, .content__key--payout-status-key {
+  text-align: left;
+  padding-left: 2rem;
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  color: var(--color-primary);
+}
+.content__key--payout-status-key {
+  background-color: #faf9f9;
+}
+.content__key--payout-status-success {
+  background-color: var(--color-green-palette);
+}
+.content__key--payout-status-fail {
+  color: var(--color-red-palette);
+  background-color: #f9e6e6;
 }
 .content__key--payout {
   padding-left: 0px;
@@ -799,12 +817,25 @@ select {
   flex-direction: row;
   flex-wrap: wrap;
 }
+.payout__search-autocomplete-container {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-sm);
+  margin-left: var(--spacing-lg);
+}
 .payout__search-autocomplete-list {
   background-color: #fff;
   color: var(--color-grey-dark-2);
   padding: var(--spacing-sm);
   border-radius: var(--spacing-xs);
-  border: 1px solid var(--color-grey-light-2);
+  border: 1px solid var(--color-pink);
+  position: absolute; /* Step 2 */
+  z-index: 999; /* Step 3 */
+  top: 100%; /* Adjust based on your layout */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 .payout__search-autocomplete-name {
   display: inline-block;
@@ -833,6 +864,7 @@ select {
   --color-primary-selected: #454c5d;
   --color-yellow: #efcb68;
   --color-pink: #f9cff2;
+  --color-pink-light: rgba(249, 207, 242, 0.4);
   --color-green: #31724b;
   --color-green-light: #659176;
   --color-green-palette: #acd8aa;

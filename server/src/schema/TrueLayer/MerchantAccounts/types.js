@@ -7,7 +7,7 @@ const types = `
     type: String!
     id: ID!
     currency: String!
-    amount_in_minor: Float!
+    amount_in_minor: Int!
     status: String!
   }
 
@@ -29,12 +29,12 @@ const types = `
     type: String!
     id: ID!
     currency: String!
-    amount_in_minor: Float!
+    amount_in_minor: Int!
     status: String!
 
     #Fields specific to Payouts
     created_at: String!
-    executed_at: String!
+    executed_at: String
     beneficiary: Beneficiary!
     context_code: String!
     payout_id: ID!
@@ -46,7 +46,7 @@ const types = `
     type: String!
     id: ID!
     currency: String!
-    amount_in_minor: Float!
+    amount_in_minor: Int!
     status: String!
 
     #Fields specific to merchant account payment type
@@ -62,7 +62,7 @@ const types = `
     type: String!
     id: ID!
     currency: String!
-    amount_in_minor: Float!
+    amount_in_minor: Int!
     status: String!
 
     #Fields specific to External payment

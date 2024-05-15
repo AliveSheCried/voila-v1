@@ -16,7 +16,7 @@ input ExternalAccountInput {
     type Payout {
       id: ID!
       merchant_account_id: ID!
-      pay_amount_in_minor: Int!
+      amount_in_minor: Int!
       currency: String!
       beneficiary: Beneficiary!
       scheme_id: String
