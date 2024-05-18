@@ -656,7 +656,7 @@ select {
   padding-left: 0px;
   margin-bottom: 0px;
 }
-.content__key--payout-status, .content__key--payout-status-fail, .content__key--payout-status-success, .content__key--payout-status-key {
+.content__key--payout-status, .content__key--payout-status-inactive, .content__key--payout-status-fail, .content__key--payout-status-success, .content__key--payout-status-key {
   text-align: left;
   padding-left: 2rem;
   font-size: var(--font-size-md);
@@ -665,13 +665,21 @@ select {
 }
 .content__key--payout-status-key {
   background-color: #faf9f9;
+  width: 210px;
 }
 .content__key--payout-status-success {
   background-color: var(--color-green-palette);
+  width: 280px;
 }
 .content__key--payout-status-fail {
-  color: var(--color-red-palette);
-  background-color: #f9e6e6;
+  background-color: var(--color-red-palette);
+  color: var(--color-red);
+  width: 280px;
+}
+.content__key--payout-status-inactive {
+  background-color: var(--color-grey-light-1);
+  color: var(--color-grey-dark-2);
+  width: 270px;
 }
 .content__key--payout {
   padding-left: 0px;
@@ -692,6 +700,17 @@ select {
 .content__value--white-highlight {
   background-color: var(--color-green-palette);
   padding-top: 2px;
+}
+.content__value--payout {
+  font-size: var(--font-size-sm);
+  color: var(--color-grey-dark-1);
+  margin-bottom: var(--spacing-xs);
+  padding-left: var(--spacing-lg);
+}
+.content__value--payout-inactive {
+  font-size: var(--font-size-sm);
+  color: var(--color-grey-dark-2);
+  padding-left: var(--spacing-lg);
 }
 .content__value--table, .content__value--table--green, .content__value--table--red, .content__value--table--white {
   font-size: var(--font-size-xs);
@@ -868,6 +887,9 @@ select {
   --color-green: #31724b;
   --color-green-light: #659176;
   --color-green-palette: #acd8aa;
+  --color-red: #7a1f1f;
+  --color-red-light: #a14b4b;
+  --color-red-palette: #f9e6e6;
   --color-white: #fff;
   --color-black: #000;
   --color-grey-light-1: #faf9f9;

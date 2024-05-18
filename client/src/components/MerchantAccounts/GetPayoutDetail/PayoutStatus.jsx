@@ -1,10 +1,16 @@
 import PropTypes from "prop-types";
 import React from "react";
+import payoutError from "../../../data/payoutError";
 
 const PayoutStatus = ({ data }) => {
   const paymentAmount = data.payoutDetail.amount_in_minor;
   const paymentCurrency = data.payoutDetail.currency;
   const beneficiary = data.payoutDetail.beneficiary.account_holder_name;
+  const reference = data.payoutDetail.beneficiary.reference;
+  const createdAt = data.payoutDetail.created_at;
+  const executedAt = data.payoutDetail.executed_at;
+  const paymentId = data.payoutDetail.id;
+  const payoutStatus = data.payoutDetail.status;
 
   return (
     <div>
@@ -12,23 +18,46 @@ const PayoutStatus = ({ data }) => {
         <tbody>
           <tr>
             <th className="content__key--payout-status-key">Payout status</th>
-            <td className="content__key--payout-status-success">
-              {data.payoutDetail.status}
+            <td
+              className={`content__key--payout-status-${
+                payoutStatus === "failed" ? "fail" : "success"
+              }`}
+            >
+              {payoutStatus.charAt(0).toUpperCase() + payoutStatus.slice(1)}
             </td>
-            <td className="blank-cell"></td>
+            <td
+              className={`content__key--payout-status-${
+                payoutStatus === "failed" ? "fail" : "success"
+              }`}
+            >
+              Error message
+            </td>
           </tr>
           <tr>
             <td colSpan={3} className="blank-row"></td>
           </tr>
           <tr>
             <th className="content__key">Account Holder Name</th>
-            <td className="content__value">{beneficiary}</td>
-            <td className="blank-cell"></td>
+            <td className="content__value--payout">{beneficiary}</td>
+            <td
+              rowSpan={3}
+              style={{ verticalAlign: "top" }}
+              className={`content__value--payout${
+                payoutStatus === "failed" ? "" : "-inactive"
+              }`}
+            >
+              {payoutStatus === "failed"
+                ? payoutError[data.payoutDetail.failure_reason]
+                : "Payment successful - no error message"}
+            </td>
+          </tr>
+          <tr>
+            <th className="content__key--white">Reference</th>
+            <td className="content__value--payout">{reference}</td>
           </tr>
           <tr>
             <th className="content__key">Currency</th>
-            <td className="content__value">{paymentCurrency}</td>
-            <td className="blank-cell"></td>
+            <td className="content__value--payout">{paymentCurrency}</td>
           </tr>
           {data.payoutDetail.beneficiary.account_identifiers.map(
             (identifier, index) => (
@@ -37,12 +66,14 @@ const PayoutStatus = ({ data }) => {
                   <>
                     <tr>
                       <th className="content__key">Sort Code</th>
-                      <td className="content__value">{identifier.sort_code}</td>
+                      <td className="content__value--payout">
+                        {identifier.sort_code}
+                      </td>
                       <td className="blank-cell"></td>
                     </tr>
                     <tr>
                       <th className="content__key">Account Number</th>
-                      <td className="content__value">
+                      <td className="content__value--payout">
                         {identifier.account_number}
                       </td>
                       <td className="blank-cell"></td>
@@ -51,7 +82,9 @@ const PayoutStatus = ({ data }) => {
                 ) : (
                   <tr>
                     <th className="content__key">IBAN</th>
-                    <td className="content__value">{identifier.iban}</td>
+                    <td className="content__value--payout">
+                      {identifier.iban}
+                    </td>
                     <td className="blank-cell"></td>
                   </tr>
                 )}
@@ -61,21 +94,45 @@ const PayoutStatus = ({ data }) => {
 
           <tr>
             <th className="content__key--white">Payment amount</th>
-            <td className="content__value--white">{paymentAmount}</td>
-            <td className="blank-cell"></td>
-          </tr>
-          <tr>
-            <td colSpan={3} className="blank-row"></td>
-          </tr>
-          <tr className="merchant-account--balance">
-            <th className="content__key--white">Status</th>
-            <td className="content__value--white">
-              <span className="content__value--white-highlight">
-                {data.payoutDetail.status}
-              </span>
+            <td className="content__value--payout">
+              {(paymentAmount / 100).toFixed(2)}
             </td>
             <td className="blank-cell"></td>
           </tr>
+
+          <tr>
+            <td colSpan={3} className="blank-row"></td>
+          </tr>
+          <tr>
+            <th className="content__key--white">Created at</th>
+            <td className="content__value--payout">
+              {typeof createdAt === "string"
+                ? createdAt.split("T")[0]
+                : createdAt instanceof Date
+                ? createdAt.toISOString().split("T")[0]
+                : createdAt}
+            </td>
+            <td className="blank-cell"></td>
+          </tr>
+          <tr>
+            <th className="content__key--white">Executed at</th>
+            <td className="content__value--payout">
+              {!executedAt
+                ? "Not executed"
+                : typeof executedAt === "string"
+                ? executedAt.split("T")[0]
+                : executedAt instanceof Date
+                ? executedAt.toISOString().split("T")[0]
+                : executedAt}
+            </td>
+            <td className="blank-cell"></td>
+          </tr>
+          <tr>
+            <th className="content__key--white">Payout ID</th>
+            <td className="content__value--payout">{paymentId}</td>
+            <td className="blank-cell"></td>
+          </tr>
+
           <tr>
             <td colSpan={3} className="blank-row"></td>
           </tr>

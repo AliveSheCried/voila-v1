@@ -51,17 +51,27 @@
             &-key {
                 @extend .content__key--payout-status;
                 background-color: #faf9f9;
+                width: 210px;
             }
 
             &-success {
                 @extend .content__key--payout-status;
                 background-color: var(--color-green-palette);
+                width: 280px;
             }
 
             &-fail {
                 @extend .content__key--payout-status;
-                color: var(--color-red-palette);
-                background-color: #f9e6e6;
+                background-color: var(--color-red-palette);
+                color: var(--color-red);
+                width: 280px;
+            }
+
+            &-inactive {
+                @extend .content__key--payout-status;
+                background-color: var(--color-grey-light-1);
+                color: var(--color-grey-dark-2);
+                width: 270px;
             }
         }
     }
@@ -93,6 +103,19 @@
                 background-color: var(--color-green-palette);
                 padding-top: 2px;
             }
+        }
+    }
+
+    &__value--payout {
+        font-size: var(--font-size-sm);
+        color: var(--color-grey-dark-1);
+        margin-bottom: var(--spacing-xs);
+        padding-left: var(--spacing-lg);
+
+        &-inactive {
+            font-size: var(--font-size-sm);
+            color: var(--color-grey-dark-2);
+            padding-left: var(--spacing-lg);
         }
     }
 
