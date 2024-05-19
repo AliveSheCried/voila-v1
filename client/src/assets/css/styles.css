@@ -850,7 +850,7 @@ select {
   color: var(--color-grey-dark-2);
   padding: var(--spacing-sm);
   border-radius: var(--spacing-xs);
-  border: 1px solid var(--color-pink);
+  border: 1px solid var(--color-grey-light-2);
   position: absolute; /* Step 2 */
   z-index: 999; /* Step 3 */
   top: 100%; /* Adjust based on your layout */

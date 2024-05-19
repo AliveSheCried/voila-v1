@@ -2,16 +2,24 @@ import PropTypes from "prop-types";
 import React from "react";
 import payoutError from "../../../data/payoutError";
 
-const PayoutStatus = ({ data }) => {
-  const paymentAmount = data.payoutDetail.amount_in_minor;
-  const paymentCurrency = data.payoutDetail.currency;
-  const beneficiary = data.payoutDetail.beneficiary.account_holder_name;
-  const reference = data.payoutDetail.beneficiary.reference;
-  const createdAt = data.payoutDetail.created_at;
-  const executedAt = data.payoutDetail.executed_at;
-  const paymentId = data.payoutDetail.id;
-  const payoutStatus = data.payoutDetail.status;
-
+const PayoutStatus = ({
+  data: {
+    payoutDetail: {
+      amount_in_minor: paymentAmount,
+      currency: paymentCurrency,
+      created_at: createdAt,
+      executed_at: executedAt,
+      id: paymentId,
+      status: payoutStatus,
+      beneficiary: {
+        account_holder_name: beneficiary,
+        reference,
+        account_identifiers,
+      },
+      failure_reason: failureReason,
+    },
+  },
+}) => {
   return (
     <div>
       <table className="merchant-account">
@@ -47,7 +55,7 @@ const PayoutStatus = ({ data }) => {
               }`}
             >
               {payoutStatus === "failed"
-                ? payoutError[data.payoutDetail.failure_reason]
+                ? payoutError[failureReason]
                 : "Payment successful - no error message"}
             </td>
           </tr>
@@ -59,38 +67,34 @@ const PayoutStatus = ({ data }) => {
             <th className="content__key">Currency</th>
             <td className="content__value--payout">{paymentCurrency}</td>
           </tr>
-          {data.payoutDetail.beneficiary.account_identifiers.map(
-            (identifier, index) => (
-              <React.Fragment key={index}>
-                {identifier.type === "sort_code_account_number" ? (
-                  <>
-                    <tr>
-                      <th className="content__key">Sort Code</th>
-                      <td className="content__value--payout">
-                        {identifier.sort_code}
-                      </td>
-                      <td className="blank-cell"></td>
-                    </tr>
-                    <tr>
-                      <th className="content__key">Account Number</th>
-                      <td className="content__value--payout">
-                        {identifier.account_number}
-                      </td>
-                      <td className="blank-cell"></td>
-                    </tr>
-                  </>
-                ) : (
+          {account_identifiers?.map((identifier, index) => (
+            <React.Fragment key={index}>
+              {identifier.type === "sort_code_account_number" ? (
+                <>
                   <tr>
-                    <th className="content__key">IBAN</th>
+                    <th className="content__key">Sort Code</th>
                     <td className="content__value--payout">
-                      {identifier.iban}
+                      {identifier.sort_code}
                     </td>
                     <td className="blank-cell"></td>
                   </tr>
-                )}
-              </React.Fragment>
-            )
-          )}
+                  <tr>
+                    <th className="content__key">Account Number</th>
+                    <td className="content__value--payout">
+                      {identifier.account_number}
+                    </td>
+                    <td className="blank-cell"></td>
+                  </tr>
+                </>
+              ) : (
+                <tr>
+                  <th className="content__key">IBAN</th>
+                  <td className="content__value--payout">{identifier.iban}</td>
+                  <td className="blank-cell"></td>
+                </tr>
+              )}
+            </React.Fragment>
+          ))}
 
           <tr>
             <th className="content__key--white">Payment amount</th>

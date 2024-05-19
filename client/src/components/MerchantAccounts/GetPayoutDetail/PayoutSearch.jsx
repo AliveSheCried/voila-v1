@@ -36,7 +36,7 @@ const PayoutSearch = () => {
       .catch((error) => setError(error));
   }, []);
 
-  console.log("payoutId", search.payoutId);
+  //console.log("payoutId", search.payoutId);
   // console.log("token", token.accessToken);
 
   const handleInputChange = (event) => {
