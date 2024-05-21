@@ -62,14 +62,50 @@ export class TLPayoutAPI extends RESTDataSource {
       "Tl-Signature": tlSignature,
       "content-type": "application/json; charset=UTF-8",
     };
+    try {
+      return await handleAPIRequest(this, `/payouts`, token, "POST", {
+        ...options,
+        body,
+      });
+    } catch (error) {
+      console.error(`Error creating merchant account payout: ${error.message}`);
+      if (error.response) {
+        console.error(`Response status: ${error.response.status}`);
+        console.error(`Response data: ${error.response.data}`);
+      } else if (error.request) {
+        console.error(
+          `Request made but no response received: ${error.request}`
+        );
+      } else {
+        console.error(`Error in setting up request: ${error.message}`);
+      }
+      throw new Error("Failed to create merchant account payout");
+    }
 
-    return await handleAPIRequest(this, `/payouts`, token, "POST", {
-      ...options,
-      body,
-    });
+    // return await handleAPIRequest(this, `/payouts`, token, "POST", {
+    //   ...options,
+    //   body,
+    // });
   }
 
   async getPayoutDetail(id, token) {
-    return await handleAPIRequest(this, `/payouts/${id}`, token);
+    try {
+      return await handleAPIRequest(this, `/payouts/${id}`, token);
+    } catch (error) {
+      console.error(
+        `Error getting payout detail for ID ${id}: ${error.message}`
+      );
+      if (error.response) {
+        console.error(`Response status: ${error.response.status}`);
+        console.error(`Response data: ${error.response.data}`);
+      } else if (error.request) {
+        console.error(
+          `Request made but no response received: ${error.request}`
+        );
+      } else {
+        console.error(`Error in setting up request: ${error.message}`);
+      }
+      throw new Error(`Failed to get payout detail for ID ${id}`);
+    }
   }
 }

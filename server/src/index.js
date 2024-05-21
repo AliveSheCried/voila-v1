@@ -47,6 +47,12 @@ async function run() {
 
 run().catch(console.dir);
 
+// Error-handling middleware
+function errorHandler(err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send({ error: "Something went wrong!" });
+}
+
 // Start Server Function
 async function startServer() {
   const app = express();
@@ -136,6 +142,9 @@ async function startServer() {
       },
     })
   );
+
+  // Add the error-handling middleware here
+  app.use(errorHandler);
 
   await new Promise((resolve) => httpServer.listen({ port: 4000 }, resolve));
 

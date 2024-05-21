@@ -35,8 +35,18 @@ export class TLAccessTokenAPI extends RESTDataSource {
         body,
       });
     } catch (error) {
-      console.error(`Error: ${error.message}`);
-      throw error;
+      console.error(`Error generating access token: ${error.message}`);
+      if (error.response) {
+        console.error(`Response status: ${error.response.status}`);
+        console.error(`Response data: ${error.response.data}`);
+      } else if (error.request) {
+        console.error(
+          `Request made but no response received: ${error.request}`
+        );
+      } else {
+        console.error(`Error in setting up request: ${error.message}`);
+      }
+      throw new Error("Failed to generate access token");
     }
   }
 }

@@ -30,17 +30,20 @@ export async function handleAPIRequest(
   } catch (error) {
     if (error.response) {
       // The request was made and the server responded with a status code that falls out of the range of 2xx
-      console.log(error.response.data);
-      console.log(error.response.status);
-      console.log(error.response.headers);
+      console.error("Response error data:", error.response.data);
+      console.error("Response error status:", error.response.status);
+      console.error("Response error headers:", error.response.headers);
+      throw new Error(
+        `API responded with status code ${error.response.status}: ${error.response.data}`
+      );
     } else if (error.request) {
       // The request was made but no response was received
-      console.log(error.request);
+      console.error("No response received:", error.request);
+      throw new Error("No response received from API");
     } else {
       // Something happened in setting up the request that triggered an Error
-      console.log("Error", error.message);
-      throw error;
+      console.error("Error in setting up request:", error.message);
+      throw new Error(`Error in setting up API request: ${error.message}`);
     }
-    console.log(error.config);
   }
 }

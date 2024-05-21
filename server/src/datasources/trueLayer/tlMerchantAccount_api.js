@@ -16,20 +16,41 @@ export class TLMerchantAccountAPI extends RESTDataSource {
 
   //get all merchant accounts
   async getMerchantAccounts(token) {
-    return await handleAPIRequest(this, "/merchant-accounts", token);
+    try {
+      return await handleAPIRequest(this, "/merchant-accounts", token);
+    } catch (error) {
+      console.error(`Error getting merchant accounts: ${error.message}`);
+      throw new Error("Failed to retrieve merchant accounts");
+    }
   }
 
   //get merchant account by id
   async getMerchantAccount(id, token) {
-    return await handleAPIRequest(this, `/merchant-accounts/${id}`, token);
+    try {
+      return await handleAPIRequest(this, `/merchant-accounts/${id}`, token);
+    } catch (error) {
+      console.error(
+        `Error getting merchant account with ID ${id}: ${error.message}`
+      );
+      throw new Error(`Failed to retrieve merchant account with ID ${id}`);
+    }
   }
 
   //get merchant account transactions for specified date range and account id
   async getMerchantAccountTransactions(id, token, fromDate, toDate) {
-    return await handleAPIRequest(
-      this,
-      `merchant-accounts/${id}/transactions?from=${fromDate}&to=${toDate}`,
-      token
-    );
+    try {
+      return await handleAPIRequest(
+        this,
+        `merchant-accounts/${id}/transactions?from=${fromDate}&to=${toDate}`,
+        token
+      );
+    } catch (error) {
+      console.error(
+        `Error getting transactions for merchant account with ID ${id}: ${error.message}`
+      );
+      throw new Error(
+        `Failed to retrieve transactions for merchant account with ID ${id}`
+      );
+    }
   }
 }
