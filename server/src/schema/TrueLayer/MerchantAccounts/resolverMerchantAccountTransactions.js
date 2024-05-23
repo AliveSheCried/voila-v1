@@ -1,3 +1,5 @@
+import logger from "../../../config/logger";
+
 //Current resolver code - does not store transactions in MongoDB; always fetches transactions from TrueLayer API
 const merchantAccountTransactions = async (
   _,
@@ -32,9 +34,20 @@ const merchantAccountTransactions = async (
       isoToDate
     );
 
-  //console.log("responseData:", responseData);
+  logger.info(
+    "Merchant account transactions data for id",
+    id,
+    "and date range",
+    decodedFromDate,
+    "to",
+    decodedToDate,
+    "retrieved from TrueLayer API"
+  );
 
   if (!responseData.items || responseData.items.length === 0) {
+    logger.error(
+      `No transactions for the date range ${decodedFromDate} to ${decodedToDate} found`
+    );
     throw new Error(
       `No transactions for the date range ${decodedFromDate} to ${decodedToDate} found`
     );

@@ -1,6 +1,7 @@
 import { RESTDataSource } from "@apollo/datasource-rest";
 import tlSigning from "truelayer-signing";
 import { v4 as uuidv4 } from "uuid";
+import logger from "../../config/logger.js";
 import { handleAPIRequest } from "../../helpers/handleAPIRequest.js";
 
 export class TLPayoutAPI extends RESTDataSource {
@@ -68,42 +69,33 @@ export class TLPayoutAPI extends RESTDataSource {
         body,
       });
     } catch (error) {
-      console.error(`Error creating merchant account payout: ${error.message}`);
+      logger.error(`Error creating merchant account payout: ${error.message}`);
       if (error.response) {
-        console.error(`Response status: ${error.response.status}`);
-        console.error(`Response data: ${error.response.data}`);
+        logger.error(`Response status: ${error.response.status}`);
+        logger.error(`Response data: ${error.response.data}`);
       } else if (error.request) {
-        console.error(
-          `Request made but no response received: ${error.request}`
-        );
+        logger.error(`Request made but no response received: ${error.request}`);
       } else {
-        console.error(`Error in setting up request: ${error.message}`);
+        logger.error(`Error in setting up request: ${error.message}`);
       }
       throw new Error("Failed to create merchant account payout");
     }
-
-    // return await handleAPIRequest(this, `/payouts`, token, "POST", {
-    //   ...options,
-    //   body,
-    // });
   }
 
   async getPayoutDetail(id, token) {
     try {
       return await handleAPIRequest(this, `/payouts/${id}`, token);
     } catch (error) {
-      console.error(
+      logger.error(
         `Error getting payout detail for ID ${id}: ${error.message}`
       );
       if (error.response) {
-        console.error(`Response status: ${error.response.status}`);
-        console.error(`Response data: ${error.response.data}`);
+        logger.error(`Response status: ${error.response.status}`);
+        logger.error(`Response data: ${error.response.data}`);
       } else if (error.request) {
-        console.error(
-          `Request made but no response received: ${error.request}`
-        );
+        logger.error(`Request made but no response received: ${error.request}`);
       } else {
-        console.error(`Error in setting up request: ${error.message}`);
+        logger.error(`Error in setting up request: ${error.message}`);
       }
       throw new Error(`Failed to get payout detail for ID ${id}`);
     }

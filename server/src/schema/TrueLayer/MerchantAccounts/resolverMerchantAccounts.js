@@ -1,12 +1,15 @@
+import logger from "../../../config/logger";
+
 const merchantAccounts = async (_, __, { token, dataSources }) => {
   try {
     const responseData =
       await dataSources.tlMerchantAccountAPI.getMerchantAccounts(token);
 
-    //console.log("Response data:", responseData); // Add this to debug
+    logger.info("Merchant accounts data retrieved");
 
     // Check if responseData is defined and has an 'items' property that is an array
     if (!responseData || !Array.isArray(responseData.items)) {
+      logger.error("No data found or data format not as expected!");
       throw new Error("No data found or data format not as expected!");
     }
 
@@ -18,8 +21,8 @@ const merchantAccounts = async (_, __, { token, dataSources }) => {
 
     return merchantAccounts;
   } catch (error) {
-    console.error(error);
-    throw error;
+    logger.error(`Error getting merchant accounts: ${error.message}`);
+    throw new Error("Failed to retrieve merchant accounts");
   }
 };
 

@@ -1,4 +1,5 @@
 import { RESTDataSource } from "@apollo/datasource-rest";
+import logger from "../../config/logger.js";
 import { handleAPIRequest } from "../../helpers/handleAPIRequest.js";
 
 export class TLMerchantAccountAPI extends RESTDataSource {
@@ -19,7 +20,7 @@ export class TLMerchantAccountAPI extends RESTDataSource {
     try {
       return await handleAPIRequest(this, "/merchant-accounts", token);
     } catch (error) {
-      console.error(`Error getting merchant accounts: ${error.message}`);
+      logger.error(`Error getting merchant accounts: ${error.message}`);
       throw new Error("Failed to retrieve merchant accounts");
     }
   }
@@ -29,7 +30,7 @@ export class TLMerchantAccountAPI extends RESTDataSource {
     try {
       return await handleAPIRequest(this, `/merchant-accounts/${id}`, token);
     } catch (error) {
-      console.error(
+      logger.error(
         `Error getting merchant account with ID ${id}: ${error.message}`
       );
       throw new Error(`Failed to retrieve merchant account with ID ${id}`);
@@ -45,7 +46,7 @@ export class TLMerchantAccountAPI extends RESTDataSource {
         token
       );
     } catch (error) {
-      console.error(
+      logger.error(
         `Error getting transactions for merchant account with ID ${id}: ${error.message}`
       );
       throw new Error(

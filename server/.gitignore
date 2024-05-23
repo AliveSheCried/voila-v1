@@ -2,3 +2,5 @@ node_modules
 keys
 .env
 temp.js
+# Ignore log files
+src/logs/*

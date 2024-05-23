@@ -10,6 +10,7 @@ const { json } = pkg;
 
 //imports not related to Apollo / Express packages
 import dotenv from "dotenv";
+import logger from "./config/logger.js";
 import {
   TLAccessTokenAPI as tlAccessTokenAPI,
   TLDataAPI as tlDataAPI,
@@ -33,7 +34,7 @@ async function run() {
 
     // Establish and verify connection
     await client.db("VoilaDev").command({ ping: 1 });
-    console.log("Connected successfully to server");
+    logger.info("Connected successfully to  MongoDB");
 
     // Make client available globally
     global.dbClient = client;
@@ -41,15 +42,15 @@ async function run() {
     // Start the server after the dbClient is ready
     await startServer();
   } catch (err) {
-    console.log(err.stack);
+    logger.error(err.stack);
   }
 }
 
-run().catch(console.dir);
+run().catch((err) => logger.error(err));
 
 // Error-handling middleware
 function errorHandler(err, req, res, next) {
-  console.error(err.stack);
+  logger.error(err.stack);
   res.status(500).send({ error: "Something went wrong!" });
 }
 
@@ -81,7 +82,7 @@ async function startServer() {
   await server.start();
 
   const corsOptions = {
-    origin: "http://127.0.0.1:5173", // Your client URL
+    origin: "http://127.0.0.1:5173", // Local client URL
     optionsSuccessStatus: 200,
   };
 
@@ -117,7 +118,7 @@ async function startServer() {
 
       res.status(200).json({ transactions, total });
     } catch (error) {
-      console.error("Error fetching transactions:", error);
+      logger.error("Error fetching transactions:", error);
       res.status(500).json({ message: "Failed to fetch transactions" });
     }
   });
@@ -158,85 +159,3 @@ async function startServer() {
     process.exit();
   });
 }
-
-// // Create a new MongoClient
-// const client = new MongoClient(process.env.MONGO_DB_URI, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// });
-
-// async function run() {
-//   try {
-//     // Connect the client to the server
-//     await client.connect();
-
-//     // Establish and verify connection
-//     await client.db("VoilaDev").command({ ping: 1 });
-//     console.log("Connected successfully to server");
-
-//     // Make client available globally
-//     global.dbClient = client;
-//   } catch (err) {
-//     console.log(err.stack);
-//   }
-// }
-
-// run().catch(console.dir);
-
-// ////imports end
-// const app = express();
-// const httpServer = http.createServer(app);
-
-// const server = new ApolloServer({
-//   typeDefs,
-//   resolvers,
-//   context: ({ req }) => {
-//     const { dbClient } = global;
-//     const token = req.headers.authorization || "";
-//     return {
-//       dbClient,
-//       token,
-//     };
-//   },
-//   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-//   introspection: true,
-//   playground: {
-//     settings: {
-//       "schema.polling.enable": true,
-//     },
-//   },
-// });
-// await server.start();
-
-// app.use(
-//   "/graphql",
-//   cors(),
-//   json(),
-//   expressMiddleware(server, {
-//     context: async ({ req }) => {
-//       const token = req.headers.authorization;
-//       const { cache } = server;
-//       return {
-//         token,
-//         dataSources: {
-//           tlAccessTokenAPI: new tlAccessTokenAPI({ cache, token }),
-//           tlDataAPI: new tlDataAPI({ cache, token }),
-//           tlMerchantAccountAPI: new tlMerchantAccountAPI({ cache, token }),
-//           tlPayoutAPI: new tlPayoutAPI({ cache, token }),
-//         },
-//       };
-//     },
-//   })
-// );
-
-// await new Promise((resolve) => httpServer.listen({ port: 4000 }, resolve));
-
-// console.log(`
-//   🚀 Server ready
-//   📭 Query at http://localhost:4000/graphql
-//   `);
-
-// process.on("SIGINT", async () => {
-//   await client.close();
-//   process.exit();
-// });

@@ -1,4 +1,5 @@
 import { RESTDataSource } from "@apollo/datasource-rest";
+import logger from "../../config/logger.js";
 import { handleAPIRequest } from "../../helpers/handleAPIRequest.js";
 
 export class TLAccessTokenAPI extends RESTDataSource {
@@ -35,16 +36,14 @@ export class TLAccessTokenAPI extends RESTDataSource {
         body,
       });
     } catch (error) {
-      console.error(`Error generating access token: ${error.message}`);
+      logger.error(`Error generating access token: ${error.message}`);
       if (error.response) {
-        console.error(`Response status: ${error.response.status}`);
-        console.error(`Response data: ${error.response.data}`);
+        logger.error(`Response status: ${error.response.status}`);
+        logger.error(`Response data: ${error.response.data}`);
       } else if (error.request) {
-        console.error(
-          `Request made but no response received: ${error.request}`
-        );
+        logger.error(`Request made but no response received: ${error.request}`);
       } else {
-        console.error(`Error in setting up request: ${error.message}`);
+        logger.error(`Error in setting up request: ${error.message}`);
       }
       throw new Error("Failed to generate access token");
     }
