@@ -656,7 +656,7 @@ select {
   padding-left: 0px;
   margin-bottom: 0px;
 }
-.content__key--payout-status, .content__key--payout-status-inactive, .content__key--payout-status-fail, .content__key--payout-status-success, .content__key--payout-status-key {
+.content__key--payout-status, .content__key--payout-status-inactive, .content__key--payout-status-fail, .content__key--payout-status-success, .content__key--payout-status-success-error, .content__key--payout-status-key {
   text-align: left;
   padding-left: 2rem;
   font-size: var(--font-size-md);
@@ -667,9 +667,12 @@ select {
   background-color: #faf9f9;
   width: 210px;
 }
-.content__key--payout-status-success {
+.content__key--payout-status-success, .content__key--payout-status-success-error {
   background-color: var(--color-green-palette);
   width: 280px;
+}
+.content__key--payout-status-success-error {
+  color: var(--color-green-light);
 }
 .content__key--payout-status-fail {
   background-color: var(--color-red-palette);

@@ -35,7 +35,7 @@ const PayoutStatus = ({
             </td>
             <td
               className={`content__key--payout-status-${
-                payoutStatus === "failed" ? "fail" : "success"
+                payoutStatus === "failed" ? "fail" : "success-error"
               }`}
             >
               Error message

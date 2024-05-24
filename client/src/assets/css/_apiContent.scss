@@ -58,6 +58,11 @@
                 @extend .content__key--payout-status;
                 background-color: var(--color-green-palette);
                 width: 280px;
+
+                &-error {
+                    @extend .content__key--payout-status-success;
+                    color: var(--color-green-light);
+                }
             }
 
             &-fail {
