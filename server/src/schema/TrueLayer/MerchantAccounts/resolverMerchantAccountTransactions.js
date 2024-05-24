@@ -1,4 +1,4 @@
-import logger from "../../../config/logger";
+import logger from "../../../config/logger.js";
 
 //Current resolver code - does not store transactions in MongoDB; always fetches transactions from TrueLayer API
 const merchantAccountTransactions = async (
@@ -25,14 +25,24 @@ const merchantAccountTransactions = async (
   const isoToDate = toDateObj.toISOString();
   //console.log(isoFromDate, isoToDate);
 
+  let responseData;
   // Fetch the transactions from TrueLayer API
-  const responseData =
-    await dataSources.tlMerchantAccountAPI.getMerchantAccountTransactions(
-      id,
-      token,
-      isoFromDate,
-      isoToDate
+  try {
+    responseData =
+      await dataSources.tlMerchantAccountAPI.getMerchantAccountTransactions(
+        id,
+        token,
+        isoFromDate,
+        isoToDate
+      );
+  } catch (error) {
+    logger.error(
+      `Error getting merchant account transactions with ID ${id}: ${error.message}`
     );
+    throw new Error(
+      `Failed to retrieve merchant account transactions with ID ${id}`
+    );
+  }
 
   logger.info(
     "Merchant account transactions data for id",

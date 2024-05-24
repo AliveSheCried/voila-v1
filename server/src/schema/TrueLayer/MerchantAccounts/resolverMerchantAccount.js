@@ -1,4 +1,4 @@
-import logger from "../../../config/logger";
+import logger from "../../../config/logger.js";
 
 //get individual merchant account detail using ID
 const merchantAccount = async (_, { id }, { token, dataSources }) => {

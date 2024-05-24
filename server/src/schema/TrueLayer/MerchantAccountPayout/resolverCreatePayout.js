@@ -1,5 +1,5 @@
 import validator from "validator";
-import logger from "../../../config/logger";
+import logger from "../../../config/logger.js";
 
 const createPayoutExternalAccount = async (
   _,

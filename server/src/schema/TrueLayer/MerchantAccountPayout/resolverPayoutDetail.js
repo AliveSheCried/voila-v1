@@ -1,10 +1,17 @@
-import logger from "../../../config/logger";
+import logger from "../../../config/logger.js";
 
 const payoutDetail = async (_, { id }, { token, dataSources }) => {
-  const responseData = await dataSources.tlPayoutAPI.getPayoutDetail(id, token);
+  let responseData;
+  // Fetch the payout detail from TrueLayer API
+  try {
+    responseData = await dataSources.tlPayoutAPI.getPayoutDetail(id, token);
+  } catch (error) {
+    logger.error(`Error getting payout detail with ID ${id}: ${error.message}`);
+    throw new Error(`Failed to retrieve payout detail with ID ${id}`);
+  }
 
-  console.log("payoutDetail resolver called with id: ", id);
-  console.log("payoutDetail resolver response: ", responseData);
+  // console.log("payoutDetail resolver called with id: ", id);
+  // console.log("payoutDetail resolver response: ", responseData);
 
   if (!responseData) {
     logger.error("No data found for the ID provided!");

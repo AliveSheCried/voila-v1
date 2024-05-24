@@ -1,5 +1,5 @@
-import logger from "..config/logger.js";
 import axios from "axios";
+import logger from "../config/logger.js";
 export async function handleAPIRequest(
   dataSource,
   endpoint,

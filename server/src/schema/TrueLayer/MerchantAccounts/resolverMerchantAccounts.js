@@ -1,4 +1,4 @@
-import logger from "../../../config/logger";
+import logger from "../../../config/logger.js";
 
 const merchantAccounts = async (_, __, { token, dataSources }) => {
   try {
