@@ -1,5 +1,6 @@
 import validator from "validator";
 import logger from "../../../config/logger.js";
+import { encrypt } from "../../../helpers/encryptionHelper.js";
 
 const createPayoutExternalAccount = async (
   _,
@@ -98,8 +99,8 @@ const createPayoutExternalAccount = async (
     const myDb = dbClient.db("VoilaDev");
     const myCollection = myDb.collection("MerchantPayouts");
 
-    // Prepare data to be saved in MongoDB
-    const document = {
+    // Prepare and encrypt data to be saved in MongoDB in one step
+    const encryptedDocument = encrypt({
       reference,
       account_holder_name,
       merchant_account_id,
@@ -107,12 +108,15 @@ const createPayoutExternalAccount = async (
       currency,
       account_identifier,
       payoutId: responseData.id,
-
       created_at: new Date(), // Record the time of the transaction
-    };
+    });
+
+    // Log encrypted data
+    logger.info("Encrypted document:", encryptedDocument);
+    console.log("encrypted", encryptedDocument);
 
     // Insert document into MongoDB
-    const result = await myCollection.insertOne(document);
+    const result = await myCollection.insertOne(encryptedDocument);
     logger.info("MongoDB insert result:", result);
     console.log("MongoDB insert result:", result);
 

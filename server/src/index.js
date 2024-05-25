@@ -17,6 +17,7 @@ import {
   TLMerchantAccountAPI as tlMerchantAccountAPI,
   TLPayoutAPI as tlPayoutAPI,
 } from "./datasources/trueLayer/index.js";
+import { decrypt } from "./helpers/encryptionHelper.js";
 import resolvers from "./schema/resolvers.js";
 import typeDefs from "./schema/schema.js";
 dotenv.config();
@@ -114,9 +115,22 @@ async function startServer() {
         .skip(skip)
         .limit(pageSizeNum)
         .toArray();
+
+      // Decrypt each transaction
+      const decryptedTransactions = transactions.map((transaction) => {
+        try {
+          const decryptedTransaction = decrypt(transaction);
+          logger.info("Decrypted transaction:", decryptedTransaction);
+          return JSON.parse(decryptedTransaction);
+        } catch (err) {
+          logger.error("Error decrypting transaction:", err);
+          return transaction; // Return the encrypted transaction if decryption fails
+        }
+      });
+
       const total = await transactionsCollection.countDocuments(query);
 
-      res.status(200).json({ transactions, total });
+      res.status(200).json({ transactions: decryptedTransactions, total });
     } catch (error) {
       logger.error("Error fetching transactions:", error);
       res.status(500).json({ message: "Failed to fetch transactions" });
