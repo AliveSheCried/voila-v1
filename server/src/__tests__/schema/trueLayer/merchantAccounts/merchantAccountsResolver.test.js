@@ -1,61 +1,78 @@
-import { merchantAccounts } from "../../../../schema/TrueLayer/MerchantAccounts/resolverMerchantAccounts.js";
+import logger from "../../../config/logger";
+import { tlMerchantAccountAPI } from "../../../datasources/trueLayer/tlMerchantAccount_api";
+import { merchantAccounts } from "./resolverMerchantAccounts";
 
-jest.mock("../../../../datasources/trueLayer/tlMerchantAccount_api.js", () => ({
-  tlMerchantAccountAPI: {
-    getMerchantAccounts: jest.fn(),
-  },
-}));
+jest.mock("../../../datasources/trueLayer/tlMerchantAccount_api");
+jest.mock("../../../config/logger");
 
-describe("merchantAccounts resolver", () => {
+describe("merchantAccounts", () => {
+  beforeEach(() => {
+    tlMerchantAccountAPI.getMerchantAccounts.mockClear();
+    logger.error.mockClear();
+    logger.info.mockClear();
+  });
+
   it("fetches merchant accounts and returns them in correct format", async () => {
     const mockToken = "test-token";
-    const mockDataSources = {
-      tlMerchantAccountAPI: {
-        getMerchantAccounts: jest.fn(() =>
-          Promise.resolve({
-            items: [
-              { id: 1, name: "Account 1" },
-              { id: 2, name: "Account 2" },
-            ],
-          })
-        ),
-      },
+    const mockResponse = {
+      items: [
+        { id: 1, name: "Account 1" },
+        { id: 2, name: "Account 2" },
+      ],
     };
+
+    tlMerchantAccountAPI.getMerchantAccounts.mockResolvedValue(mockResponse);
 
     const result = await merchantAccounts(
       {},
       {},
-      { token: mockToken, dataSources: mockDataSources }
+      { token, dataSources: { tlMerchantAccountAPI } }
     );
 
-    expect(
-      mockDataSources.tlMerchantAccountAPI.getMerchantAccounts
-    ).toHaveBeenCalledWith(mockToken);
-    expect(result).toEqual([
-      { id: 1, name: "Account 1" },
-      { id: 2, name: "Account 2" },
-    ]);
+    expect(tlMerchantAccountAPI.getMerchantAccounts).toHaveBeenCalledWith(
+      mockToken
+    );
+    expect(result).toEqual(mockResponse.items);
+    expect(logger.info).toHaveBeenCalledWith(
+      "Merchant accounts data retrieved"
+    );
   });
 
-  // This test is to be reviewed and updated - need to confirm what the API returns if no data is found
-  it("throws an error if data is not found", async () => {
+  it("throws an error if data is not found or data format not as expected", async () => {
     const mockToken = "test-token";
-    const mockDataSources = {
-      tlMerchantAccountAPI: {
-        getMerchantAccounts: jest.fn(() =>
-          Promise.resolve({
-            items: "not an array",
-          })
-        ),
-      },
-    };
+    const mockResponse = { items: "not an array" };
+
+    tlMerchantAccountAPI.getMerchantAccounts.mockResolvedValue(mockResponse);
 
     await expect(
       merchantAccounts(
         {},
         {},
-        { token: mockToken, dataSources: mockDataSources }
+        { token: mockToken, dataSources: { tlMerchantAccountAPI } }
       )
     ).rejects.toThrow("No data found or data format not as expected!");
+
+    expect(logger.error).toHaveBeenCalledWith(
+      "No data found or data format not as expected!"
+    );
+  });
+
+  it("throws an error if getMerchantAccounts fails", async () => {
+    const mockToken = "test-token";
+    const mockError = new Error("Failed to retrieve merchant accounts");
+
+    tlMerchantAccountAPI.getMerchantAccounts.mockRejectedValue(mockError);
+
+    await expect(
+      merchantAccounts(
+        {},
+        {},
+        { token: mockToken, dataSources: { tlMerchantAccountAPI } }
+      )
+    ).rejects.toThrow("Failed to retrieve merchant accounts");
+
+    expect(logger.error).toHaveBeenCalledWith(
+      `Error getting merchant accounts: ${mockError.message}`
+    );
   });
 });

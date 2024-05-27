@@ -13,7 +13,21 @@ describe("TLDataAPI", () => {
     mock.reset();
   });
 
-  test("getBankAccounts", async () => {
+  // Additional tests for the TLDataAPI class
+
+  test("handleAPIRequest", async () => {
+    const path = "/data/v1/test";
+    const token = "test-token";
+    const expectedResult = { id: "test-id" };
+    mock.onGet(`${baseURL}${path}`).reply(200, expectedResult);
+
+    const result = await tlDataAPI.handleAPIRequest(tlDataAPI, path, token);
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  test("getBankAccounts with handleAPIRequest", async () => {
+    const token = "test-token";
     const expectedResult = [{ id: "account-1" }, { id: "account-2" }];
     mock.onGet(`${baseURL}/data/v1/accounts`).reply(200, expectedResult);
 
@@ -22,8 +36,9 @@ describe("TLDataAPI", () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test("getBankAccount", async () => {
+  test("getBankAccount with handleAPIRequest", async () => {
     const accountId = "account-1";
+    const token = "test-token";
     const expectedResult = { id: accountId };
     mock
       .onGet(`${baseURL}/data/v1/accounts/${accountId}`)
@@ -34,8 +49,9 @@ describe("TLDataAPI", () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test("getBankAccountBalance", async () => {
+  test("getBankAccountBalance with handleAPIRequest", async () => {
     const accountId = "account-1";
+    const token = "test-token";
     const expectedResult = { id: accountId, balance: 1000 };
     mock
       .onGet(`${baseURL}/data/v1/accounts/${accountId}/balance`)
@@ -46,10 +62,11 @@ describe("TLDataAPI", () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test("getBankAccountTransactions", async () => {
+  test("getBankAccountTransactions with handleAPIRequest", async () => {
     const accountId = "account-1";
     const fromDate = "2023-04-01";
     const toDate = "2023-04-15";
+    const token = "test-token";
     const expectedResult = [{ id: "transaction-1" }, { id: "transaction-2" }];
     mock
       .onGet(
@@ -67,8 +84,9 @@ describe("TLDataAPI", () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test("getBankAccountPendingTransactions", async () => {
+  test("getBankAccountPendingTransactions with handleAPIRequest", async () => {
     const accountId = "account-1";
+    const token = "test-token";
     const expectedResult = [{ id: "transaction-1" }, { id: "transaction-2" }];
     mock
       .onGet(`${baseURL}/data/v1/accounts/${accountId}/transactions/pending`)
@@ -82,8 +100,9 @@ describe("TLDataAPI", () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test("getBankAccountDirectDebits", async () => {
+  test("getBankAccountDirectDebits with handleAPIRequest", async () => {
     const accountId = "account-1";
+    const token = "test-token";
     const expectedResult = [{ id: "direct_debit-1" }, { id: "direct_debit-2" }];
     mock
       .onGet(`${baseURL}/data/v1/accounts/${accountId}/direct_debits`)
@@ -94,8 +113,9 @@ describe("TLDataAPI", () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test("getBankAccountStandingOrders", async () => {
+  test("getBankAccountStandingOrders with handleAPIRequest", async () => {
     const accountId = "account-1";
+    const token = "test-token";
     const expectedResult = [
       { id: "standing_order-1" },
       { id: "standing_order-2" },

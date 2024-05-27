@@ -9,7 +9,7 @@ jest.mock("../../../../datasources/trueLayer/tlPayout_api.js", () => ({
 describe("payoutDetail resolver", () => {
   let mockToken, mockDataSources;
 
-  beforeAll(() => {
+  beforeEach(() => {
     mockToken = "test-token";
     mockDataSources = {
       tlPayoutAPI: require("../../../../datasources/trueLayer/tlPayout_api.js")
@@ -17,14 +17,12 @@ describe("payoutDetail resolver", () => {
     };
   });
 
-  it("fetches a single payout's detail using an id and returns it in correct format", async () => {
+  it("calls tlPayoutAPI.getPayoutDetail with correct arguments", async () => {
     mockDataSources.tlPayoutAPI.getPayoutDetail.mockImplementation(() =>
-      Promise.resolve({
-        items: [{ id: 1, name: "Account 1" }],
-      })
+      Promise.resolve({ items: [{ id: 1, name: "Account 1" }] })
     );
 
-    const result = await payoutDetail(
+    await payoutDetail(
       {},
       { id: 1 },
       { token: mockToken, dataSources: mockDataSources }
@@ -34,15 +32,39 @@ describe("payoutDetail resolver", () => {
       1,
       mockToken
     );
+  });
+
+  it("returns correct data when tlPayoutAPI.getPayoutDetail resolves", async () => {
+    mockDataSources.tlPayoutAPI.getPayoutDetail.mockImplementation(() =>
+      Promise.resolve({ items: [{ id: 1, name: "Account 1" }] })
+    );
+
+    const result = await payoutDetail(
+      {},
+      { id: 1 },
+      { token: mockToken, dataSources: mockDataSources }
+    );
+
     expect(result).toEqual({ items: [{ id: 1, name: "Account 1" }] });
   });
 
-  // This test is to be reviewed and updated - need to confirm what the API returns if no data is found
-  it("throws an error if data is not found", async () => {
+  it("throws an error when tlPayoutAPI.getPayoutDetail rejects", async () => {
     mockDataSources.tlPayoutAPI.getPayoutDetail.mockImplementation(() =>
-      Promise.resolve({
-        items: null,
-      })
+      Promise.reject(new Error("API call failed"))
+    );
+
+    await expect(
+      payoutDetail(
+        {},
+        { id: 1 },
+        { token: mockToken, dataSources: mockDataSources }
+      )
+    ).rejects.toThrow("Failed to retrieve payout detail with ID 1");
+  });
+
+  it("throws an error when tlPayoutAPI.getPayoutDetail resolves with no data", async () => {
+    mockDataSources.tlPayoutAPI.getPayoutDetail.mockImplementation(() =>
+      Promise.resolve(null)
     );
 
     await expect(

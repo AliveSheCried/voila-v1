@@ -7,7 +7,7 @@ export async function handleAPIRequest(
   method = "GET",
   additionalHeaders = {}
 ) {
-  console.log("token", token);
+  // console.log("token", token);
   try {
     const headers = {
       accept: "application/json; charset=UTF-8",

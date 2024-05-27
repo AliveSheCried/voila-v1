@@ -317,4 +317,149 @@ describe("createPayout resolver", () => {
       )
     ).rejects.toThrow("account_identifier must be an object");
   });
+
+  //Error path test where reference is not provided
+  it("throws an error if reference is not provided", async () => {
+    await expect(
+      createPayoutExternalAccount(
+        {},
+        {
+          account_holder_name: "UK vendor",
+          merchant_account_id: 1,
+          amount_in_minor: 123,
+          currency: "GBP",
+          account_identifier: {
+            type: "sort_code_account_number",
+            sort_code: "123456",
+            account_number: "12345678",
+          },
+        },
+        { token: mockToken, dataSources: mockDataSources }
+      )
+    ).rejects.toThrow("Reference is required");
+  });
+
+  //Error path test where account_holder_name is not provided
+  it("throws an error if account_holder_name is not provided", async () => {
+    await expect(
+      createPayoutExternalAccount(
+        {},
+        {
+          reference: "sort_code_account_number test",
+          merchant_account_id: 1,
+          amount_in_minor: 123,
+          currency: "GBP",
+          account_identifier: {
+            type: "sort_code_account_number",
+            sort_code: "123456",
+            account_number: "12345678",
+          },
+        },
+        { token: mockToken, dataSources: mockDataSources }
+      )
+    ).rejects.toThrow("Account holder name is required");
+  });
+
+  //Error path test where merchant_account_id is not provided
+  it("throws an error if merchant_account_id is not provided", async () => {
+    await expect(
+      createPayoutExternalAccount(
+        {},
+        {
+          reference: "sort_code_account_number test",
+          account_holder_name: "UK vendor",
+          amount_in_minor: 123,
+          currency: "GBP",
+          account_identifier: {
+            type: "sort_code_account_number",
+            sort_code: "123456",
+            account_number: "12345678",
+          },
+        },
+        { token: mockToken, dataSources: mockDataSources }
+      )
+    ).rejects.toThrow("Merchant account ID is required");
+  });
+
+  //Error path test where currency is not provided
+  it("throws an error if currency is not provided", async () => {
+    await expect(
+      createPayoutExternalAccount(
+        {},
+        {
+          reference: "sort_code_account_number test",
+          account_holder_name: "UK vendor",
+          merchant_account_id: 1,
+          amount_in_minor: 123,
+          account_identifier: {
+            type: "sort_code_account_number",
+            sort_code: "123456",
+            account_number: "12345678",
+          },
+        },
+        { token: mockToken, dataSources: mockDataSources }
+      )
+    ).rejects.toThrow("Currency is required");
+  });
+
+  //Error path test where account_identifier is not provided
+  it("throws an error if account_identifier is not provided", async () => {
+    await expect(
+      createPayoutExternalAccount(
+        {},
+        {
+          reference: "sort_code_account_number test",
+          account_holder_name: "UK vendor",
+          merchant_account_id: 1,
+          amount_in_minor: 123,
+          currency: "GBP",
+        },
+        { token: mockToken, dataSources: mockDataSources }
+      )
+    ).rejects.toThrow("Account identifier is required");
+  });
+
+  //Error path test where token is not provided
+  it("throws an error if token is not provided", async () => {
+    await expect(
+      createPayoutExternalAccount(
+        {},
+        {
+          reference: "sort_code_account_number test",
+          account_holder_name: "UK vendor",
+          merchant_account_id: 1,
+          amount_in_minor: 123,
+          currency: "GBP",
+          account_identifier: {
+            type: "sort_code_account_number",
+            sort_code: "123456",
+            account_number: "12345678",
+          },
+        },
+        { dataSources: mockDataSources }
+      )
+    ).rejects.toThrow("Token is required");
+  });
+
+  //Error path test where dataSources is not provided
+  it("throws an error if dataSources is not provided", async () => {
+    await expect(
+      createPayoutExternalAccount(
+        {},
+        {
+          reference: "sort_code_account_number test",
+          account_holder_name: "UK vendor",
+          merchant_account_id: 1,
+          amount_in_minor: 123,
+          currency: "GBP",
+          account_identifier: {
+            type: "sort_code_account_number",
+            sort_code: "123456",
+            account_number: "12345678",
+          },
+        },
+        { token: mockToken }
+      )
+    ).rejects.toThrow("DataSources is required");
+  });
 });
