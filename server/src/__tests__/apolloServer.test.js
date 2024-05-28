@@ -1,6 +1,6 @@
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
-import { startApolloServer } from "./apolloServer.js";
+import { startApolloServer } from "../apolloServer.js";
 
 jest.mock("@apollo/server", () => ({
   ApolloServer: jest.fn().mockImplementation(() => ({

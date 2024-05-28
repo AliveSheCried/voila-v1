@@ -1,4 +1,5 @@
-import logger from "../../config/logger.js";
+//import logger from "../../config/logger.js";
+import logger from "../../config/testLogger.js";
 import { decrypt } from "../../helpers/encryptionHelper.js";
 import { transactionsHandler } from "../../routes/transactions.js";
 
