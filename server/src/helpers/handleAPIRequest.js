@@ -20,7 +20,7 @@ export async function handleAPIRequest(
       headers: headers,
     });
 
-    const response = await client({
+    const response = await client.request({
       method: method,
       url: endpoint,
       data: additionalHeaders.body,
