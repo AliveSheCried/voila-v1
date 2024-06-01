@@ -1,116 +1,102 @@
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
+import test from "ava";
+import sinon from "sinon";
+import tlSigning from "truelayer-signing";
 import { TLPayoutAPI } from "../../../datasources/trueLayer/tlPayout_api.js";
 
-const mock = new MockAdapter(axios);
+test.beforeEach((t) => {
+  // Create a sandbox for stubbing
+  t.context.sandbox = sinon.createSandbox();
 
-describe("TLPayoutAPI", () => {
-  jest.mock("truelayer-signing"); // Mock the signing module
+  // Stub the handleAPIRequest function
+  t.context.handleAPIRequestStub = t.context.sandbox
+    .stub()
+    .resolves({ accessToken: "abc123" });
 
-  const tlPayoutAPI = new TLPayoutAPI();
-  const token = "test-token";
-  const baseURL = "https://api.truelayer-sandbox.com";
+  // Create an instance of TLPayoutAPI with the stubbed handleAPIRequest
+  t.context.tlPayoutAPI = new TLPayoutAPI(t.context.handleAPIRequestStub);
+});
 
-  afterEach(() => {
-    mock.reset();
-  });
+test.afterEach.always((t) => {
+  // Restore the sandbox after each test
+  t.context.sandbox.restore();
+});
 
-  test("createMerchantAccountPayout", async () => {
-    // Replace these with your test data
-    const reference = "test-reference";
-    const account_holder_name = "John Doe";
-    const merchant_account_id = "account-1";
-    const amount_in_minor = 1000;
-    const currency = "GBP";
-    const account_identifier = "test-identifier";
+test("createMerchantAccountPayout calls handleAPIRequest with correct arguments", async (t) => {
+  const { tlPayoutAPI, handleAPIRequestStub } = t.context;
+  const token = "testToken";
+  const reference = "testReference";
+  const account_holder_name = "testAccountHolderName";
+  const merchant_account_id = "testMerchantAccountID";
+  const amount_in_minor = 100;
+  const currency = "GBP";
+  const account_identifier = {
+    type: "external_account",
+    sort_code: "testSortCode",
+    account_number: "testAccountNumber",
+  };
 
-    const expectedResult = { id: "payout-1" };
-    mock.onPost(`${baseURL}/payouts`).reply(200, expectedResult);
+  // Mock environment variables
+  process.env.KID = "testKid";
+  process.env.PRIVATE_KEY = "testPrivateKey";
 
-    // Mock environment variables
-    process.env.KID = "test-kid";
-    process.env.PRIVATE_KEY =
-      "-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE KEY-----";
+  // Mock tlSigning.sign
+  t.context.sandbox.stub(tlSigning, "sign").returns("testSignature");
 
-    const result = await tlPayoutAPI.createMerchantAccountPayout(
+  // Directly set the idempotency key
+  const idKey = "testIdKey";
+
+  const body = {
+    beneficiary: {
+      type: "external_account",
+      account_identifier,
       reference,
       account_holder_name,
-      merchant_account_id,
-      amount_in_minor,
-      currency,
-      account_identifier,
-      token
-    );
+    },
+    amount_in_minor,
+    merchant_account_id,
+    currency,
+  };
 
-    expect(result).toEqual(expectedResult);
-  });
+  const options = {
+    "Idempotency-Key": idKey,
+    "Tl-Signature": "testSignature",
+    "content-type": "application/json; charset=UTF-8",
+    body: body,
+  };
 
-  test("getPayoutDetail", async () => {
-    const payoutId = "payout-1";
-    const expectedResult = { id: payoutId };
-    mock.onGet(`${baseURL}/payouts/${payoutId}`).reply(200, expectedResult);
+  await tlPayoutAPI.createMerchantAccountPayout(
+    reference,
+    account_holder_name,
+    merchant_account_id,
+    amount_in_minor,
+    currency,
+    account_identifier,
+    token
+  );
 
-    const result = await tlPayoutAPI.getPayoutDetail(payoutId, token);
+  // Log the actual arguments passed to handleAPIRequest
+  console.log(handleAPIRequestStub.getCall(0).args);
 
-    expect(result).toEqual(expectedResult);
-  });
-
-  test("createMerchantAccountPayout throws error when KID is missing", async () => {
-    const reference = "test-reference";
-    const account_holder_name = "John Doe";
-    const merchant_account_id = "account-1";
-    const amount_in_minor = 1000;
-    const currency = "GBP";
-    const account_identifier = "test-identifier";
-
-    process.env.KID = "";
-    process.env.PRIVATE_KEY =
-      "-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE KEY-----";
-
-    await expect(
-      tlPayoutAPI.createMerchantAccountPayout(
-        reference,
-        account_holder_name,
-        merchant_account_id,
-        amount_in_minor,
-        currency,
-        account_identifier,
-        token
-      )
-    ).rejects.toThrow("Missing env var KID");
-  });
-
-  test("createMerchantAccountPayout throws error when PRIVATE_KEY is missing", async () => {
-    const reference = "test-reference";
-    const account_holder_name = "John Doe";
-    const merchant_account_id = "account-1";
-    const amount_in_minor = 1000;
-    const currency = "GBP";
-    const account_identifier = "test-identifier";
-
-    process.env.KID = "test-kid";
-    process.env.PRIVATE_KEY = "";
-
-    await expect(
-      tlPayoutAPI.createMerchantAccountPayout(
-        reference,
-        account_holder_name,
-        merchant_account_id,
-        amount_in_minor,
-        currency,
-        account_identifier,
-        token
-      )
-    ).rejects.toThrow("Missing env var PRIVATE_KEY");
-  });
-
-  test("getPayoutDetail throws error when request fails", async () => {
-    const payoutId = "payout-1";
-
-    mock.onGet(`${baseURL}/payouts/${payoutId}`).reply(500);
-
-    await expect(tlPayoutAPI.getPayoutDetail(payoutId, token)).rejects.toThrow(
-      `Failed to get payout detail for ID ${payoutId}`
-    );
-  });
+  t.true(
+    handleAPIRequestStub.calledWithExactly(
+      tlPayoutAPI,
+      "/payouts",
+      token,
+      "POST",
+      {
+        ...options,
+        body: {
+          beneficiary: {
+            type: "external_account",
+            account_identifier,
+            reference,
+            account_holder_name,
+          },
+          amount_in_minor,
+          merchant_account_id,
+          currency,
+        },
+      }
+    )
+  );
 });

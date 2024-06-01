@@ -1,113 +1,130 @@
-//Jest test of the tlMerchantAccount_api.js file
-
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
+import test from "ava";
+import sinon from "sinon";
 import { TLMerchantAccountAPI } from "../../../datasources/trueLayer/tlMerchantAccount_api.js";
 
-const mock = new MockAdapter(axios);
+test.beforeEach((t) => {
+  t.context.sandbox = sinon.createSandbox();
+  t.context.handleAPIRequestStub = t.context.sandbox
+    .stub()
+    .resolves({ accessToken: "abc123" });
+  t.context.tlMerchantAccountAPI = new TLMerchantAccountAPI(
+    t.context.handleAPIRequestStub
+  );
+});
 
-describe("TLMerchantAccountAPI", () => {
-  const tlMerchantAccountAPI = new TLMerchantAccountAPI();
-  const token = "test-token";
-  const baseURL = "https://api.truelayer-sandbox.com";
+test.afterEach.always((t) => {
+  t.context.sandbox.restore();
+});
 
-  afterEach(() => {
-    mock.reset();
-  });
+test("getMerchantAccounts calls handleAPIRequest with correct arguments", async (t) => {
+  const { tlMerchantAccountAPI, handleAPIRequestStub } = t.context;
+  const token = "testToken";
 
-  test("getMerchantAccounts", async () => {
-    const expectedResult = [{ id: "account-1" }, { id: "account-2" }];
-    mock.onGet(`${baseURL}/merchant-accounts`).reply(200, expectedResult);
+  await tlMerchantAccountAPI.getMerchantAccounts(token);
 
-    const result = await tlMerchantAccountAPI.getMerchantAccounts(token);
-
-    expect(result).toEqual(expectedResult);
-  });
-
-  test("getMerchantAccount", async () => {
-    const accountId = "account-1";
-    const expectedResult = { id: accountId };
-    mock
-      .onGet(`${baseURL}/merchant-accounts/${accountId}`)
-      .reply(200, expectedResult);
-
-    const result = await tlMerchantAccountAPI.getMerchantAccount(
-      accountId,
+  t.true(
+    handleAPIRequestStub.calledWith(
+      tlMerchantAccountAPI,
+      "/merchant-accounts",
       token
-    );
+    )
+  );
+});
 
-    expect(result).toEqual(expectedResult);
-  });
+test("getMerchantAccounts handles error correctly", async (t) => {
+  const { tlMerchantAccountAPI, handleAPIRequestStub } = t.context;
+  const token = "testToken";
 
-  test("getMerchantAccountTransactions", async () => {
-    const accountId = "account-1";
-    const fromDate = "2023-04-01";
-    const toDate = "2023-04-15";
-    const expectedResult = [{ id: "transaction-1" }, { id: "transaction-2" }];
-    mock
-      .onGet(
-        `${baseURL}/merchant-accounts/${accountId}/transactions?from=${fromDate}&to=${toDate}`
-      )
-      .reply(200, expectedResult);
+  handleAPIRequestStub.rejects(
+    new Error("Failed to retrieve merchant accounts")
+  );
 
-    const result = await tlMerchantAccountAPI.getMerchantAccountTransactions(
-      accountId,
+  const error = await t.throwsAsync(
+    tlMerchantAccountAPI.getMerchantAccounts(token)
+  );
+
+  t.is(error.message, "Failed to retrieve merchant accounts");
+});
+
+test("getMerchantAccount calls handleAPIRequest with correct arguments", async (t) => {
+  const { tlMerchantAccountAPI, handleAPIRequestStub } = t.context;
+  const token = "testToken";
+  const id = "testID";
+
+  await tlMerchantAccountAPI.getMerchantAccount(id, token);
+
+  t.true(
+    handleAPIRequestStub.calledWith(
+      tlMerchantAccountAPI,
+      `/merchant-accounts/${id}`,
+      token
+    )
+  );
+});
+
+test("getMerchantAccount handles error correctly", async (t) => {
+  const { tlMerchantAccountAPI, handleAPIRequestStub } = t.context;
+  const token = "testToken";
+  const id = "testID";
+
+  handleAPIRequestStub.rejects(
+    new Error(`Failed to retrieve merchant account with ID ${id}`)
+  );
+
+  const error = await t.throwsAsync(
+    tlMerchantAccountAPI.getMerchantAccount(id, token)
+  );
+
+  t.is(error.message, `Failed to retrieve merchant account with ID ${id}`);
+});
+
+test("getMerchantAccountTransactions calls handleAPIRequest with correct arguments", async (t) => {
+  const { tlMerchantAccountAPI, handleAPIRequestStub } = t.context;
+  const token = "testToken";
+  const id = "testID";
+  const fromDate = "2021-01-01";
+  const toDate = "2021-01-31";
+
+  await tlMerchantAccountAPI.getMerchantAccountTransactions(
+    id,
+    token,
+    fromDate,
+    toDate
+  );
+
+  t.true(
+    handleAPIRequestStub.calledWith(
+      tlMerchantAccountAPI,
+      `merchant-accounts/${id}/transactions?from=${fromDate}&to=${toDate}`,
+      token
+    )
+  );
+});
+
+test("getMerchantAccountTransactions handles error correctly", async (t) => {
+  const { tlMerchantAccountAPI, handleAPIRequestStub } = t.context;
+  const token = "testToken";
+  const id = "testID";
+  const fromDate = "2021-01-01";
+  const toDate = "2021-01-31";
+
+  handleAPIRequestStub.rejects(
+    new Error(
+      `Failed to retrieve transactions for merchant account with ID ${id}`
+    )
+  );
+
+  const error = await t.throwsAsync(
+    tlMerchantAccountAPI.getMerchantAccountTransactions(
+      id,
       token,
       fromDate,
       toDate
-    );
+    )
+  );
 
-    expect(result).toEqual(expectedResult);
-  });
-});
-
-describe("TLMerchantAccountAPI error handling", () => {
-  const tlMerchantAccountAPI = new TLMerchantAccountAPI();
-  const token = "test-token";
-  const baseURL = "https://api.truelayer-sandbox.com/v3";
-
-  afterEach(() => {
-    mock.reset();
-  });
-
-  test("getMerchantAccounts error", async () => {
-    mock.onGet(`${baseURL}/merchant-accounts`).networkError();
-
-    await expect(
-      tlMerchantAccountAPI.getMerchantAccounts(token)
-    ).rejects.toThrow("Failed to retrieve merchant accounts");
-  });
-
-  test("getMerchantAccount error", async () => {
-    const accountId = "account-1";
-    mock.onGet(`${baseURL}/merchant-accounts/${accountId}`).networkError();
-
-    await expect(
-      tlMerchantAccountAPI.getMerchantAccount(accountId, token)
-    ).rejects.toThrow(
-      `Failed to retrieve merchant account with ID ${accountId}`
-    );
-  });
-
-  test("getMerchantAccountTransactions error", async () => {
-    const accountId = "account-1";
-    const fromDate = "2023-04-01";
-    const toDate = "2023-04-15";
-    mock
-      .onGet(
-        `${baseURL}/merchant-accounts/${accountId}/transactions?from=${fromDate}&to=${toDate}`
-      )
-      .networkError();
-
-    await expect(
-      tlMerchantAccountAPI.getMerchantAccountTransactions(
-        accountId,
-        token,
-        fromDate,
-        toDate
-      )
-    ).rejects.toThrow(
-      `Failed to retrieve transactions for merchant account with ID ${accountId}`
-    );
-  });
+  t.is(
+    error.message,
+    `Failed to retrieve transactions for merchant account with ID ${id}`
+  );
 });
