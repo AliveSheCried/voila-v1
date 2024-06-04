@@ -41,6 +41,9 @@ async function run(client) {
     await client.db("VoilaDev").command({ ping: 1 });
     console.log("Connected successfully to MongoDB");
 
+    // Make client available globally
+    global.dbClient = client;
+
     const app = express();
     const httpServer = http.createServer(app);
 

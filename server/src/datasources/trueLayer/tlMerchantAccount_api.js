@@ -6,7 +6,7 @@ export class TLMerchantAccountAPI extends RESTDataSource {
   constructor(handleAPIRequest = defaultHandleAPIRequest) {
     super();
     this.baseURL = "https://api.truelayer-sandbox.com/v3";
-    this.handleAPIRequest = handleAPIRequest;
+    this.handleAPIRequest = handleAPIRequest.bind(this);
   }
 
   /*

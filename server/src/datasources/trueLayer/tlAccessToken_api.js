@@ -6,7 +6,7 @@ export class TLAccessTokenAPI extends RESTDataSource {
   constructor(handleAPIRequest = defaultHandleAPIRequest) {
     super();
     this.baseURL = "https://auth.truelayer-sandbox.com";
-    this.handleAPIRequest = handleAPIRequest;
+    this.handleAPIRequest = handleAPIRequest.bind(this);
   }
 
   //methods

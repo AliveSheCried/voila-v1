@@ -75,7 +75,7 @@ test("createMerchantAccountPayout calls handleAPIRequest with correct arguments"
   );
 
   // Log the actual arguments passed to handleAPIRequest
-  console.log(handleAPIRequestStub.getCall(0).args);
+  console.log(handleAPIRequestStub.getCall(0).args[0].body.beneficiary);
 
   t.true(
     handleAPIRequestStub.calledWithExactly(

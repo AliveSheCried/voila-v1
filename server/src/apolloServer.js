@@ -7,6 +7,7 @@ import {
   TLMerchantAccountAPI as tlMerchantAccountAPI,
   TLPayoutAPI as tlPayoutAPI,
 } from "./datasources/trueLayer/index.js";
+import { handleAPIRequest } from "./helpers/handleAPIRequest.js";
 import resolvers from "./schema/resolvers.js";
 import typeDefs from "./schema/schema.js";
 
@@ -42,10 +43,16 @@ export async function startApolloServer(app, httpServer) {
         return {
           token,
           dataSources: {
-            tlAccessTokenAPI: new tlAccessTokenAPI({ cache, token }),
+            tlAccessTokenAPI: new tlAccessTokenAPI(handleAPIRequest, {
+              cache,
+              token,
+            }),
             tlDataAPI: new tlDataAPI({ cache, token }),
-            tlMerchantAccountAPI: new tlMerchantAccountAPI({ cache, token }),
-            tlPayoutAPI: new tlPayoutAPI({ cache, token }),
+            tlMerchantAccountAPI: new tlMerchantAccountAPI(handleAPIRequest, {
+              cache,
+              token,
+            }),
+            tlPayoutAPI: new tlPayoutAPI(handleAPIRequest, { cache, token }),
           },
         };
       },

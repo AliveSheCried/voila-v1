@@ -3,7 +3,8 @@ import sinon from "sinon";
 import { TLAccessTokenAPI } from "../../../datasources/trueLayer/tlAccessToken_api.js";
 
 test.beforeEach((t) => {
-  t.context.handleAPIRequestStub = sinon
+  t.context.sandbox = sinon.createSandbox();
+  t.context.handleAPIRequestStub = t.context.sandbox
     .stub()
     .resolves({ accessToken: "abc123" });
   t.context.tlAccessTokenAPI = new TLAccessTokenAPI(

@@ -8,7 +8,7 @@ export class TLPayoutAPI extends RESTDataSource {
   constructor(handleAPIRequest = defaultHandleAPIRequest) {
     super();
     this.baseURL = "https://api.truelayer-sandbox.com/v3";
-    this.handleAPIRequest = handleAPIRequest;
+    this.handleAPIRequest = handleAPIRequest.bind(this);
   }
 
   /*
@@ -66,6 +66,10 @@ export class TLPayoutAPI extends RESTDataSource {
     };
 
     try {
+      console.log(`/payouts`, token, "POST", {
+        ...options,
+        body,
+      });
       return await this.handleAPIRequest(this, `/payouts`, token, "POST", {
         ...options,
         body,
