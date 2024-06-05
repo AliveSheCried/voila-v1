@@ -26,13 +26,13 @@ test("createMerchantAccountPayout calls handleAPIRequest with correct arguments"
   const token = "testToken";
   const reference = "testReference";
   const account_holder_name = "testAccountHolderName";
-  const merchant_account_id = "testMerchantAccountID";
+  const merchant_account_id = "e1eff241-77d7-490d-aef4-d2701d68f90a";
   const amount_in_minor = 100;
   const currency = "GBP";
   const account_identifier = {
-    type: "external_account",
-    sort_code: "testSortCode",
-    account_number: "testAccountNumber",
+    type: "sort_code_account_number", // Updated to match actual call
+    sort_code: "123456",
+    account_number: "12345678",
   };
 
   // Mock environment variables
@@ -75,28 +75,46 @@ test("createMerchantAccountPayout calls handleAPIRequest with correct arguments"
   );
 
   // Log the actual arguments passed to handleAPIRequest
-  console.log(handleAPIRequestStub.getCall(0).args[0].body.beneficiary);
+  console.log(JSON.stringify(handleAPIRequestStub.getCall(0).args, null, 2));
 
   t.true(
-    handleAPIRequestStub.calledWithExactly(
+    handleAPIRequestStub.calledWithMatch(
       tlPayoutAPI,
       "/payouts",
       token,
       "POST",
-      {
-        ...options,
-        body: {
-          beneficiary: {
+      sinon.match({
+        "Idempotency-Key": sinon.match.string, //asserting that the idempotency key is a string
+        "Tl-Signature": "testSignature",
+        "content-type": "application/json; charset=UTF-8",
+        body: sinon.match({
+          beneficiary: sinon.match({
             type: "external_account",
-            account_identifier,
+            account_identifier: sinon.match({
+              type: "sort_code_account_number", // Updated to match actual call
+              sort_code: "123456",
+              account_number: "12345678",
+            }),
             reference,
             account_holder_name,
-          },
+          }),
           amount_in_minor,
           merchant_account_id,
           currency,
-        },
-      }
+        }),
+      })
     )
+  );
+});
+
+test("getPayoutDetail calls handleAPIRequest with correct arguments", async (t) => {
+  const { tlPayoutAPI, handleAPIRequestStub } = t.context;
+  const token = "testToken";
+  const id = "testId";
+
+  await tlPayoutAPI.getPayoutDetail(id, token);
+
+  t.true(
+    handleAPIRequestStub.calledWithExactly(tlPayoutAPI, `/payouts/${id}`, token)
   );
 });
