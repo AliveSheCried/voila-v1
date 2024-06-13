@@ -1,7 +1,5 @@
-import logger from "../../../config/logger.js";
-
 //get individual merchant account detail using ID
-const merchantAccount = async (_, { id }, { token, dataSources }) => {
+const merchantAccount = async (_, { id }, { token, dataSources, logger }) => {
   //try catch block to handle errors
   try {
     //get updated merchant account data from TrueLayer
@@ -19,7 +17,7 @@ const merchantAccount = async (_, { id }, { token, dataSources }) => {
       `Error getting merchant account with ID ${id}: ${error.message}`
     );
     // Throw the error so that it can be caught and handled by Apollo Server
-    throw new error("Failed to retrieve merchant account with ID ${id}");
+    throw new Error(`Failed to retrieve merchant account with ID ${id}`);
   }
 };
 

@@ -1,7 +1,3 @@
-import validator from "validator";
-import logger from "../../../config/logger.js";
-import { encrypt } from "../../../helpers/encryptionHelper.js";
-
 const createPayoutExternalAccount = async (
   _,
   {
@@ -12,19 +8,8 @@ const createPayoutExternalAccount = async (
     currency,
     account_identifier,
   },
-  { token, dataSources }
+  { token, dataSources, validator, logger, encrypt }
 ) => {
-  //logging
-  console.log("createPayout resolver called");
-  console.log("Arguments:", {
-    reference,
-    account_holder_name,
-    merchant_account_id,
-    amount_in_minor,
-    currency,
-    account_identifier,
-  });
-
   // Validate currency is 3 characters long and only contains uppercase letters
   if (!validator.isUppercase(currency) || currency.length !== 3) {
     logger.error("Currency must be a 3 character uppercase code");
@@ -88,7 +73,6 @@ const createPayoutExternalAccount = async (
         token
       );
 
-    console.log("Response data:", responseData);
     // Confirm connection to MongoDB
     const { dbClient } = global;
     if (!dbClient) {
@@ -113,12 +97,10 @@ const createPayoutExternalAccount = async (
 
     // Log encrypted data
     logger.info("Encrypted document:", encryptedDocument);
-    console.log("encrypted", encryptedDocument);
 
     // Insert document into MongoDB
     const result = await myCollection.insertOne(encryptedDocument);
     logger.info("MongoDB insert result:", result);
-    console.log("MongoDB insert result:", result);
 
     return responseData;
   } catch (error) {

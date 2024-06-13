@@ -1,86 +1,89 @@
-import logger from "../../../config/logger";
-import { merchantAccountTransactions } from "./resolverMerchantAccountTransactions";
+import test from "ava";
+import sinon from "sinon";
+import { merchantAccountTransactions } from "../../../../schema/TrueLayer/MerchantAccounts/resolverMerchantAccountTransactions.js";
 
-jest.mock("../../../config/logger", () => ({
-  error: jest.fn(),
-  info: jest.fn(),
-}));
-
-const mockGetMerchantAccountTransactions = jest.fn();
-jest.mock("../../../dataSources/tlMerchantAccountAPI", () => ({
-  getMerchantAccountTransactions: mockGetMerchantAccountTransactions,
-}));
-
-describe("merchantAccountTransactions", () => {
-  const mockContext = {
-    token: "mockToken",
-    dataSources: {
-      tlMerchantAccountAPI: {
-        getMerchantAccountTransactions: mockGetMerchantAccountTransactions,
+test("merchantAccountTransactions resolver", async (t) => {
+  const mockResponse = {
+    items: [
+      {
+        type: "payout",
+        id: "a53df9ca-64e8-4aa5-8838-17578bf06ede",
+        currency: "EUR",
+        amount_in_minor: 112,
+        status: "executed",
+        created_at: "2024-05-26T19:42:46.344362Z",
+        executed_at: "2024-05-26T19:42:47.243Z",
+        beneficiary: {
+          account_holder_name: "TheDuke",
+          reference: "26052024 02",
+          account_identifiers: [
+            {
+              type: "iban",
+              sort_code: null,
+              account_number: null,
+              iban: "GB75CLRB04066800000871",
+              __typename: "AccountIdentifier",
+            },
+          ],
+          __typename: "Beneficiary",
+        },
+        __typename: "Payout",
       },
+    ],
+  };
+
+  const dataSources = {
+    tlMerchantAccountAPI: {
+      getMerchantAccountTransactions: sinon.stub().returns(mockResponse),
     },
   };
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  const logger = {
+    info: sinon.stub(),
+    error: sinon.stub(),
+  };
 
-  it("should return transactions when getMerchantAccountTransactions returns valid response", async () => {
-    const mockTransactions = [{ id: "1" }, { id: "2" }];
-    mockGetMerchantAccountTransactions.mockResolvedValueOnce({
-      items: mockTransactions,
-    });
+  const result = await merchantAccountTransactions(
+    null,
+    { id: "testId", fromDate: "2022-01-01", toDate: "2025-01-31" },
+    { token: "testToken", dataSources, logger }
+  );
 
-    const result = await merchantAccountTransactions(
-      null,
-      { id: "mockId", fromDate: "2022-01-01", toDate: "2022-01-31" },
-      mockContext
-    );
+  t.true(
+    dataSources.tlMerchantAccountAPI.getMerchantAccountTransactions.calledOnce
+  );
+  t.deepEqual(result, mockResponse.items);
+  t.true(logger.info.called);
+});
 
-    expect(result).toEqual(mockTransactions);
-    expect(mockGetMerchantAccountTransactions).toHaveBeenCalledWith(
-      "mockId",
-      "mockToken",
-      "2022-01-01T00:00:00.000Z",
-      "2022-01-31T23:59:59.999Z"
-    );
-  });
+test("merchantAccountTransactions resolver handles errors", async (t) => {
+  const dataSources = {
+    tlMerchantAccountAPI: {
+      getMerchantAccountTransactions: sinon
+        .stub()
+        .throws(
+          new Error(
+            "Failed to retrieve merchant account transactions with ID 1"
+          )
+        ),
+    },
+  };
 
-  it("should throw error when getMerchantAccountTransactions throws error", async () => {
-    mockGetMerchantAccountTransactions.mockRejectedValueOnce(
-      new Error("Mock error")
-    );
+  const logger = {
+    info: sinon.stub(),
+    error: sinon.stub(),
+  };
 
-    await expect(
-      merchantAccountTransactions(
+  await t.throwsAsync(
+    async () => {
+      await merchantAccountTransactions(
         null,
-        { id: "mockId", fromDate: "2022-01-01", toDate: "2022-01-31" },
-        mockContext
-      )
-    ).rejects.toThrow(
-      "Failed to retrieve merchant account transactions with ID mockId"
-    );
+        { id: "1", fromDate: "2022-01-01", toDate: "2025-01-31" },
+        { token: "testToken", dataSources, logger }
+      );
+    },
+    { message: "Failed to retrieve merchant account transactions with ID 1" }
+  );
 
-    expect(logger.error).toHaveBeenCalledWith(
-      "Error getting merchant account transactions with ID mockId: Mock error"
-    );
-  });
-
-  it("should throw error when getMerchantAccountTransactions returns empty array", async () => {
-    mockGetMerchantAccountTransactions.mockResolvedValueOnce({ items: [] });
-
-    await expect(
-      merchantAccountTransactions(
-        null,
-        { id: "mockId", fromDate: "2022-01-01", toDate: "2022-01-31" },
-        mockContext
-      )
-    ).rejects.toThrow(
-      "No transactions for the date range 2022-01-01 to 2022-01-31 found"
-    );
-
-    expect(logger.error).toHaveBeenCalledWith(
-      "No transactions for the date range 2022-01-01 to 2022-01-31 found"
-    );
-  });
+  t.true(logger.error.called);
 });

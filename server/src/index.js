@@ -19,6 +19,7 @@ async function startServer(app, httpServer, client) {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
+  console.log("Starting Apollo Server");
   await startApolloServer(app, httpServer, client);
 
   app.get("/api/transactions", transactionsHandler(client));
@@ -47,6 +48,7 @@ async function run(client) {
     const app = express();
     const httpServer = http.createServer(app);
 
+    console.log("Running server setup");
     await startServer(app, httpServer, client);
   } catch (err) {
     console.error(err.stack);

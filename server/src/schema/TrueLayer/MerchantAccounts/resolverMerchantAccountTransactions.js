@@ -1,14 +1,9 @@
-import logger from "../../../config/logger.js";
-
 //Current resolver code - does not store transactions in MongoDB; always fetches transactions from TrueLayer API
 const merchantAccountTransactions = async (
   _,
   { id, fromDate, toDate },
-  { token, dataSources }
+  { token, dataSources, logger }
 ) => {
-  console.log("merchantAccountTransactions resolver called");
-  console.log("Arguments:", { id, fromDate, toDate });
-
   // Decode the fromDate and toDate values
   const decodedFromDate = decodeURIComponent(fromDate);
   const decodedToDate = decodeURIComponent(toDate);

@@ -1,6 +1,4 @@
-import logger from "../../../config/logger.js";
-
-const merchantAccounts = async (_, __, { token, dataSources }) => {
+const merchantAccounts = async (_, __, { token, dataSources, logger }) => {
   try {
     const responseData =
       await dataSources.tlMerchantAccountAPI.getMerchantAccounts(token);

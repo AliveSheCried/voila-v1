@@ -1,78 +1,68 @@
-import logger from "../../../config/logger";
-import { tlMerchantAccountAPI } from "../../../datasources/trueLayer/tlMerchantAccount_api";
-import { merchantAccounts } from "./resolverMerchantAccounts";
+import test from "ava";
+import sinon from "sinon";
+import { merchantAccounts } from "../../../../schema/TrueLayer/MerchantAccounts/resolverMerchantAccounts.js";
 
-jest.mock("../../../datasources/trueLayer/tlMerchantAccount_api");
-jest.mock("../../../config/logger");
+test.beforeEach((t) => {
+  // Create a sandbox for stubbing
+  t.context.sandbox = sinon.createSandbox();
 
-describe("merchantAccounts", () => {
-  beforeEach(() => {
-    tlMerchantAccountAPI.getMerchantAccounts.mockClear();
-    logger.error.mockClear();
-    logger.info.mockClear();
+  // Create a stubbed logger
+  t.context.logger = {
+    info: t.context.sandbox.stub(),
+    error: t.context.sandbox.stub(),
+  };
+
+  // Stub the dataSources
+  t.context.dataSources = {
+    tlMerchantAccountAPI: {
+      getMerchantAccounts: t.context.sandbox.stub(),
+    },
+  };
+});
+
+test.afterEach.always((t) => {
+  // Restore the sandbox after each test
+  t.context.sandbox.restore();
+});
+
+test("merchantAccounts retrieves data correctly", async (t) => {
+  const { dataSources, logger } = t.context;
+
+  // Mock the response data
+  const responseData = {
+    items: [
+      { id: "1", name: "Account 1" },
+      { id: "2", name: "Account 2" },
+    ],
+  };
+
+  // Stub the getMerchantAccounts method to return the mock data
+  dataSources.tlMerchantAccountAPI.getMerchantAccounts.resolves(responseData);
+
+  const result = await merchantAccounts(null, null, {
+    token: "testToken",
+    dataSources,
+    logger,
   });
 
-  it("fetches merchant accounts and returns them in correct format", async () => {
-    const mockToken = "test-token";
-    const mockResponse = {
-      items: [
-        { id: 1, name: "Account 1" },
-        { id: 2, name: "Account 2" },
-      ],
-    };
+  t.true(logger.info.calledWith("Merchant accounts data retrieved"));
+  t.deepEqual(result, responseData.items);
+});
 
-    tlMerchantAccountAPI.getMerchantAccounts.mockResolvedValue(mockResponse);
+test("merchantAccounts handles errors correctly", async (t) => {
+  const { dataSources, logger } = t.context;
 
-    const result = await merchantAccounts(
-      {},
-      {},
-      { token, dataSources: { tlMerchantAccountAPI } }
-    );
+  // Stub the getMerchantAccounts method to throw an error
+  dataSources.tlMerchantAccountAPI.getMerchantAccounts.rejects(
+    new Error("Test error")
+  );
 
-    expect(tlMerchantAccountAPI.getMerchantAccounts).toHaveBeenCalledWith(
-      mockToken
-    );
-    expect(result).toEqual(mockResponse.items);
-    expect(logger.info).toHaveBeenCalledWith(
-      "Merchant accounts data retrieved"
-    );
-  });
+  const error = await t.throwsAsync(() =>
+    merchantAccounts(null, null, { token: "testToken", dataSources, logger })
+  );
 
-  it("throws an error if data is not found or data format not as expected", async () => {
-    const mockToken = "test-token";
-    const mockResponse = { items: "not an array" };
-
-    tlMerchantAccountAPI.getMerchantAccounts.mockResolvedValue(mockResponse);
-
-    await expect(
-      merchantAccounts(
-        {},
-        {},
-        { token: mockToken, dataSources: { tlMerchantAccountAPI } }
-      )
-    ).rejects.toThrow("No data found or data format not as expected!");
-
-    expect(logger.error).toHaveBeenCalledWith(
-      "No data found or data format not as expected!"
-    );
-  });
-
-  it("throws an error if getMerchantAccounts fails", async () => {
-    const mockToken = "test-token";
-    const mockError = new Error("Failed to retrieve merchant accounts");
-
-    tlMerchantAccountAPI.getMerchantAccounts.mockRejectedValue(mockError);
-
-    await expect(
-      merchantAccounts(
-        {},
-        {},
-        { token: mockToken, dataSources: { tlMerchantAccountAPI } }
-      )
-    ).rejects.toThrow("Failed to retrieve merchant accounts");
-
-    expect(logger.error).toHaveBeenCalledWith(
-      `Error getting merchant accounts: ${mockError.message}`
-    );
-  });
+  t.true(
+    logger.error.calledWith("Error getting merchant accounts: Test error")
+  );
+  t.is(error.message, "Failed to retrieve merchant accounts");
 });

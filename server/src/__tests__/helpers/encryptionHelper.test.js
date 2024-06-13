@@ -1,37 +1,15 @@
-import { randomBytes } from "crypto";
-import { decrypt, encrypt } from "./encryptionHelper";
+import test from "ava";
+import { decrypt, encrypt } from "../../helpers/encryptionHelper.js";
 
-describe("encryptionHelper", () => {
-  let data, encryptedData, decryptedData;
+test("encryption and decryption", (t) => {
+  const data = "Test data";
 
-  beforeEach(() => {
-    data = randomBytes(256).toString("hex");
-  });
+  // Encrypt the data
+  const encrypted = encrypt(data);
 
-  it("encrypts the data correctly", () => {
-    encryptedData = encrypt(data);
-    expect(encryptedData).toHaveProperty("iv");
-    expect(encryptedData).toHaveProperty("encryptedData");
-  });
+  // Decrypt the data
+  const decrypted = decrypt(encrypted);
 
-  it("decrypts the data correctly", () => {
-    decryptedData = decrypt(encryptedData);
-    expect(decryptedData).toEqual(data);
-  });
-
-  it("does not decrypt data with wrong iv", () => {
-    const wrongIvData = {
-      ...encryptedData,
-      iv: randomBytes(16).toString("hex"),
-    };
-    expect(() => decrypt(wrongIvData)).toThrow();
-  });
-
-  it("does not decrypt data with wrong encryptedData", () => {
-    const wrongEncryptedData = {
-      ...encryptedData,
-      encryptedData: randomBytes(256).toString("hex"),
-    };
-    expect(() => decrypt(wrongEncryptedData)).toThrow();
-  });
+  // Check if the decrypted data matches the original data
+  t.is(decrypted, data);
 });

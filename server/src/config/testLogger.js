@@ -2,7 +2,7 @@
 // testLogger.js
 import { createLogger, format, transports } from "winston";
 
-const logger = createLogger({
+export const logger = createLogger({
   level: "info",
   format: format.combine(
     format.timestamp({
@@ -15,5 +15,3 @@ const logger = createLogger({
   defaultMeta: { service: "your-service-name" },
   transports: [new transports.Console()],
 });
-
-export default logger;
