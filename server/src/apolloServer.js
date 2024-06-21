@@ -15,20 +15,27 @@ import resolvers from "./schema/resolvers.js";
 import typeDefs from "./schema/schema.js";
 
 export async function startApolloServer(app, httpServer) {
+  logger.info("Starting Apollo Server...");
   const server = new ApolloServer({
     typeDefs,
     resolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
     introspection: true,
+    cors: {
+      origin: "http://127.0.0.1:5173", // Local client URL
+      credentials: true,
+    },
   });
 
   await server.start();
+  logger.info("Apollo Server started");
 
   app.use(
     "/graphql",
     expressMiddleware(server, {
       context: async ({ req }) => {
-        console.log("Express middleware context function called");
+        logger.info("Express middleware context function called");
+
         const context = {
           dbClient: global.dbClient,
           token: req.headers.authorization || "",
@@ -61,6 +68,6 @@ export async function startApolloServer(app, httpServer) {
     })
   );
 
-  console.log("Apollo Server started");
+  logger.info("Apollo Server started");
   return server;
 }

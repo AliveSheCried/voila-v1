@@ -1,58 +1,84 @@
 import { ApolloServer } from "@apollo/server";
-import { expressMiddleware } from "@apollo/server/express4";
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+import test from "ava";
+import sinon from "sinon";
+import validator from "validator";
 import { startApolloServer } from "../apolloServer.js";
+import logger from "../config/logger.js";
+import * as trueLayerModule from "../datasources/trueLayer/index.js";
+import * as encryptionHelper from "../helpers/encryptionHelper.js";
+import * as handleAPIRequest from "../helpers/handleAPIRequest.js";
+import resolvers from "../schema/resolvers.js";
+import typeDefs from "../schema/schema.js";
 
-jest.mock("@apollo/server", () => ({
-  ApolloServer: jest.fn().mockImplementation(() => ({
-    start: jest.fn(),
-    cache: {},
-  })),
-}));
+test.beforeEach((t) => {
+  t.context.mockTlAccessTokenAPI = sinon
+    .stub(trueLayerModule, "TLAccessTokenAPI")
+    .returns(sinon.stub());
+  t.context.mockTlDataAPI = sinon
+    .stub(trueLayerModule, "TLDataAPI")
+    .returns(sinon.stub());
+  t.context.mockTlMerchantAccountAPI = sinon
+    .stub(trueLayerModule, "TLMerchantAccountAPI")
+    .returns(sinon.stub());
+  t.context.mockTlPayoutAPI = sinon
+    .stub(trueLayerModule, "TLPayoutAPI")
+    .returns(sinon.stub());
+  t.context.mockEncrypt = sinon.stub(encryptionHelper, "encrypt");
+  t.context.mockDecrypt = sinon.stub(encryptionHelper, "decrypt");
+  t.context.mockHandleAPIRequest = sinon.stub(
+    handleAPIRequest,
+    "handleAPIRequest"
+  );
+});
 
-jest.mock("@apollo/server/express4", () => ({
-  expressMiddleware: jest.fn(),
-}));
+test.afterEach.always((t) => {
+  sinon.restore();
+});
 
-describe("startApolloServer", () => {
-  it("should start the Apollo server", async () => {
+test.serial(
+  "startApolloServer initializes and starts Apollo Server",
+  async (t) => {
     const app = {
-      use: jest.fn(),
+      use: sinon.stub(),
     };
     const httpServer = {};
-    global.dbClient = {};
 
-    const req = {
-      headers: {
-        authorization: "Bearer token",
-      },
-    };
+    const server = await startApolloServer(app, httpServer);
 
-    await startApolloServer(app, httpServer);
-
-    expect(ApolloServer).toHaveBeenCalledWith(
-      expect.objectContaining({
-        context: expect.any(Function),
-        plugins: expect.any(Array),
-        introspection: true,
-        playground: expect.objectContaining({
-          settings: expect.objectContaining({
-            "schema.polling.enable": true,
-          }),
-        }),
-      })
+    t.true(app.use.calledOnceWith("/graphql", sinon.match.func));
+    t.true(server instanceof ApolloServer);
+    t.deepEqual(server.typeDefs, typeDefs);
+    t.deepEqual(server.resolvers, resolvers);
+    t.true(
+      server.plugins.includes(ApolloServerPluginDrainHttpServer({ httpServer }))
     );
-
-    const context = ApolloServer.mock.calls[0][0].context({ req });
-    expect(context).toEqual({
-      dbClient: global.dbClient,
-      token: req.headers.authorization,
+    t.true(server.introspection);
+    t.deepEqual(server.cors, {
+      origin: "http://127.0.0.1:5173",
+      credentials: true,
     });
 
-    expect(app.use).toHaveBeenCalledWith(
-      "/graphql",
-      expressMiddleware(expect.any(Object), {
-        context: expect.any(Function),
-      })
+    const middleware = app.use.firstCall.args[1];
+    const req = { headers: { authorization: "Bearer token" } };
+    const context = await middleware.context({ req });
+
+    t.is(context.token, "Bearer token");
+    t.is(context.validator, validator);
+    t.is(context.encrypt, t.context.mockEncrypt);
+    t.is(context.decrypt, t.context.mockDecrypt);
+    t.is(context.logger, logger);
+    t.true(
+      context.dataSources.tlAccessTokenAPI instanceof
+        trueLayerModule.TLAccessTokenAPI
     );
-  });
-});
+    t.true(context.dataSources.tlDataAPI instanceof trueLayerModule.TLDataAPI);
+    t.true(
+      context.dataSources.tlMerchantAccountAPI instanceof
+        trueLayerModule.TLMerchantAccountAPI
+    );
+    t.true(
+      context.dataSources.tlPayoutAPI instanceof trueLayerModule.TLPayoutAPI
+    );
+  }
+);

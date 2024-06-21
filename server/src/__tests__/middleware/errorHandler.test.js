@@ -1,37 +1,36 @@
+import test from "ava";
+import sinon from "sinon";
 import logger from "../../config/logger.js";
 import { errorHandler } from "../../middleware/errorHandler.js";
 
-jest.mock("../../config/logger.js", () => ({
-  error: jest.fn(),
-}));
+test.beforeEach((t) => {
+  // Create a sandbox for stubbing
+  t.context.sandbox = sinon.createSandbox();
 
-describe("errorHandler middleware", () => {
-  const mockRequest = {};
-  const mockResponse = {
-    status: jest.fn().mockReturnThis(),
-    send: jest.fn(),
-  };
-  const mockNext = jest.fn();
-  const error = new Error("Test error");
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  it("should log the error stack", () => {
-    errorHandler(error, mockRequest, mockResponse, mockNext);
-    expect(logger.error).toHaveBeenCalledWith(error.stack);
-  });
-
-  it("should set the response status to 500", () => {
-    errorHandler(error, mockRequest, mockResponse, mockNext);
-    expect(mockResponse.status).toHaveBeenCalledWith(500);
-  });
-
-  it("should send the correct error message", () => {
-    errorHandler(error, mockRequest, mockResponse, mockNext);
-    expect(mockResponse.send).toHaveBeenCalledWith({
-      error: "Something went wrong!",
-    });
-  });
+  // Stub the logger.error method
+  t.context.loggerErrorStub = t.context.sandbox.stub(logger, "error");
 });
+
+test.afterEach.always((t) => {
+  // Restore the sandbox after each test
+  t.context.sandbox.restore();
+});
+
+test("errorHandler logs the error and sends a 500 response", (t) => {
+  const { loggerErrorStub } = t.context;
+  const err = new Error("Test error");
+  const req = {};
+  const res = {
+    status: sinon.stub().returnsThis(),
+    send: sinon.stub(),
+  };
+  const next = sinon.stub();
+
+  errorHandler(err, req, res, next);
+
+  t.true(loggerErrorStub.calledWith(err.stack));
+  t.true(res.status.calledWith(500));
+  t.true(res.send.calledWith({ error: "Something went wrong!" }));
+});
+
+export default test;
