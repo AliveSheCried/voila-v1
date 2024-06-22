@@ -128,3 +128,30 @@
 .input-width--md {
     width: 40px;
 }
+
+.cell-width--xs {
+    width: 10%;
+}
+
+.cell-width--sm {
+    width: 20%;
+}
+
+.cell-width--md {
+    width: 30%;
+}
+
+// To be moved to separate file for payout status
+.payout-status--fail {
+    background-color: var(--color-red-palette);
+    color: var(--color-red);
+    padding-top: var(--spacing-xs);
+    padding-bottom: var(--spacing-xs);
+}
+
+.payout-status--success {
+    background-color: var(--color-green-light);
+    color: var(--color-white);
+    padding-top: var(--spacing-xs);
+    padding-bottom: var(--spacing-xs);
+}

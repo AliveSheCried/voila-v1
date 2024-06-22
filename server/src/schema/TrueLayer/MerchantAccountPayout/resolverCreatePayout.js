@@ -106,7 +106,7 @@ const createPayoutExternalAccount = async (
   } catch (error) {
     logger.error("Error in createPayoutExternalAccount:", error);
 
-    throw new Error("Failed to create payout");
+    throw new Error(error.message || "Failed to create payout");
   }
 };
 

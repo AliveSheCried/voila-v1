@@ -5,10 +5,10 @@ const PaymentSuccess = ({ data }) => {
   return (
     <Card data={data} className="card card__merchant-account--detail">
       <div className="merchant-account__title">
-        <span className="material-symbols-outlined merchant-account__icon">
-          {data.currency === "GBP" ? "currency_pound" : "euro"}
+        <span className="material-symbols-outlined token__icon token__icon--payout-success">
+          check_circle
         </span>
-        Payment Successful
+        Payment successfully transmitted
       </div>
       <div>
         <table className="merchant-account">

@@ -579,6 +579,14 @@ select {
   background-color: var(--color-tertiary);
   color: var(--color-white);
 }
+.token__icon--payout-success {
+  background-color: var(--color-green-light);
+  color: var(--color-white);
+}
+.token__icon--payout-fail {
+  background-color: var(--color-red);
+  color: var(--color-white);
+}
 .token__button {
   padding: var(--spacing-xs);
   margin-left: var(--spacing-sm);
@@ -641,13 +649,16 @@ select {
   padding-left: 5rem;
   padding-right: 1rem;
 }
-.content__key, .content__key--payout, .content__key--payout-key, .content__key--white {
+.content__key, .content__key--payout, .content__key--payout-key, .content__key--white, .content__key--table {
   font-size: var(--font-size-sm);
   color: var(--color-grey-dark-1);
   font-weight: 600;
   margin-bottom: var(--spacing-xs);
   text-align: left;
   padding-left: 2rem;
+}
+.content__key--table {
+  padding-left: var(--spacing-xs);
 }
 .content__key--white {
   color: var(--color-primary);
@@ -665,19 +676,19 @@ select {
 }
 .content__key--payout-status-key {
   background-color: #faf9f9;
-  width: 210px;
 }
 .content__key--payout-status-success, .content__key--payout-status-success-error {
-  background-color: var(--color-green-palette);
-  width: 280px;
+  color: var(--color-green);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 .content__key--payout-status-success-error {
   color: var(--color-green-light);
 }
 .content__key--payout-status-fail {
-  background-color: var(--color-red-palette);
   color: var(--color-red);
-  width: 280px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 .content__key--payout-status-inactive {
   background-color: var(--color-grey-light-1);
@@ -1166,6 +1177,32 @@ table {
 
 .input-width--md {
   width: 40px;
+}
+
+.cell-width--xs {
+  width: 10%;
+}
+
+.cell-width--sm {
+  width: 20%;
+}
+
+.cell-width--md {
+  width: 30%;
+}
+
+.payout-status--fail {
+  background-color: var(--color-red-palette);
+  color: var(--color-red);
+  padding-top: var(--spacing-xs);
+  padding-bottom: var(--spacing-xs);
+}
+
+.payout-status--success {
+  background-color: var(--color-green-light);
+  color: var(--color-white);
+  padding-top: var(--spacing-xs);
+  padding-bottom: var(--spacing-xs);
 }
 
 /* Base link styles */

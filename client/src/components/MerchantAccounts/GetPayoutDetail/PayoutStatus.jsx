@@ -25,7 +25,9 @@ const PayoutStatus = ({
       <table className="merchant-account">
         <tbody>
           <tr>
-            <th className="content__key--payout-status-key">Payout status</th>
+            <th colSpan={2} className="content__key--payout-status-key">
+              Payout status
+            </th>
             <td
               className={`content__key--payout-status-${
                 payoutStatus === "failed" ? "fail" : "success"
@@ -33,39 +35,57 @@ const PayoutStatus = ({
             >
               {payoutStatus.charAt(0).toUpperCase() + payoutStatus.slice(1)}
             </td>
-            <td
-              className={`content__key--payout-status-${
-                payoutStatus === "failed" ? "fail" : "success-error"
-              }`}
-            >
-              Error message
+            <td className="content__key--payout-status-key right">
+              {payoutStatus === "failed" ? (
+                <span className="material-symbols-outlined token__icon token__icon--payout-fail">
+                  error
+                </span>
+              ) : (
+                <span className="material-symbols-outlined token__icon token__icon--payout-success">
+                  check_circle
+                </span>
+              )}
             </td>
           </tr>
           <tr>
-            <td colSpan={3} className="blank-row"></td>
+            <td colSpan={4} className="blank-row"></td>
           </tr>
           <tr>
-            <th className="content__key">Account Holder Name</th>
-            <td className="content__value--payout">{beneficiary}</td>
-            <td
-              rowSpan={3}
-              style={{ verticalAlign: "top" }}
-              className={`content__value--payout${
-                payoutStatus === "failed" ? "" : "-inactive"
-              }`}
-            >
-              {payoutStatus === "failed"
-                ? payoutError[failureReason]
-                : "Payment successful - no error message"}
+            <th className="content__key cell-width--sm">Account Holder Name</th>
+            <td className="content__value--payout cell-width--md">
+              {beneficiary}
+            </td>
+            <th className="content__key--white cell-width--sm">Created at</th>
+            <td className="content__value--payout cell-width--md">
+              {typeof createdAt === "string"
+                ? createdAt.split("T")[0]
+                : createdAt instanceof Date
+                ? createdAt.toISOString().split("T")[0]
+                : createdAt}
             </td>
           </tr>
           <tr>
             <th className="content__key--white">Reference</th>
             <td className="content__value--payout">{reference}</td>
+            <th className="content__key--white">Executed at</th>
+            <td className="content__value--payout">
+              {!executedAt
+                ? "Not executed"
+                : typeof executedAt === "string"
+                ? executedAt.split("T")[0]
+                : executedAt instanceof Date
+                ? executedAt.toISOString().split("T")[0]
+                : executedAt}
+            </td>
+          </tr>
+          <tr>
+            <td colSpan={4} className="blank-row"></td>
           </tr>
           <tr>
             <th className="content__key">Currency</th>
             <td className="content__value--payout">{paymentCurrency}</td>
+            <th className="content__key--white">Payout ID</th>
+            <td className="content__value--payout">{paymentId}</td>
           </tr>
           {account_identifiers?.map((identifier, index) => (
             <React.Fragment key={index}>
@@ -97,48 +117,40 @@ const PayoutStatus = ({
           ))}
 
           <tr>
-            <th className="content__key--white">Payment amount</th>
-            <td className="content__value--payout">
+            <td colSpan={4} className="blank-row"></td>
+          </tr>
+          <tr>
+            <th
+              className={`content__key--white ${
+                payoutStatus === "failed" ? "" : "payout-status--success"
+              }`}
+            >
+              Payment amount
+            </th>
+            <td
+              className={`content__key--white ${
+                payoutStatus === "failed" ? "" : "payout-status--success"
+              }`}
+            >
               {(paymentAmount / 100).toFixed(2)}
             </td>
-            <td className="blank-cell"></td>
-          </tr>
-
-          <tr>
-            <td colSpan={3} className="blank-row"></td>
-          </tr>
-          <tr>
-            <th className="content__key--white">Created at</th>
-            <td className="content__value--payout">
-              {typeof createdAt === "string"
-                ? createdAt.split("T")[0]
-                : createdAt instanceof Date
-                ? createdAt.toISOString().split("T")[0]
-                : createdAt}
+            <th
+              className={`content__key--white${
+                payoutStatus === "failed" ? " payout-status--fail" : "-inactive"
+              }`}
+            >
+              {payoutStatus === "failed" ? "Failure reason" : ""}
+            </th>
+            <td
+              className={`content__value--payout${
+                payoutStatus === "failed" ? " payout-status--fail" : "-inactive"
+              }`}
+            >
+              {payoutStatus === "failed" ? payoutError[failureReason] : ""}
             </td>
-            <td className="blank-cell"></td>
           </tr>
           <tr>
-            <th className="content__key--white">Executed at</th>
-            <td className="content__value--payout">
-              {!executedAt
-                ? "Not executed"
-                : typeof executedAt === "string"
-                ? executedAt.split("T")[0]
-                : executedAt instanceof Date
-                ? executedAt.toISOString().split("T")[0]
-                : executedAt}
-            </td>
-            <td className="blank-cell"></td>
-          </tr>
-          <tr>
-            <th className="content__key--white">Payout ID</th>
-            <td className="content__value--payout">{paymentId}</td>
-            <td className="blank-cell"></td>
-          </tr>
-
-          <tr>
-            <td colSpan={3} className="blank-row"></td>
+            <td colSpan={4} className="blank-row"></td>
           </tr>
         </tbody>
       </table>

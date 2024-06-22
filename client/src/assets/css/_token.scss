@@ -47,6 +47,16 @@
             background-color: var(--color-tertiary);
             color: var(--color-white);
         }
+
+        &--payout-success {
+            background-color: var(--color-green-light);
+            color: var(--color-white);
+        }
+
+        &--payout-fail {
+            background-color: var(--color-red);
+            color: var(--color-white);
+        }
     }
 
     &__button {

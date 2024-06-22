@@ -95,11 +95,19 @@ const CreateMerchantPayment = () => {
         });
       }
     } catch (error) {
+      // Extracting error message from the response
+      let errorMessage = "An error occurred while processing the payment";
+      if (error.response && error.response.data && error.response.data.detail) {
+        errorMessage = error.response.data.detail;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
       dispatch({
-        type: "SUBMIT_ERROR",
+        type: "SUBMIT_FAILURE",
         payload: {
-          error:
-            error.message || "An error occurred while processing the payment",
+          error: errorMessage,
+          // error.message || "An error occurred while processing the payment",
         },
       });
     }
@@ -148,7 +156,7 @@ const CreateMerchantPayment = () => {
             </span>
             Merchant account payout - external
           </div>
-          <div className="payout__search-container sp-left-lg">
+          <div className="payout__search-container payout-status--fail sp-left-lg">
             <div>Error: {state.error}</div>;
           </div>
         </div>

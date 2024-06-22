@@ -30,6 +30,11 @@
         text-align: left;
         padding-left: 2rem;
 
+        &--table {
+            @extend .content__key;
+            padding-left: var(--spacing-xs);
+        }
+
         &--white {
             @extend .content__key;
             color: var(--color-primary);
@@ -51,13 +56,13 @@
             &-key {
                 @extend .content__key--payout-status;
                 background-color: #faf9f9;
-                width: 210px;
             }
 
             &-success {
                 @extend .content__key--payout-status;
-                background-color: var(--color-green-palette);
-                width: 280px;
+                color: var(--color-green);
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
 
                 &-error {
                     @extend .content__key--payout-status-success;
@@ -67,9 +72,9 @@
 
             &-fail {
                 @extend .content__key--payout-status;
-                background-color: var(--color-red-palette);
                 color: var(--color-red);
-                width: 280px;
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
             }
 
             &-inactive {
