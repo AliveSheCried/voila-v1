@@ -1,5 +1,5 @@
 import { useMutation } from "@apollo/client";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { MerchantAccountContext } from "../../../contexts/MerchantAccountContext";
 import { useGenerateToken } from "../../../hooks/useGenerateToken";
 import usePaymentForm from "../../../hooks/usePaymentForm";
@@ -18,7 +18,7 @@ const CreateMerchantPayment = () => {
   );
   const { merchantAccounts } = useContext(MerchantAccountContext);
   const { handleCreateToken } = useGenerateToken();
-  const { token: paymentToken } = usePaymentToken;
+  const { token: paymentToken, clearToken } = usePaymentToken();
   const {
     state,
     dispatch,
@@ -43,38 +43,41 @@ const CreateMerchantPayment = () => {
       type: "SUBMIT_START",
     });
 
-    /////////////////////////////Prepare the data for submission///////////////////////////
-    // Change the accountIdentifier object keys to snake_case from camelCase for use by GraphQL
-    const accountIdentifier = formatToSnakeCase({
-      type: state.method,
-      iban: state.iban,
-      sortCode: state.sortCode,
-      accountNumber: state.accountNumber,
-    });
+    //generate token
+    handleCreateToken("payments", "payment");
+  };
 
-    // Convert input value to a float, then to an integer representing minor units
-    const amountInMinorUnits = Math.round(parseFloat(state.amount) * 100);
+  /////////////////////////////Prepare the data for submission///////////////////////////
+  // Change the accountIdentifier object keys to snake_case from camelCase for use by GraphQL
+  const accountIdentifier = formatToSnakeCase({
+    type: state.method,
+    iban: state.iban,
+    sortCode: state.sortCode,
+    accountNumber: state.accountNumber,
+  });
 
-    //variable to hold the submission data
-    const variables = {
-      merchantAccountId: state.selectedAccountId,
-      amountInMinor: amountInMinorUnits,
-      currency: state.selectedCurrency,
-      type: "external_account",
-      reference: state.reference,
-      accountHolderName: state.payeeName,
-      accountIdentifier,
-    };
+  // Convert input value to a float, then to an integer representing minor units
+  const amountInMinorUnits = Math.round(parseFloat(state.amount) * 100);
 
-    /////////////////////////////Submit the payment data///////////////////////////
-    try {
-      //generate token
-      handleCreateToken("payments", "payment");
-      console.log("paymentToken", paymentToken);
+  //variable to hold the submission data
+  const variables = {
+    merchantAccountId: state.selectedAccountId,
+    amountInMinor: amountInMinorUnits,
+    currency: state.selectedCurrency,
+    type: "external_account",
+    reference: state.reference,
+    accountHolderName: state.payeeName,
+    accountIdentifier,
+  };
 
+  useEffect(() => {
+    const submitPayment = async () => {
       if (paymentToken) {
         dispatch({ type: "SET_TOKEN" });
+      }
 
+      /////////////////////////////Submit the payment data///////////////////////////
+      try {
         const response = await createPayoutExternalAccount({
           variables,
           context: {
@@ -95,8 +98,7 @@ const CreateMerchantPayment = () => {
               submissionData: variables,
             },
           });
-
-          console.log("paymentToken should be null", paymentToken);
+          clearToken();
         } else {
           dispatch({
             type: "SUBMIT_FAILURE",
@@ -105,33 +107,33 @@ const CreateMerchantPayment = () => {
             },
           });
         }
-      } else {
-        //handle token failure
+      } catch (error) {
+        // Extracting error message from the response
+        let errorMessage = "An error occurred while processing the payment";
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.detail
+        ) {
+          errorMessage = error.response.data.detail;
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+
         dispatch({
-          type: "TOKEN_ERROR",
+          type: "SUBMIT_FAILURE",
           payload: {
-            error: "Token generation error",
+            error: errorMessage,
+            // error.message || "An error occurred while processing the payment",
           },
         });
       }
-    } catch (error) {
-      // Extracting error message from the response
-      let errorMessage = "An error occurred while processing the payment";
-      if (error.response && error.response.data && error.response.data.detail) {
-        errorMessage = error.response.data.detail;
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-
-      dispatch({
-        type: "SUBMIT_FAILURE",
-        payload: {
-          error: errorMessage,
-          // error.message || "An error occurred while processing the payment",
-        },
-      });
+    };
+    // Call submitPayment if paymentToken is not null
+    if (paymentToken) {
+      submitPayment();
     }
-  };
+  }, [paymentToken]);
 
   const togglePaymentMethod = (e) => {
     dispatch({
