@@ -2,8 +2,8 @@ import { useLazyQuery } from "@apollo/client";
 import { useContext, useEffect, useState } from "react";
 import { MerchantAccountContext } from "../../../contexts/MerchantAccountContext";
 import { MerchantAccountTransactionContext } from "../../../contexts/MerchantAccountTransactionContext";
-import { PaymentTokenContext } from "../../../contexts/TokenContext";
 import { GET_MERCHANT_ACCOUNT_TRANSACTIONS } from "../../../graphql/queries/getMerchantAccountTransactions";
+import { useMerchantAccountDataToken } from "../../../providers/MerchantAccountDataTokenProvider";
 //components
 import ErrorBoundary from "../../../utils/ErrorBoundary";
 import Start from "../../Start/Start";
@@ -14,7 +14,7 @@ const GetTransactions = () => {
   const { merchantAccounts } = useContext(MerchantAccountContext);
   const { setMerchantAccountTransactions, merchantAccountTransactions } =
     useContext(MerchantAccountTransactionContext);
-  const { token } = useContext(PaymentTokenContext);
+  const { token: merchantToken } = useMerchantAccountDataToken();
   // const [selectedAccountId, setSelectedAccountId] = useState("");
   const [selectedIban, setSelectedIban] = useState("");
   const [dateFrom, setDateFrom] = useState("");
@@ -26,7 +26,7 @@ const GetTransactions = () => {
     useLazyQuery(GET_MERCHANT_ACCOUNT_TRANSACTIONS, {
       context: {
         headers: {
-          Authorization: `${token.accessToken}`,
+          Authorization: `${merchantToken.accessToken}`,
         },
       },
     });

@@ -1,12 +1,12 @@
 import { useLazyQuery } from "@apollo/client";
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { PaymentTokenContext } from "../../../contexts/TokenContext";
+import { useEffect, useState } from "react";
 import { GET_PAYOUT_DETAIL } from "../../../graphql/queries/getPayout";
+import { useMerchantAccountDataToken } from "../../../providers/MerchantAccountDataTokenProvider";
 import PayoutStatus from "./PayoutStatus";
 
 const PayoutSearch = () => {
-  const { token } = useContext(PaymentTokenContext);
+  const { token: merchantToken } = useMerchantAccountDataToken();
   const [transactions, setTransactions] = useState([]);
   const [error, setError] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
@@ -23,7 +23,7 @@ const PayoutSearch = () => {
     {
       context: {
         headers: {
-          Authorization: `${token.accessToken}`,
+          Authorization: `${merchantToken.accessToken}`,
         },
       },
     }
@@ -59,7 +59,7 @@ const PayoutSearch = () => {
         variables: { id: search.payoutId },
         context: {
           headers: {
-            Authorization: `${token.accessToken}`,
+            Authorization: `${merchantToken.accessToken}`,
           },
         },
       });

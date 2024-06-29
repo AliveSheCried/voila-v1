@@ -7,33 +7,15 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Nav from "./pages/Nav/Nav";
 
-// contexts
-import { DataTokenContext, PaymentTokenContext } from "./contexts/TokenContext";
+//context providers
+import { DataTokenProvider } from "./providers/DataTokenProvider";
+import { MerchantAccountDataTokenProvider } from "./providers/MerchantAccountDataTokenProvider";
+import { PaymentTokenProvider } from "./providers/PaymentTokenProvider";
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
   const [name, setName] = useState("John Doe");
   const [email, setEmail] = useState("");
-
-  const [dataToken, setDataToken] = useState({
-    name: "",
-    type: "",
-    expiry: "",
-    state: "",
-    accessToken: "",
-  });
-
-  const [paymentToken, setPaymentToken] = useState({
-    name: "",
-    type: "",
-    expiry: "",
-    state: "",
-    accessToken: "",
-  });
-
-  // const handleSetToken = (newTokenData) => {
-  //   setToken(newTokenData);
-  // };
 
   const handleLogin = (email) => {
     const localName = email.split("@")[0];
@@ -44,20 +26,18 @@ function App() {
 
   return isAuth ? (
     <Router>
-      <Layout>
-        <DataTokenContext.Provider
-          value={{ token: dataToken, setToken: setDataToken }}
-        >
-          <PaymentTokenContext.Provider
-            value={{ token: paymentToken, setToken: setPaymentToken }}
-          >
-            <Nav />
-            <Routes>
-              <Route path="/*" element={<Home name={name} email={email} />} />
-            </Routes>
-          </PaymentTokenContext.Provider>
-        </DataTokenContext.Provider>
-      </Layout>
+      <PaymentTokenProvider>
+        <MerchantAccountDataTokenProvider>
+          <DataTokenProvider>
+            <Layout>
+              <Nav />
+              <Routes>
+                <Route path="/*" element={<Home name={name} email={email} />} />
+              </Routes>
+            </Layout>
+          </DataTokenProvider>
+        </MerchantAccountDataTokenProvider>
+      </PaymentTokenProvider>
     </Router>
   ) : (
     <Login onLogin={handleLogin} />

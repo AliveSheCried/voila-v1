@@ -24,6 +24,7 @@ export const initialPaymentFormState = {
   submitting: false,
   error: null,
   submissionData: null,
+  token: null,
 };
 
 export const paymentFormReducer = (state, action) => {
@@ -121,6 +122,17 @@ export const paymentFormReducer = (state, action) => {
       return {
         ...state,
         submitting: false,
+        error: action.payload.error,
+      };
+    case "SET_TOKEN":
+      return {
+        ...state,
+        token: true,
+      };
+    case "TOKEN_ERROR":
+      return {
+        ...state,
+        token: false,
         error: action.payload.error,
       };
 

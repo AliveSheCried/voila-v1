@@ -1,3 +1,31 @@
+import { useGenerateToken } from "../../hooks/useGenerateToken";
+import Token from "./Token";
+
+const Tokens = () => {
+  const { handleCreateToken, loading } = useGenerateToken();
+
+  return (
+    <div>
+      <Token
+        name="data"
+        loading={loading}
+        onCreateToken={() => handleCreateToken("data", "data")}
+      />
+
+      <Token
+        name="payment"
+        loading={loading}
+        onCreateToken={() => handleCreateToken("payments", "merchantData")}
+      />
+    </div>
+  );
+};
+
+export default Tokens;
+
+/*   
+Previously working code before refactoring to use providers and contexts:
+
 import { useMutation } from "@apollo/client";
 import { useContext, useEffect } from "react";
 import {
@@ -86,3 +114,8 @@ const Tokens = () => {
 };
 
 export default Tokens;
+
+
+
+
+*/

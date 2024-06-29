@@ -1,8 +1,9 @@
 import { useMutation } from "@apollo/client";
 import { useContext } from "react";
 import { MerchantAccountContext } from "../../../contexts/MerchantAccountContext";
-import { PaymentTokenContext } from "../../../contexts/TokenContext";
+import { useGenerateToken } from "../../../hooks/useGenerateToken";
 import usePaymentForm from "../../../hooks/usePaymentForm";
+import { usePaymentToken } from "../../../providers/PaymentTokenProvider";
 import { formatToSnakeCase } from "../../../utils/formatToSnakeCase";
 import InputField from "../../InputField/InputField";
 import SelectMerchantAccount from "../../SelectMerchantAccount/SelectMerchantAccount";
@@ -16,7 +17,8 @@ const CreateMerchantPayment = () => {
     CREATE_MERCHANT_ACCOUNT_PAYOUT
   );
   const { merchantAccounts } = useContext(MerchantAccountContext);
-  const { token } = useContext(PaymentTokenContext);
+  const { handleCreateToken } = useGenerateToken();
+  const { token: paymentToken } = usePaymentToken;
   const {
     state,
     dispatch,
@@ -66,31 +68,49 @@ const CreateMerchantPayment = () => {
 
     /////////////////////////////Submit the payment data///////////////////////////
     try {
-      const response = await createPayoutExternalAccount({
-        variables,
-        context: {
-          headers: {
-            authorization: `${token.accessToken}`, // Ensure you are accessing the token correctly
-          },
-        },
-      });
+      //generate token
+      handleCreateToken("payments", "payment");
+      console.log("paymentToken", paymentToken);
 
-      // Check if the mutation was successful and response contains the necessary data
-      if (
-        response.data.createPayoutExternalAccount &&
-        response.data.createPayoutExternalAccount.id
-      ) {
-        dispatch({
-          type: "SUBMIT_SUCCESS",
-          payload: {
-            submissionData: variables,
+      if (paymentToken) {
+        dispatch({ type: "SET_TOKEN" });
+
+        const response = await createPayoutExternalAccount({
+          variables,
+          context: {
+            headers: {
+              authorization: `${paymentToken.accessToken}`, // Ensure you are accessing the token correctly
+            },
           },
         });
+
+        // Check if the mutation was successful and response contains the necessary data
+        if (
+          response.data.createPayoutExternalAccount &&
+          response.data.createPayoutExternalAccount.id
+        ) {
+          dispatch({
+            type: "SUBMIT_SUCCESS",
+            payload: {
+              submissionData: variables,
+            },
+          });
+
+          console.log("paymentToken should be null", paymentToken);
+        } else {
+          dispatch({
+            type: "SUBMIT_FAILURE",
+            payload: {
+              error: "Server responded without the expected data.",
+            },
+          });
+        }
       } else {
+        //handle token failure
         dispatch({
-          type: "SUBMIT_FAILURE",
+          type: "TOKEN_ERROR",
           payload: {
-            error: "Server responded without the expected data.",
+            error: "Token generation error",
           },
         });
       }
@@ -136,7 +156,7 @@ const CreateMerchantPayment = () => {
     });
   }
 
-  if (!token.accessToken || !merchantAccounts.length) {
+  if (!merchantAccounts.length) {
     return <Start type={"routes"} title={"Merchant account payout"} />;
   }
 

@@ -1,11 +1,10 @@
-import { useContext } from "react";
-import { PaymentTokenContext } from "../../../contexts/TokenContext";
+import { useMerchantAccountDataToken } from "../../../providers/MerchantAccountDataTokenProvider";
 import Start from "../../Start/Start";
 import PayoutSearch from "./PayoutSearch";
 
 const GetPayoutDetail = () => {
-  const { token } = useContext(PaymentTokenContext);
-  if (!token.accessToken) {
+  const { token: merchantToken } = useMerchantAccountDataToken();
+  if (!merchantToken.accessToken) {
     return <Start type={"routes"} title={"Get payout details"} />;
   }
 
