@@ -10,16 +10,32 @@ const Start = ({ type, title }) => {
     );
   }
 
-  if (type === "routes") {
+  if (type === "MerchantAccountRoutes") {
     return (
       <div>
         <div className="content__head">
-          <span className="content__arrow">&raquo;</span>
+          <span className="content__arrow--pink">&raquo;</span>
           {` ${title}`}
         </div>
-        <div className="start__route">
+        <div className="start__route--merchant">
           to start, create a <br />
-          payment token <span className="start__arrow">&raquo;</span>
+          payment token <span className="start__arrow--pink">&raquo;</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (type === "DataRoutes") {
+    return (
+      <div>
+        <div className="content__head">
+          <span className="content__arrow--yellow">&raquo;</span>
+          {` ${title}`}
+        </div>
+        <div className="start__route--data">
+          to start, give permission <br />
+          to access your data{" "}
+          <span className="start__arrow--yellow">&raquo;</span>
         </div>
       </div>
     );

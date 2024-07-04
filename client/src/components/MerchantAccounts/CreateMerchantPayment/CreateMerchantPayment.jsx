@@ -159,7 +159,9 @@ const CreateMerchantPayment = () => {
   }
 
   if (!merchantAccounts.length) {
-    return <Start type={"routes"} title={"Merchant account payout"} />;
+    return (
+      <Start type={"MerchantAccountRoutes"} title={"Merchant account payout"} />
+    );
   }
 
   if (state.error) {

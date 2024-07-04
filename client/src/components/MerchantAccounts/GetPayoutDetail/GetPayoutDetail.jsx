@@ -5,7 +5,9 @@ import PayoutSearch from "./PayoutSearch";
 const GetPayoutDetail = () => {
   const { token: merchantToken } = useMerchantAccountDataToken();
   if (!merchantToken.accessToken) {
-    return <Start type={"routes"} title={"Get payout details"} />;
+    return (
+      <Start type={"MerchantAccountRoutes"} title={"Get payout details"} />
+    );
   }
 
   return (

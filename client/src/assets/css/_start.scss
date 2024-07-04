@@ -19,7 +19,7 @@
     line-height: 8rem;
 }
 
-.start__route {
+.start__route--merchant {
     //requires a media query for different screen sizes to align the arrow with the payment button.
     margin-top: 8rem;
     @media (max-width: 1080px) {
@@ -40,10 +40,40 @@
     line-height: 8rem;
 }
 
+.start__route--data {
+    //requires a media query for different screen sizes to align the arrow with the payment button.
+    margin-top: 55rem;
+    @media (max-width: 1080px) {
+        margin-top: 6rem;
+    }
+    color: var(--color-primary);
+    padding-top: var(--spacing-xs);
+    padding-right: 4rem;
+    padding-bottom: 11rem;
+    border-radius: var(--br-small);
+    //text
+    text-align: right;
+    font-weight: 700;
+    font-size: 7rem;
+    @media (max-width: 1080px) {
+        font-size: 6rem;
+    }
+    line-height: 8rem;
+}
+
 .start__arrow {
-    background-color: var(--color-pink);
     color: var(--color-white);
     border-radius: var(--br-small);
     padding-left: 5rem;
     padding-right: var(--spacing-sm);
+
+    &--yellow {
+        @extend .start__arrow;
+        background-color: var(--color-yellow);
+    }
+
+    &--pink {
+        @extend .start__arrow;
+        background-color: var(--color-pink);
+    }
 }

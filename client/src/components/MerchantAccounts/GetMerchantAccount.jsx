@@ -19,7 +19,9 @@ const GetMerchantAccount = () => {
   };
 
   if (!merchantAccounts.length) {
-    return <Start type={"routes"} title={"Merchant account detail"} />;
+    return (
+      <Start type={"MerchantAccountRoutes"} title={"Merchant account detail"} />
+    );
   }
 
   const selectedAccount = merchantAccounts.find((account) =>

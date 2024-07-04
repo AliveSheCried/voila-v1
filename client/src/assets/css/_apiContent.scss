@@ -15,11 +15,20 @@
     }
 
     &__arrow {
-        background-color: var(--color-pink);
         color: var(--color-white);
         border-radius: var(--br-small);
         padding-left: 5rem;
         padding-right: 1rem;
+
+        &--pink {
+            @extend .content__arrow;
+            background-color: var(--color-pink);
+        }
+
+        &--yellow {
+            @extend .content__arrow;
+            background-color: var(--color-yellow);
+        }
     }
 
     &__key {

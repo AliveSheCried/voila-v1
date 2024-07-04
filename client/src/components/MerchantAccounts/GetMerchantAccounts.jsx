@@ -1,7 +1,6 @@
 import { useLazyQuery } from "@apollo/client"; // Notice useLazyQuery instead of useQuery
 import { useContext, useEffect } from "react";
 import { MerchantAccountContext } from "../../contexts/MerchantAccountContext";
-//import { PaymentTokenContext } from "../../contexts/TokenContext";
 import { GET_MERCHANT_ACCOUNTS } from "../../graphql/queries/getMerchantAccounts";
 import { useMerchantAccountDataToken } from "../../providers/MerchantAccountDataTokenProvider";
 import Start from "../Start/Start";
@@ -31,7 +30,9 @@ const GetMerchantAccounts = () => {
   }, [merchantToken.accessToken, getMerchantAccounts, setMerchantAccounts]);
 
   if (!loading && !error && !data) {
-    return <Start type={"routes"} title={"All merchant accounts"} />;
+    return (
+      <Start type={"MerchantAccountRoutes"} title={"All merchant accounts"} />
+    );
   }
   if (loading)
     return (

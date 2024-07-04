@@ -101,7 +101,12 @@ const GetTransactions = () => {
   };
 
   if (!merchantAccounts.length) {
-    return <Start type={"routes"} title={"Merchant account transactions"} />;
+    return (
+      <Start
+        type={"MerchantAccountRoutes"}
+        title={"Merchant account transactions"}
+      />
+    );
   }
 
   if (loading)

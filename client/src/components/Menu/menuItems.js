@@ -9,7 +9,7 @@ export const menuItems = [
         name: "Data - accounts",
         icon: "code_blocks",
         level: 2,
-        path: "",
+        path: "/getDataAccounts",
         children: [],
       },
       {
