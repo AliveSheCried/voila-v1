@@ -69,7 +69,7 @@ const PayoutSearch = () => {
     }
   };
 
-  if (error || ApiError) return <div>Something went wrong. D'oh!</div>;
+  if (error || ApiError) return <div>Something went wrong. D&apos;oh!</div>;
 
   return (
     <>

@@ -6,6 +6,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { useUser } from "../../providers/UserProvider";
 
 //dummy login page for styling purposes
 
@@ -16,6 +17,7 @@ function Login({ onLogin }) {
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [timer, setTimer] = useState(null);
+  const { user, setUser } = useUser();
 
   //email regex
   const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -58,7 +60,11 @@ function Login({ onLogin }) {
     setIsPasswordValid(e.target.value.length < 8);
   };
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    console.log("user state updated", user);
+  }, [user]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isEmailValid) {
       alert("Please enter a valid email address.");
@@ -68,8 +74,18 @@ function Login({ onLogin }) {
       alert("Please enter a valid password.");
       return;
     }
+    const response = await fetch("http://localhost:4000/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      //credentials: "include",
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await response.json();
+    console.log("data", data.user);
+    setUser(data.user);
+    // console.log("user", user);
     onLogin(email);
-    // Continue with form submission logic
   };
 
   // Clear the timer when the component unmounts

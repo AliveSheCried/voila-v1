@@ -3,15 +3,30 @@ import cors from "cors";
 import express from "express";
 import http from "http";
 import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
 import { startApolloServer } from "./apolloServer.js";
 import logger from "./config/logger.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import { loginHandler } from "./routes/login.js";
 import { transactionsHandler } from "./routes/transactions.js";
+
+// Connect to MongoDB using Mongoose
+mongoose.connect(process.env.MONGO_DB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const client = new MongoClient(process.env.MONGO_DB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 async function startServer(app, httpServer, client) {
   const corsOptions = {
-    origin: "http://127.0.0.1:5173", // Local client URL
+    //origin: "http://127.0.0.1:5173", // Local client URL
+    origin: "*",
     optionsSuccessStatus: 200,
+    //credentials: true,
   };
 
   app.use(cors(corsOptions));
@@ -20,12 +35,17 @@ async function startServer(app, httpServer, client) {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
-  logger.info("Starting Apollo Server");
-  await startApolloServer(app, httpServer, client);
-
+  // Other middleware
+  // Login route
+  app.post("/api/login", loginHandler());
+  // REST endpoint for fetching payout transactions
   app.get("/api/transactions", transactionsHandler(client));
 
+  // Error handler should be the last piece of middleware
   app.use(errorHandler);
+
+  logger.info("Starting Apollo Server");
+  await startApolloServer(app, httpServer, client);
 
   await new Promise((resolve) => httpServer.listen({ port: 4000 }, resolve));
 
@@ -55,11 +75,6 @@ async function run(client) {
     logger.error(err.stack);
   }
 }
-
-const client = new MongoClient(process.env.MONGO_DB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
 
 run(client).catch(console.error);
 
