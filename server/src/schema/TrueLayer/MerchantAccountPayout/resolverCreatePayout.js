@@ -84,16 +84,19 @@ const createPayoutExternalAccount = async (
     const myCollection = myDb.collection("MerchantPayouts");
 
     // Prepare and encrypt data to be saved in MongoDB in one step
-    const encryptedDocument = encrypt({
-      reference,
-      account_holder_name,
-      merchant_account_id,
-      amount_in_minor,
-      currency,
-      account_identifier,
-      payoutId: responseData.id,
-      created_at: new Date(), // Record the time of the transaction
-    });
+    const encryptedDocument = encrypt(
+      {
+        reference,
+        account_holder_name,
+        merchant_account_id,
+        amount_in_minor,
+        currency,
+        account_identifier,
+        payoutId: responseData.id,
+        created_at: new Date(), // Record the time of the transaction
+      },
+      "payout"
+    );
 
     // Log encrypted data
     logger.info("Encrypted document:", encryptedDocument);

@@ -34,7 +34,8 @@ const GetMerchantAccount = () => {
   return (
     <div>
       <div className="content__head">
-        <span className="content__arrow">&raquo;</span> Merchant account detail
+        <span className="content__arrow--pink">&raquo;</span> Merchant account
+        detail
       </div>
       <SelectMerchantAccount
         label=""

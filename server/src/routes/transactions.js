@@ -34,7 +34,7 @@ export function transactionsHandler(client) {
         try {
           if (transaction) {
             console.log("Decrypting transaction:", transaction);
-            const decryptedTransaction = decrypt(transaction);
+            const decryptedTransaction = decrypt(transaction, "payout");
             console.log("decryptedTransaction:", decryptedTransaction);
             logger.info("Decrypted transaction:", decryptedTransaction);
             return JSON.parse(decryptedTransaction);

@@ -7,6 +7,8 @@ import mongoose from "mongoose";
 import { startApolloServer } from "./apolloServer.js";
 import logger from "./config/logger.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import { dataAuthLinkHandler } from "./routes/dataAuthLink.js";
+import { dataCallbackHandler } from "./routes/dataCallback.js";
 import { loginHandler } from "./routes/login.js";
 import { transactionsHandler } from "./routes/transactions.js";
 
@@ -35,11 +37,24 @@ async function startServer(app, httpServer, client) {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
-  // Other middleware
+  // API routes
+  // Data API routes
+  app.post("/redirect-to-auth", (req, res) => {
+    const { userId } = req.body;
+    dataAuthLinkHandler(userId, res);
+  });
+  // Data API auth link
+  app.post("/data/callback", dataCallbackHandler()); // Data API callback
+
   // Login route
   app.post("/api/login", loginHandler());
+
   // REST endpoint for fetching payout transactions
   app.get("/api/transactions", transactionsHandler(client));
+
+  // Serve front-end application
+  // Ensure this is defined after all API routes
+  app.use(express.static("../../client/index.html"));
 
   // Error handler should be the last piece of middleware
   app.use(errorHandler);

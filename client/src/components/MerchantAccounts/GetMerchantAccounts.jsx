@@ -57,7 +57,8 @@ const GetMerchantAccounts = () => {
     return (
       <div>
         <div className="content__head">
-          <span className="content__arrow">&raquo;</span> All merchant accounts
+          <span className="content__arrow--pink">&raquo;</span> All merchant
+          accounts
         </div>
 
         <div className="merchant-account__container">

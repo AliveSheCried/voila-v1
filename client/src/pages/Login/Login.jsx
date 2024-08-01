@@ -8,8 +8,6 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useUser } from "../../providers/UserProvider";
 
-//dummy login page for styling purposes
-
 function Login({ onLogin }) {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [email, setEmail] = useState("");

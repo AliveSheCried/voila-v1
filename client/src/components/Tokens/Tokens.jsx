@@ -1,15 +1,25 @@
 import { useGenerateToken } from "../../hooks/useGenerateToken";
+import { useUser } from "../../providers/UserProvider";
 import Token from "./Token";
 
 const Tokens = () => {
   const { handleCreateToken, loading } = useGenerateToken();
+  const { user } = useUser();
+
+  const hasAuthCode = !!user.auth_code;
+  const email = user.user_id;
+
+  console.log("user", email);
+  // console.log("auth_token", auth_code);
 
   return (
     <div>
       <Token
         name="data"
         loading={loading}
-        onCreateToken={() => handleCreateToken("data", "data")}
+        onCreateToken={() =>
+          handleCreateToken("data", "data", hasAuthCode, email)
+        }
       />
 
       <Token

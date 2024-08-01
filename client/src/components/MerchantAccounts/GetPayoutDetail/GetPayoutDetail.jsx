@@ -13,7 +13,7 @@ const GetPayoutDetail = () => {
   return (
     <div>
       <div className="content__head">
-        <span className="content__arrow">&raquo;</span> Get payout detail
+        <span className="content__arrow--pink">&raquo;</span> Get payout detail
       </div>
 
       <PayoutSearch />
