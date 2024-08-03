@@ -14,14 +14,10 @@ import { transactionsHandler } from "./routes/transactions.js";
 
 // Connect to MongoDB using Mongoose
 mongoose.connect(process.env.MONGO_DB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+  dbName: "VoilaDev",
 });
 
-const client = new MongoClient(process.env.MONGO_DB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const client = new MongoClient(process.env.MONGO_DB_URI);
 
 async function startServer(app, httpServer, client) {
   const corsOptions = {
@@ -45,6 +41,7 @@ async function startServer(app, httpServer, client) {
   });
   // Data API auth link
   app.post("/data/callback", dataCallbackHandler()); // Data API callback
+  app.get("/data/get-token", getDataTokenHandler()); // Data API get token - called directly from server (if user doesn't have auth code)
 
   // Login route
   app.post("/api/login", loginHandler());

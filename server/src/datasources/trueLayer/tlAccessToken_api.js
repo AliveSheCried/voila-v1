@@ -31,6 +31,10 @@ export class TLAccessTokenAPI extends RESTDataSource {
       code,
     };
 
+    // Log client_id and redirect_uri
+    // logger.info(`client_id: ${client_id}`);
+    // logger.info(`redirect_uri: ${redirect_uri}`);
+
     try {
       return await this.handleAPIRequest(this, `/connect/token`, "", "POST", {
         ...options,

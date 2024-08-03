@@ -9,7 +9,7 @@ const Tokens = () => {
   const hasAuthCode = !!user.auth_code;
   const email = user.user_id;
 
-  console.log("user", email);
+  //console.log("user", email);
   // console.log("auth_token", auth_code);
 
   return (

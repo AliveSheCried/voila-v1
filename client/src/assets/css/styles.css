@@ -63,7 +63,7 @@
 }
 
 .start__route--data {
-  margin-top: 55rem;
+  margin-top: -2rem;
   color: var(--color-primary);
   padding-top: var(--spacing-xs);
   padding-right: 4rem;

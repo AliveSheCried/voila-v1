@@ -5,7 +5,7 @@ const Start = ({ type, title }) => {
     return (
       <div className="start">
         to start, create a <br />
-        payment token <span className="start__arrow">&raquo;</span>
+        payment token <span className="start__arrow--pink">&raquo;</span>
       </div>
     );
   }
@@ -33,9 +33,10 @@ const Start = ({ type, title }) => {
           {` ${title}`}
         </div>
         <div className="start__route--data">
+          <span className="start__arrow--yellow">&raquo;</span>
+          <br />
           to start, give permission <br />
           to access your data{" "}
-          <span className="start__arrow--yellow">&raquo;</span>
         </div>
       </div>
     );

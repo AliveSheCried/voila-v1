@@ -42,7 +42,7 @@
 
 .start__route--data {
     //requires a media query for different screen sizes to align the arrow with the payment button.
-    margin-top: 55rem;
+    margin-top: -2rem;
     @media (max-width: 1080px) {
         margin-top: 6rem;
     }
