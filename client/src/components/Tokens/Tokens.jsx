@@ -8,9 +8,10 @@ const Tokens = () => {
 
   const hasAuthCode = !!user.auth_code;
   const email = user.user_id;
+  const auth_code = user.auth_code;
 
   //console.log("user", email);
-  // console.log("auth_token", auth_code);
+  // console.log("auth_code", auth_code);
 
   return (
     <div>
@@ -18,7 +19,7 @@ const Tokens = () => {
         name="data"
         loading={loading}
         onCreateToken={() =>
-          handleCreateToken("data", "data", hasAuthCode, email)
+          handleCreateToken("data", "data", hasAuthCode, email, auth_code)
         }
       />
 

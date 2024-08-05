@@ -1,12 +1,12 @@
 import { tempStorage } from "./dataAuthLink.js";
 
-export function getDataTokenHandler() {
+export function dataTokenHandler() {
   return async (req, res) => {
     // Find the user ID from the temporary storage
     const userIds = Object.keys(tempStorage);
     const userId = userIds[0];
 
-    if (!userId || !tempStorage[userId] || !tempStorage[userId].dataToken) {
+    if (!userId || !tempStorage[userId] || !tempStorage[userId].tokenResponse) {
       return res.status(400).json({ error: "Data token not found" });
     }
 

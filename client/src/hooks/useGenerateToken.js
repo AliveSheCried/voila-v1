@@ -14,7 +14,7 @@ export const useGenerateToken = () => {
   let secondaryRef = useRef();
 
   const handleCreateToken = useCallback(
-    (type, secondaryScope, hasAuthCode = false, userId = "") => {
+    (type, secondaryScope, hasAuthCode = false, userId = "", authCode = "") => {
       secondaryRef.current = secondaryScope;
 
       //if there is no auth code, redirect to the TrueLayer auth link
@@ -50,22 +50,45 @@ export const useGenerateToken = () => {
         };
 
         fetchAuthLink(userId);
-
         return;
-      } else {
-        //if there is an auth code, decrypt it then generate the token
-        console.log("user:", userId);
-        console.log("auth code exists:", hasAuthCode);
-      }
+      } else if (hasAuthCode && type === "data") {
+        try {
+          const fetchDataToken = async (authCode) => {
+            try {
+              const response = await fetch(
+                `${apiBaseUrl}/data/decrypt-auth-code`,
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ authCode }),
+                }
+              );
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              const data = await response.json();
+              console.log("Data:", data);
+            } catch (error) {
+              console.error("Error fetching data token:", error);
+            }
+          };
 
-      generateToken({
-        variables: {
-          grantType: "client_credentials",
-          scope: type,
-          redirectUri: "",
-          code: "",
-        },
-      });
+          fetchDataToken(authCode);
+        } catch (error) {
+          console.error("Error fetching data token:", error);
+        }
+      } else if (type === "payments") {
+        generateToken({
+          variables: {
+            grantType: "client_credentials",
+            scope: "payments",
+            redirectUri: "",
+            code: "",
+          },
+        });
+      }
     },
     [generateToken]
   );
@@ -99,6 +122,44 @@ export const useGenerateToken = () => {
       }
     }
   }, [data, updateMerchantToken, updateDataToken, updatePaymentToken]);
+
+  useEffect(() => {
+    const handleMessage = async (event) => {
+      if (event.data === "authorizationComplete") {
+        try {
+          const response = await fetch(`${apiBaseUrl}/data/get-token`);
+          const data = await response.json();
+          console.log("Data:", data);
+
+          if (data.dataToken) {
+            // Use the data token as needed
+            const { access_token, expires_in, scope } = data.dataToken;
+            const expiresInNumber = Number(expires_in);
+            const expiryTimestamp = Date.now() + expiresInNumber * 1000;
+            const newToken = {
+              name: scope,
+              type: "Bearer",
+              expiry: expiryTimestamp,
+              state: "active",
+              accessToken: access_token,
+            };
+
+            updateDataToken(newToken, expiresInNumber);
+          } else {
+            console.error("Failed to retrieve data token");
+          }
+        } catch (error) {
+          console.error("Error retrieving data token:", error);
+        }
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, [updateDataToken]);
 
   return { handleCreateToken, loading };
 };

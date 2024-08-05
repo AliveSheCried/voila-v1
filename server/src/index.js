@@ -9,6 +9,8 @@ import logger from "./config/logger.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { dataAuthLinkHandler } from "./routes/dataAuthLink.js";
 import { dataCallbackHandler } from "./routes/dataCallback.js";
+import { dataAuthCodeDecryptHandler } from "./routes/dataCodeDecrypt.js";
+import { dataTokenHandler } from "./routes/dataToken.js";
 import { loginHandler } from "./routes/login.js";
 import { transactionsHandler } from "./routes/transactions.js";
 
@@ -41,7 +43,8 @@ async function startServer(app, httpServer, client) {
   });
   // Data API auth link
   app.post("/data/callback", dataCallbackHandler()); // Data API callback
-  app.get("/data/get-token", getDataTokenHandler()); // Data API get token - called directly from server (if user doesn't have auth code)
+  app.get("/data/get-token", dataTokenHandler()); // Data API get token - called directly from server (if user doesn't have auth code)
+  app.post("/data/decrypt-auth-code", dataAuthCodeDecryptHandler()); // Data API decrypt auth code
 
   // Login route
   app.post("/api/login", loginHandler());

@@ -10,6 +10,7 @@ export function dataCallbackHandler() {
   return async (req, res) => {
     try {
       const { code } = req.body; // Extract the code from the request body
+      console.log("new code", code);
       // Check if the code is present in the request body
       if (!code) {
         console.log("Code not found in the request body.");
@@ -56,7 +57,7 @@ export function dataCallbackHandler() {
 
       // Store the data token temporarily (e.g., in session or in-memory storage)
       tempStorage[userId] = { tokenResponse };
-      console.log("tempStorage", tempStorage);
+      console.log("tempStorage - dataCallBack", tempStorage);
 
       // Respond with a script to close the window
       res.send(`

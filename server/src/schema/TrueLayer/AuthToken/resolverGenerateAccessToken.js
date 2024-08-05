@@ -4,6 +4,12 @@ export const generateAccessToken = async (
   { dataSources, logger }
 ) => {
   let responseData;
+  logger.info("generateAccessToken called with parameters:");
+  logger.info(`scope: ${scope}`);
+  logger.info(`grant_type: ${grant_type}`);
+  logger.info(`redirect_uri: ${redirect_uri}`);
+  logger.info(`code: ${code}`);
+
   // Fetch the access token from TrueLayer API
   try {
     responseData = await dataSources.tlAccessTokenAPI.generateAccessToken(
