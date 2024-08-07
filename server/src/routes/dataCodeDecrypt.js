@@ -20,10 +20,10 @@ export function dataAuthCodeDecryptHandler() {
     const tokenResponse = await generateAccessToken(
       null,
       {
-        scope: "data",
-        grant_type: "authorization_code",
-        redirect_uri: "https://console.truelayer.com/redirect-page",
-        code: decryptedCode,
+        scope: "",
+        grant_type: "refresh_token",
+        redirect_uri: "",
+        refresh_token: decryptedCode,
       },
       { dataSources: { tlAccessTokenAPI }, logger }
     );

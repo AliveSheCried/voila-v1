@@ -1,6 +1,6 @@
 export const generateAccessToken = async (
   _,
-  { scope, grant_type, redirect_uri, code },
+  { scope, grant_type, redirect_uri, code, refresh_token },
   { dataSources, logger }
 ) => {
   let responseData;
@@ -9,6 +9,7 @@ export const generateAccessToken = async (
   logger.info(`grant_type: ${grant_type}`);
   logger.info(`redirect_uri: ${redirect_uri}`);
   logger.info(`code: ${code}`);
+  logger.info(`refresh_token: ${refresh_token}`);
 
   // Fetch the access token from TrueLayer API
   try {
@@ -16,7 +17,8 @@ export const generateAccessToken = async (
       scope,
       grant_type,
       redirect_uri,
-      code
+      code,
+      refresh_token
     );
   } catch (error) {
     logger.error(`Error getting access token: ${error.message}`);

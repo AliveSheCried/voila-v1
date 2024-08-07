@@ -68,8 +68,27 @@ export const useGenerateToken = () => {
               if (!response.ok) {
                 throw new Error("Network response was not ok");
               }
+
               const data = await response.json();
               console.log("Data:", data);
+
+              if (data.tokenResponse) {
+                // Use the data token as needed
+                const { access_token, expires_in, scope } = data.tokenResponse;
+                const expiresInNumber = Number(expires_in);
+                const expiryTimestamp = Date.now() + expiresInNumber * 1000;
+                const newToken = {
+                  name: scope,
+                  type: "Bearer",
+                  expiry: expiryTimestamp,
+                  state: "active",
+                  accessToken: access_token,
+                };
+
+                updateDataToken(newToken, expiresInNumber);
+              } else {
+                console.error("Failed to retrieve data token");
+              }
             } catch (error) {
               console.error("Error fetching data token:", error);
             }

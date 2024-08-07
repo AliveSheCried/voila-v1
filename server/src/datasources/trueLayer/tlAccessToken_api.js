@@ -14,7 +14,8 @@ export class TLAccessTokenAPI extends RESTDataSource {
     scope = "",
     grant_type,
     redirect_uri = "",
-    code = ""
+    code = "",
+    refresh_token = ""
   ) {
     const client_id = process.env.CLIENT_ID;
     const client_secret = process.env.CLIENT_SECRET;
@@ -29,6 +30,7 @@ export class TLAccessTokenAPI extends RESTDataSource {
       grant_type,
       redirect_uri,
       code,
+      refresh_token,
     };
 
     // Log client_id and redirect_uri
