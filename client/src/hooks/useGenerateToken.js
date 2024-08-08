@@ -13,12 +13,98 @@ export const useGenerateToken = () => {
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
   let secondaryRef = useRef();
 
+  const handleTokenResponse = (tokenResponse, updateToken) => {
+    if (tokenResponse) {
+      const { access_token, expires_in, scope } = tokenResponse;
+      const expiresInNumber = Number(expires_in);
+      const expiryTimestamp = Date.now() + expiresInNumber * 1000;
+      const newToken = {
+        name: scope,
+        type: "Bearer",
+        expiry: expiryTimestamp,
+        state: "active",
+        accessToken: access_token,
+      };
+
+      updateToken(newToken, expiresInNumber);
+    } else {
+      console.error("Failed to retrieve data token");
+    }
+  };
+
+  const isTokenExpired = (createdDateTime) => {
+    const tokenAge = Date.now() - new Date(createdDateTime).getTime();
+    const ninetyDaysInMilliseconds = 90 * 24 * 60 * 60 * 1000;
+    return tokenAge > ninetyDaysInMilliseconds;
+  };
+
   const handleCreateToken = useCallback(
-    (type, secondaryScope, hasAuthCode = false, userId = "", authCode = "") => {
+    (type, secondaryScope, userId = "", authCode = false) => {
       secondaryRef.current = secondaryScope;
 
-      //if there is no auth code, redirect to the TrueLayer auth link
-      if (!hasAuthCode && type === "data") {
+      //if there is an auth code, check if it's expired; if not, fetch the data token, else redirect to the TrueLayer auth link
+      if (authCode && type === "data") {
+        //if the token is not expired, decrypt the refresh token and fetch the data token
+        if (!isTokenExpired(authCode.createdDateTime)) {
+          const fetchDataToken = async (authCode) => {
+            try {
+              const response = await fetch(
+                `${apiBaseUrl}/data/decrypt-auth-code`,
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ authCode }),
+                }
+              );
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+
+              const data = await response.json();
+              handleTokenResponse(data.tokenResponse, updateDataToken);
+            } catch (error) {
+              console.error("Error fetching data token:", error);
+            }
+          };
+
+          fetchDataToken(authCode);
+        } else {
+          const authWindow = window.open("/loading.html", "_blank"); // Open a new window with a loading page
+
+          const fetchAuthLink = async (userId) => {
+            try {
+              const response = await fetch(`${apiBaseUrl}/redirect-to-auth`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ userId }),
+              });
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              //const data = await response.json();
+              const text = await response.text();
+              const data = JSON.parse(text); // Manually parse to catch any non-JSON responses
+
+              if (data.authLink) {
+                authWindow.location.href = data.authLink;
+              } else {
+                console.error("Auth link not found");
+                authWindow.close();
+              }
+            } catch (error) {
+              console.error("Error fetching auth link:", error);
+              authWindow.close();
+            }
+          };
+
+          fetchAuthLink(userId);
+          return;
+        }
+      } else if (!authCode && type === "data") {
         const authWindow = window.open("/loading.html", "_blank"); // Open a new window with a loading page
 
         const fetchAuthLink = async (userId) => {
@@ -51,53 +137,6 @@ export const useGenerateToken = () => {
 
         fetchAuthLink(userId);
         return;
-      } else if (hasAuthCode && type === "data") {
-        try {
-          const fetchDataToken = async (authCode) => {
-            try {
-              const response = await fetch(
-                `${apiBaseUrl}/data/decrypt-auth-code`,
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({ authCode }),
-                }
-              );
-              if (!response.ok) {
-                throw new Error("Network response was not ok");
-              }
-
-              const data = await response.json();
-              console.log("Data:", data);
-
-              if (data.tokenResponse) {
-                // Use the data token as needed
-                const { access_token, expires_in, scope } = data.tokenResponse;
-                const expiresInNumber = Number(expires_in);
-                const expiryTimestamp = Date.now() + expiresInNumber * 1000;
-                const newToken = {
-                  name: scope,
-                  type: "Bearer",
-                  expiry: expiryTimestamp,
-                  state: "active",
-                  accessToken: access_token,
-                };
-
-                updateDataToken(newToken, expiresInNumber);
-              } else {
-                console.error("Failed to retrieve data token");
-              }
-            } catch (error) {
-              console.error("Error fetching data token:", error);
-            }
-          };
-
-          fetchDataToken(authCode);
-        } catch (error) {
-          console.error("Error fetching data token:", error);
-        }
       } else if (type === "payments") {
         generateToken({
           variables: {
@@ -148,25 +187,7 @@ export const useGenerateToken = () => {
         try {
           const response = await fetch(`${apiBaseUrl}/data/get-token`);
           const data = await response.json();
-          console.log("Data:", data);
-
-          if (data.dataToken) {
-            // Use the data token as needed
-            const { access_token, expires_in, scope } = data.dataToken;
-            const expiresInNumber = Number(expires_in);
-            const expiryTimestamp = Date.now() + expiresInNumber * 1000;
-            const newToken = {
-              name: scope,
-              type: "Bearer",
-              expiry: expiryTimestamp,
-              state: "active",
-              accessToken: access_token,
-            };
-
-            updateDataToken(newToken, expiresInNumber);
-          } else {
-            console.error("Failed to retrieve data token");
-          }
+          handleTokenResponse(data.dataToken, updateDataToken);
         } catch (error) {
           console.error("Error retrieving data token:", error);
         }

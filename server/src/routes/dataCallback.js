@@ -61,6 +61,7 @@ export function dataCallbackHandler() {
           auth_code: {
             iv: iv,
             encryptedData: encryptedData,
+            createdDateTime: new Date(),
           },
         }
       );

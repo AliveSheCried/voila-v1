@@ -6,7 +6,6 @@ const Tokens = () => {
   const { handleCreateToken, loading } = useGenerateToken();
   const { user } = useUser();
 
-  const hasAuthCode = !!user.auth_code;
   const email = user.user_id;
   const auth_code = user.auth_code;
 
@@ -19,7 +18,7 @@ const Tokens = () => {
         name="data"
         loading={loading}
         onCreateToken={() =>
-          handleCreateToken("data", "data", hasAuthCode, email, auth_code)
+          handleCreateToken("data", "data", email, auth_code)
         }
       />
 
