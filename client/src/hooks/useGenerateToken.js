@@ -45,7 +45,7 @@ export const useGenerateToken = () => {
       //if there is an auth code, check if it's expired; if not, fetch the data token, else redirect to the TrueLayer auth link
       if (authCode && type === "data") {
         //if the token is not expired, decrypt the refresh token and fetch the data token
-        if (!isTokenExpired(authCode.createdDateTime)) {
+        if (!isTokenExpired(authCode.createdDateTime["$date"])) {
           const fetchDataToken = async (authCode) => {
             try {
               const response = await fetch(
