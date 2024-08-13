@@ -75,7 +75,7 @@ const GetMerchantAccounts = () => {
     );
   }
 
-  // If there's no data yet, you can return null or some placeholder
+  // If there's no data yet return null
   return null;
 };
 

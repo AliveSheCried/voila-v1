@@ -27,8 +27,15 @@ export const menuItems = [
         children: [],
       },
       {
-        name: "Data - another endpoint",
+        name: "Data - transactions",
         icon: "grade  ",
+        level: 2,
+        path: "",
+        children: [],
+      },
+      {
+        name: "Data - pending transactions",
+        icon: "more_horiz",
         level: 2,
         path: "",
         children: [],
