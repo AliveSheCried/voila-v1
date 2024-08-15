@@ -4,7 +4,6 @@ import Start from "../Start/Start";
 
 //tl merchant account routes
 import CreateMerchantPayment from "../MerchantAccounts/CreateMerchantPayment/CreateMerchantPayment";
-import GetMerchantAccount from "../MerchantAccounts/GetMerchantAccount";
 import GetMerchantAccounts from "../MerchantAccounts/GetMerchantAccounts";
 import GetPayoutDetail from "../MerchantAccounts/GetPayoutDetail/GetPayoutDetail";
 import GetTransactions from "../MerchantAccounts/GetTransactions/GetTransactions";
@@ -18,7 +17,7 @@ const Content = () => {
       <div className="main__content">
         <Routes>
           <Route path="getDataAccounts" element={<GetDataAccounts />} />
-          <Route path="getMerchantAccount" element={<GetMerchantAccount />} />
+          {/* <Route path="getMerchantAccount" element={<GetMerchantAccount />} /> */}
           <Route path="getMerchantAccounts" element={<GetMerchantAccounts />} />
           <Route path="getTransactions" element={<GetTransactions />} />
           <Route path="payout" element={<CreateMerchantPayment />} />

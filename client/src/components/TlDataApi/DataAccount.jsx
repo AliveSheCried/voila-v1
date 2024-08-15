@@ -28,23 +28,27 @@ const DataAccount = ({ id, data, className }) => {
             <tr>
               <td colSpan={2} className="blank-row"></td>
             </tr>
-            <tr>
+            <tr className="merchant-account--balance">
               <th className="content__key">Account number</th>
-              <td className="content__value">{data.account_number.number}</td>
+              <td className="content__value--white">
+                <span className="content__value--white-highlight">
+                  {data.account_number.number}
+                </span>
+              </td>
             </tr>
-            <tr>
+            <tr className="merchant-account--balance">
               <th className="content__key">SWIFT/BIC</th>
               <td className="content__value">
                 {data.account_number.swift_bic}
               </td>
             </tr>
-            <tr>
+            <tr className="merchant-account--balance">
               <th className="content__key">Sort code</th>
               <td className="content__value">
                 {data.account_number.sort_code}
               </td>
             </tr>
-            <tr>
+            <tr className="merchant-account--balance">
               <th className="content__key">IBAN</th>
               <td className="content__value">{data.account_number.iban}</td>
             </tr>

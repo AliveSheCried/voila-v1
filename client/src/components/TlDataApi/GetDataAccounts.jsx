@@ -6,7 +6,12 @@ import { useDataToken } from "../../providers/DataTokenProvider";
 import Start from "../Start/Start";
 import DataAccount from "./DataAccount";
 
+//pagination
+const ITEMS_PER_PAGE = 2;
+
 const GetDataAccounts = () => {
+  const [currentPage, setCurrentPage] = useState(0);
+
   const [accounts, setAccounts] = useState([]);
   const { token: dataToken } = useDataToken();
   const [getDataAccounts, { loading, data, error }] = useLazyQuery(
@@ -18,6 +23,11 @@ const GetDataAccounts = () => {
         },
       },
     }
+  );
+
+  const paginatedTransactions = [...accounts].slice(
+    currentPage * ITEMS_PER_PAGE,
+    (currentPage + 1) * ITEMS_PER_PAGE
   );
 
   useEffect(() => {
@@ -60,8 +70,8 @@ const GetDataAccounts = () => {
           <span className="content__arrow--yellow">&raquo;</span> User&apos;s
           accounts
         </div>
-        <div className="merchant-account__container">
-          {accounts.map((account) => (
+        <div className="data-account__container">
+          {paginatedTransactions.map((account) => (
             <DataAccount
               key={account.id}
               id={account.id}
@@ -69,6 +79,25 @@ const GetDataAccounts = () => {
               className="sp-right-sm sp-bottom-md"
             />
           ))}
+        </div>
+        <div className="sp-bottom-sm right-temp">
+          <button
+            className="btn btn--quaternary sp-right-sm "
+            onClick={() => setCurrentPage(currentPage - 1)}
+            disabled={currentPage === 0}
+          >
+            Previous
+          </button>
+          <button
+            className="btn btn--quaternary"
+            onClick={() => setCurrentPage(currentPage + 1)}
+            disabled={
+              (currentPage + 1) * ITEMS_PER_PAGE >= accounts.length ||
+              paginatedTransactions.length === 0
+            }
+          >
+            Next
+          </button>
         </div>
       </div>
     );

@@ -192,7 +192,7 @@ const CreateMerchantPayment = () => {
     return (
       <>
         <div className="content__head">
-          <span className="content__arrow">&raquo;</span> Merchant account
+          <span className="content__arrow--pink">&raquo;</span> Merchant account
           payout
         </div>
         <div className="token__container">
@@ -215,7 +215,8 @@ const CreateMerchantPayment = () => {
   return (
     <>
       <div className="content__head">
-        <span className="content__arrow">&raquo;</span> Merchant account payout
+        <span className="content__arrow--pink">&raquo;</span> Merchant account
+        payout
       </div>
       <div className="token__container">
         <div className="token__title">

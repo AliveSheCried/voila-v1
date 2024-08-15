@@ -124,7 +124,7 @@ const GetTransactions = () => {
     return (
       <div>
         <div className="content__head">
-          <span className="content__arrow">&raquo;</span> Merchant account
+          <span className="content__arrow--pink">&raquo;</span> Merchant account
           transactions
         </div>
         <div>An error occurred: {error.message}</div>
@@ -135,7 +135,7 @@ const GetTransactions = () => {
     return (
       <div>
         <div className="content__head">
-          <span className="content__arrow">&raquo;</span> Merchant account
+          <span className="content__arrow--pink">&raquo;</span> Merchant account
           transactions
         </div>
 

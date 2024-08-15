@@ -320,3 +320,16 @@
         color: var(--color-grey-dark-2);
     }
 }
+
+// Data API styles
+.data-account {
+    // @extend %first-child-spacing;
+    border: 1px solid var(--color-grey-light-2);
+    border-radius: var(--br-small);
+    width: 100%;
+
+    &__container {
+        // min-height: 320px;
+        @include fbox($direction: row, $items: start, $content: start, $wrap: wrap);
+    }
+}
