@@ -17,6 +17,7 @@ export class TLDataAPI extends RESTDataSource {
   */
 
   async getBankAccounts(token) {
+    console.log("tlAPI getBankAccounts webhookURL:", this.webhookURL);
     return await handleAPIRequest(
       this,
       `/data/v1/accounts?async=true&webhook_uri=${this.webhookURL}`,
@@ -24,9 +25,9 @@ export class TLDataAPI extends RESTDataSource {
     );
   }
 
-  // async getBankAccount(id, token) {
-  //   return await handleAPIRequest(this, `/data/v1/accounts/${id}`, token);
-  // }
+  async getBankAccount(id, token) {
+    return await handleAPIRequest(this, `/data/v1/accounts/${id}`, token);
+  }
 
   async getBankAccountBalance(id, token) {
     return await handleAPIRequest(

@@ -16,6 +16,7 @@ import typeDefs from "./schema/schema.js";
 
 export async function startApolloServer(app, httpServer, ngrokUrl) {
   logger.info("Starting Apollo Server...");
+  console.log("Webhook URL:", `${ngrokUrl}/webhooks/truelayer/data`);
   const server = new ApolloServer({
     typeDefs,
     resolvers,

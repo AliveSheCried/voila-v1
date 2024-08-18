@@ -25,6 +25,9 @@ mongoose.connect(process.env.MONGO_DB_URI, {
 const client = new MongoClient(process.env.MONGO_DB_URI);
 
 async function startServer(app, httpServer, client, ngrokUrl) {
+  //logger.info("ngrok URL startServer:", ngrokUrl);
+  console.log("ngrok URL startServer:", ngrokUrl);
+  console.log("ngrokUrl type startServer:", typeof ngrokUrl); // Log the type of
   const corsOptions = {
     origin: "*",
     optionsSuccessStatus: 200,
@@ -63,7 +66,9 @@ async function startServer(app, httpServer, client, ngrokUrl) {
   app.use(errorHandler);
 
   logger.info("Starting Apollo Server");
-  await startApolloServer(app, httpServer, client, ngrokUrl);
+  console.log("ngrok URL before apolloServer:", ngrokUrl);
+  console.log("ngrokUrl type before startApolloServer:", typeof ngrokUrl); // Log the type of ngrokUrl
+  await startApolloServer(app, httpServer, ngrokUrl);
 
   await new Promise((resolve) => httpServer.listen({ port: 4000 }, resolve));
 
@@ -91,7 +96,12 @@ async function run(client) {
       addr: 4000,
       authtoken_from_env: true,
     });
-    const ngrokUrl = listener.url();
+
+    let ngrokUrl = listener.url();
+    logger.info(`ngrok URL: ${ngrokUrl}`); // Log the ngrok URL to verify it's a string
+
+    // Explicitly convert ngrokUrl to a string
+    ngrokUrl = String(ngrokUrl);
 
     const app = express();
     const httpServer = http.createServer(app);
