@@ -27,6 +27,7 @@
   "dependencies": {
     "@apollo/datasource-rest": "^6.2.2",
     "@apollo/server": "^4.9.5",
+    "@ngrok/ngrok": "^1.4.1",
     "@prisma/client": "^5.7.1",
     "apollo-datasource-rest": "^3.7.0",
     "apollo-server": "^3.13.0",

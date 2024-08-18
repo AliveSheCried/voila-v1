@@ -2,9 +2,10 @@ import { RESTDataSource } from "@apollo/datasource-rest";
 import { handleAPIRequest } from "../../helpers/handleAPIRequest.js";
 
 export class TLDataAPI extends RESTDataSource {
-  constructor() {
+  constructor({ webhookURL }) {
     super();
     this.baseURL = "https://api.truelayer-sandbox.com";
+    this.webhookURL = `${webhookURL}/webhooks/truelayer/data`;
   }
 
   /* 
@@ -16,12 +17,16 @@ export class TLDataAPI extends RESTDataSource {
   */
 
   async getBankAccounts(token) {
-    return await handleAPIRequest(this, `/data/v1/accounts`, token);
+    return await handleAPIRequest(
+      this,
+      `/data/v1/accounts?async=true&webhook_uri=${this.webhookURL}`,
+      token
+    );
   }
 
-  async getBankAccount(id, token) {
-    return await handleAPIRequest(this, `/data/v1/accounts/${id}`, token);
-  }
+  // async getBankAccount(id, token) {
+  //   return await handleAPIRequest(this, `/data/v1/accounts/${id}`, token);
+  // }
 
   async getBankAccountBalance(id, token) {
     return await handleAPIRequest(

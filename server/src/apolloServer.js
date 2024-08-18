@@ -14,7 +14,7 @@ import { handleAPIRequest } from "./helpers/handleAPIRequest.js";
 import resolvers from "./schema/resolvers.js";
 import typeDefs from "./schema/schema.js";
 
-export async function startApolloServer(app, httpServer) {
+export async function startApolloServer(app, httpServer, ngrokUrl) {
   logger.info("Starting Apollo Server...");
   const server = new ApolloServer({
     typeDefs,
@@ -51,6 +51,7 @@ export async function startApolloServer(app, httpServer) {
             tlDataAPI: new tlDataAPI({
               cache: server.cache,
               token: req.headers.authorization || "",
+              webhookURL: ngrokUrl,
             }),
             tlMerchantAccountAPI: new tlMerchantAccountAPI(handleAPIRequest, {
               cache: server.cache,
