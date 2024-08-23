@@ -3,7 +3,7 @@ import { bankAccountTransactionsResolvers } from "./resolverBankAccountTransacti
 import { bankAccountResolvers } from "./resolverBankAccounts.js";
 
 const queries = {
-  bankAccounts: bankAccountResolvers.bankAccounts,
+  getDataAccounts: bankAccountResolvers.bankAccounts,
   bankAccount: bankAccountResolvers.bankAccount,
   bankAccountTransactions:
     bankAccountTransactionsResolvers.bankAccountTransactions,

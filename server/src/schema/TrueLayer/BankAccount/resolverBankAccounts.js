@@ -4,36 +4,26 @@ Bank account meta data queries
 *********************************************
 */
 
+// For the purpose of this demo, we will store the user data token in a variable
+let tempUserDataToken = null;
+
 //Get all bank accounts
 const bankAccounts = async (_, __, { token, dataSources, logger }) => {
   //try catch block to handle errors
 
   try {
-    console.log("Initiating bank accounts request...");
+    // Store the active token in temporary storage
+    tempUserDataToken = token;
     // Initiate the asynchronous request to TrueLayer
-    await dataSources.tlDataAPI.getBankAccounts(token);
+    await dataSources.tlDataAPI.getBankAccounts(token, "bankAccounts");
 
     // Since the process is asynchronous, return a message indicating that the data will be processed later
     return {
+      __typename: "InitialStatus",
       status: "Processing",
       message:
         "The request has been initiated. You will receive the results once they are processed.",
     };
-    /*
-    *********************************************
-    Resovler before refactoring to use Webhook
-    *********************************************
-    const responseData = await dataSources.tlDataAPI.getBankAccounts(token);
-
-    //Check if data exists
-    if (!responseData.results || !Array.isArray(responseData.results)) {
-      throw new Error("No data found or data format not as expected!");
-    }
-    //Convert received data to schema array of bank account objects
-    const bankAccounts = responseData.results.map((account) => account);
-
-    return bankAccounts;
-    */
   } catch (error) {
     logger.error("Error initiating bank accounts request:", error);
     // Throw the error so that it can be caught and handled by Apollo Server
@@ -66,3 +56,24 @@ export const bankAccountResolvers = {
   bankAccounts,
   bankAccount,
 };
+
+export { tempUserDataToken };
+
+// const resolverBankAccounts = {
+//   Query: {
+//     getDataAccounts: bankAccounts,
+//   },
+//   GetDataAccountsResult: {
+//     __resolveType(obj) {
+//       if (obj.status) {
+//         return "InitialStatus";
+//       }
+//       if (obj.accounts) {
+//         return "BankAccounts";
+//       }
+//       return null;
+//     },
+//   },
+// };
+
+// export default resolverBankAccounts;

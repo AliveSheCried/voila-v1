@@ -1,5 +1,6 @@
 import { RESTDataSource } from "@apollo/datasource-rest";
 import { handleAPIRequest } from "../../helpers/handleAPIRequest.js";
+import { storeTaskMetadata } from "../../helpers/webhookDataHelper.js";
 
 export class TLDataAPI extends RESTDataSource {
   constructor({ webhookURL }) {
@@ -16,13 +17,19 @@ export class TLDataAPI extends RESTDataSource {
   *************************  
   */
 
-  async getBankAccounts(token) {
-    console.log("tlAPI getBankAccounts webhookURL:", this.webhookURL);
-    return await handleAPIRequest(
+  async getBankAccounts(token, dataApiType) {
+    const response = await handleAPIRequest(
       this,
       `/data/v1/accounts?async=true&webhook_uri=${this.webhookURL}`,
       token
     );
+
+    const taskId = response.task_id;
+
+    // Store the association between task_id and dataApiType
+    storeTaskMetadata(taskId, dataApiType);
+
+    return response;
   }
 
   async getBankAccount(id, token) {

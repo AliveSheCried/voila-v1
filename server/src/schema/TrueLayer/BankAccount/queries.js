@@ -1,7 +1,8 @@
 export const queries = `
 ###Bank account data
 "Retrieve all bank accounts"
-bankAccounts: [BankAccount]!
+getDataAccounts: GetDataAccountsResult!
+
 
 "Retrieve specific bank account passing account_id"
 bankAccount(id: ID!): BankAccount!
@@ -22,3 +23,6 @@ bankAccountDirectDebits(id: ID!): [DirectDebit]
 "Retrieve standing orders linked to an account"
 bankAccountStandingOrders(id: ID!): [StandingOrder]
 `;
+
+//"Retrieve all bank accounts"
+//bankAccounts: [BankAccount]!

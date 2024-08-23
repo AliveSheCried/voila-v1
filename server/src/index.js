@@ -12,6 +12,7 @@ import { errorHandler } from "./middleware/errorHandler.js";
 import { dataAuthLinkHandler } from "./routes/dataAuthLink.js";
 import { dataCallbackHandler } from "./routes/dataCallback.js";
 import { dataAuthCodeDecryptHandler } from "./routes/dataCodeDecrypt.js";
+import { retrieveDataHandler } from "./routes/dataRetrieval.js";
 import { dataTokenHandler } from "./routes/dataToken.js";
 import { dataWebhookHandler } from "./routes/dataWebhook.js";
 import { loginHandler } from "./routes/login.js";
@@ -26,8 +27,7 @@ const client = new MongoClient(process.env.MONGO_DB_URI);
 
 async function startServer(app, httpServer, client, ngrokUrl) {
   //logger.info("ngrok URL startServer:", ngrokUrl);
-  console.log("ngrok URL startServer:", ngrokUrl);
-  console.log("ngrokUrl type startServer:", typeof ngrokUrl); // Log the type of
+
   const corsOptions = {
     origin: "*",
     optionsSuccessStatus: 200,
@@ -53,6 +53,16 @@ async function startServer(app, httpServer, client, ngrokUrl) {
   // Webhook routes
   app.post("/webhooks/truelayer/data", dataWebhookHandler()); // Truelayer user data API webhook
 
+  // Middleware to extract dataType from query parameters
+  function extractDataType(req, res, next) {
+    req.dataType = req.query.dataType;
+    next();
+  }
+
+  app.get("/webhooks/truelayer/retrieve", extractDataType, (req, res) =>
+    retrieveDataHandler(req.dataType)(req, res)
+  ); // Retrieve data from temporary storage
+
   // Login route
   app.post("/api/login", loginHandler());
 
@@ -66,8 +76,8 @@ async function startServer(app, httpServer, client, ngrokUrl) {
   app.use(errorHandler);
 
   logger.info("Starting Apollo Server");
-  console.log("ngrok URL before apolloServer:", ngrokUrl);
-  console.log("ngrokUrl type before startApolloServer:", typeof ngrokUrl); // Log the type of ngrokUrl
+  // console.log("ngrok URL before apolloServer:", ngrokUrl);
+  // console.log("ngrokUrl type before startApolloServer:", typeof ngrokUrl); // Log the type of ngrokUrl
   await startApolloServer(app, httpServer, ngrokUrl);
 
   await new Promise((resolve) => httpServer.listen({ port: 4000 }, resolve));

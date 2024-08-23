@@ -11,6 +11,7 @@ import Nav from "./pages/Nav/Nav";
 import { DataTokenProvider } from "./providers/DataTokenProvider";
 import { MerchantAccountDataTokenProvider } from "./providers/MerchantAccountDataTokenProvider";
 import { PaymentTokenProvider } from "./providers/PaymentTokenProvider";
+import { UserBankDataProvider } from "./providers/UserBankDataProvider";
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
@@ -29,12 +30,17 @@ function App() {
       <PaymentTokenProvider>
         <MerchantAccountDataTokenProvider>
           <DataTokenProvider>
-            <Layout>
-              <Nav />
-              <Routes>
-                <Route path="/*" element={<Home name={name} email={email} />} />
-              </Routes>
-            </Layout>
+            <UserBankDataProvider>
+              <Layout>
+                <Nav />
+                <Routes>
+                  <Route
+                    path="/*"
+                    element={<Home name={name} email={email} />}
+                  />
+                </Routes>
+              </Layout>
+            </UserBankDataProvider>
           </DataTokenProvider>
         </MerchantAccountDataTokenProvider>
       </PaymentTokenProvider>

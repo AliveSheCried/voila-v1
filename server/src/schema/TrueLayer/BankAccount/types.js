@@ -25,6 +25,20 @@ type Provider {
     logo_uri: String
 }
 
+"Initial status of the data fetch"
+type InitialStatus {
+    status: String!
+    message: String
+}
+
+"Union type for the result of getDataAccounts"
+union GetDataAccountsResult = InitialStatus | BankAccounts
+
+"Array of bank accounts"
+type BankAccounts {
+    accounts: [BankAccount!]!
+}
+
 "Account balance"
 type BankAccountBalance {
     currency: String!
