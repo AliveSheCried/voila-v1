@@ -34,9 +34,25 @@ type InitialStatus {
 "Union type for the result of getDataAccounts"
 union GetDataAccountsResult = InitialStatus | BankAccounts
 
+"Union type for the result of getDirectDebits"
+union GetDirectDebitsResult = InitialStatus | DirectDebits
+
+"Union type for the result of getStandingOrders"
+union GetStandingOrdersResult = InitialStatus | StandingOrders
+
 "Array of bank accounts"
 type BankAccounts {
     accounts: [BankAccount!]!
+}
+
+"Array of direct debits"
+type DirectDebits {
+    directDebits: [DirectDebit!]!
+}
+
+"Array of standing orders"
+type StandingOrders {
+    standingOrders: [StandingOrder!]!
 }
 
 "Account balance"

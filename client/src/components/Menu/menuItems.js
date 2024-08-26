@@ -16,7 +16,7 @@ export const menuItems = [
         name: "Get - direct debits",
         icon: "south_west", //"do_not_disturb_on",
         level: 2,
-        path: "",
+        path: "/getDataDirectDebits",
         children: [],
       },
       {

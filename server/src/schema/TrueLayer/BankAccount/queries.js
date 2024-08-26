@@ -18,10 +18,10 @@ bankAccountTransactions(id: ID!, fromDate: String, toDate: String): [BankAccount
 bankAccountPendingTransactions(id: ID!): [BankAccountTransaction!]
 
 "Retrieve direct debits linked to an account"
-bankAccountDirectDebits(id: ID!): [DirectDebit]
+bankAccountDirectDebits(id: ID!): GetDirectDebitsResult!
 
 "Retrieve standing orders linked to an account"
-bankAccountStandingOrders(id: ID!): [StandingOrder]
+bankAccountStandingOrders(id: ID!): GetStandingOrdersResult!
 `;
 
 //"Retrieve all bank accounts"

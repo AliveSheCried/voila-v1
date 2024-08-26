@@ -10,6 +10,7 @@ import GetTransactions from "../MerchantAccounts/GetTransactions/GetTransactions
 
 //tl data api routes
 import GetDataAccounts from "../TlDataApi/GetDataAccounts";
+import GetDataDirectDebits from "../TlDataApi/GetDataDirectDebits";
 
 const Content = () => {
   return (
@@ -17,6 +18,7 @@ const Content = () => {
       <div className="main__content">
         <Routes>
           <Route path="getDataAccounts" element={<GetDataAccounts />} />
+          <Route path="getDataDirectDebits" element={<GetDataDirectDebits />} />
           {/* <Route path="getMerchantAccount" element={<GetMerchantAccount />} /> */}
           <Route path="getMerchantAccounts" element={<GetMerchantAccounts />} />
           <Route path="getTransactions" element={<GetTransactions />} />

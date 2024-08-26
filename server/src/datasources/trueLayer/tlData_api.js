@@ -32,8 +32,34 @@ export class TLDataAPI extends RESTDataSource {
     return response;
   }
 
-  async getBankAccount(id, token) {
-    return await handleAPIRequest(this, `/data/v1/accounts/${id}`, token);
+  async getBankAccountDirectDebits(id, token, dataApiType) {
+    const response = await handleAPIRequest(
+      this,
+      `/data/v1/accounts/${id}/direct_debits?async=true&webhook_uri=${this.webhookURL}`,
+      token
+    );
+
+    const taskId = response.task_id;
+
+    // Store the association between task_id and dataApiType
+    storeTaskMetadata(taskId, dataApiType);
+
+    return response;
+  }
+
+  async getBankAccountStandingOrders(id, token, dataApiType) {
+    const response = await handleAPIRequest(
+      this,
+      `/data/v1/accounts/${id}/standing_orders?async=true&webhook_uri=${this.webhookURL}`,
+      token
+    );
+
+    const taskId = response.task_id;
+
+    // Store the association between task_id and dataApiType
+    storeTaskMetadata(taskId, dataApiType);
+
+    return response;
   }
 
   async getBankAccountBalance(id, token) {
@@ -64,19 +90,7 @@ export class TLDataAPI extends RESTDataSource {
     );
   }
 
-  async getBankAccountDirectDebits(id, token) {
-    return await handleAPIRequest(
-      this,
-      `/data/v1/accounts/${id}/direct_debits`,
-      token
-    );
-  }
-
-  async getBankAccountStandingOrders(id, token) {
-    return await handleAPIRequest(
-      this,
-      `/data/v1/accounts/${id}/standing_orders`,
-      token
-    );
+  async getBankAccount(id, token) {
+    return await handleAPIRequest(this, `/data/v1/accounts/${id}`, token);
   }
 }

@@ -4,7 +4,7 @@ Bank account meta data queries
 *********************************************
 */
 
-// For the purpose of this demo, we will store the user data token in a variable
+// For the purpose of this demo, we will store the user data token in a local variable to be used in the webhook handler
 let tempUserDataToken = null;
 
 //Get all bank accounts

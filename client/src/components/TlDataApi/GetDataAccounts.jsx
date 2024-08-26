@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { GET_DATA_ACCOUNTS } from "../../graphql/queries/getDataAccounts"; // Import the query
 import { useDataToken } from "../../providers/DataTokenProvider";
 import { UserBankDataContext } from "../../providers/UserBankDataProvider";
+import DataAccount from "./DataAccount";
 
 import Start from "../Start/Start";
 
@@ -66,7 +67,7 @@ const GetDataAccounts = () => {
     }
   }, [fetchStatus, setUserBankData]);
 
-  const paginatedTransactions = [...accounts].slice(
+  const paginatedAccounts = [...accounts].slice(
     currentPage * ITEMS_PER_PAGE,
     (currentPage + 1) * ITEMS_PER_PAGE
   );
@@ -89,11 +90,13 @@ const GetDataAccounts = () => {
     <div>
       <div className="data-account__container">
         {accounts.length > 0 ? (
-          accounts.map((account) => (
-            <div key={account.account_id}>
-              <p>{account.display_name}</p>
-              <p>{account.account_type}</p>
-            </div>
+          paginatedAccounts.map((account) => (
+            <DataAccount
+              key={account.account_id}
+              id={account.account_id}
+              data={account}
+              className="sp-right-sm sp-bottom-md"
+            />
           ))
         ) : (
           <p>No accounts available</p>
@@ -112,7 +115,7 @@ const GetDataAccounts = () => {
           onClick={() => setCurrentPage(currentPage + 1)}
           disabled={
             (currentPage + 1) * ITEMS_PER_PAGE >= accounts.length ||
-            paginatedTransactions.length === 0
+            paginatedAccounts.length === 0
           }
         >
           Next
