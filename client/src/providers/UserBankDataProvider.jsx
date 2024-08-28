@@ -6,10 +6,10 @@ export const UserBankDataContext = createContext();
 
 export const UserBankDataProvider = ({ children }) => {
   const [userBankData, setUserBankData] = useState({
-    bankAccounts: [],
-    transactions: [],
-    directDebits: [],
-    standingOrders: [],
+    bankAccounts: {},
+    transactions: {},
+    directDebits: {},
+    standingOrders: {},
     // Add other data types as needed
   });
 

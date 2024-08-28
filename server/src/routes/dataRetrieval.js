@@ -8,11 +8,11 @@ export const retrieveDataHandler = (dataType) => async (req, res) => {
     for (const taskId in userBankDataStore) {
       if (userBankDataStore.hasOwnProperty(taskId)) {
         const userData = userBankDataStore[taskId];
-
+        // console.log("userData", userData);
         // Check if the type matches the dataType
         if (userData.type === dataType) {
-          const data = userData.data;
-          res.status(200).send(data);
+          const { accountData } = userData;
+          res.status(200).send(accountData);
           dataFound = true;
           break;
         }
@@ -28,3 +28,12 @@ export const retrieveDataHandler = (dataType) => async (req, res) => {
     res.status(500).send("Error retrieving data.");
   }
 };
+
+// userBankDataStore[taskId] = {
+//   type: dataApiType, // e.g., "bankAccounts", "directDebits"
+//   accountData: {
+//     allAccounts: [], // For data that doesn't relate to a specific accountId
+//     [id]: [], // id is the accountId, and the array holds the data for that account
+//   },
+// };
+// }

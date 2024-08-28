@@ -1,5 +1,8 @@
 import axios from "axios";
-import { updateUserDataStore } from "../helpers/webhookDataHelper.js";
+import {
+  updateUserDataStore,
+  userBankDataStore,
+} from "../helpers/webhookDataHelper.js";
 import { tempUserDataToken } from "../schema/TrueLayer/BankAccount/resolverBankAccounts.js";
 
 export const dataWebhookHandler = () => async (req, res) => {
@@ -24,9 +27,17 @@ export const dataWebhookHandler = () => async (req, res) => {
       });
 
       const results = resultsResponse.data.results;
-      console.log("object results", results);
 
-      updateUserDataStore(task_id, results); // Update data key of temporary store with the results
+      // Retrieve the stored metadata using task_id
+      const storedData = userBankDataStore[task_id];
+      const { accountData } = storedData;
+
+      // Retrieve the account ID from the stored metadata if it exists
+      const accountId = Object.keys(accountData)[1];
+      // console.log("object accountId", accountId);
+      // console.log("object results", results);
+
+      updateUserDataStore(task_id, accountId, results); // Update data key of temporary store with the results
 
       res.status(200).send("Data successfully retrieved and processed.");
     } else {

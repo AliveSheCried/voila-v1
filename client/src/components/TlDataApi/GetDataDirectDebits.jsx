@@ -25,10 +25,14 @@ const GetDataDirectDebits = () => {
   );
 
   const handleGetDirectDebits = () => {
-    getBankAccountDirectDebits({
-      variables: { id: selectedAccountId },
-    });
-    setFetchStatus("processing");
+    // If there is no data for the selected account in the userBankData.directDebits object, fetch it
+    if (!(selectedAccountId in userBankData.directDebits)) {
+      // Fetch data for the selected account
+      getBankAccountDirectDebits({
+        variables: { id: selectedAccountId },
+      });
+      setFetchStatus("processing");
+    }
   };
 
   // Poll the server for data retrieved by the webhook
@@ -40,16 +44,33 @@ const GetDataDirectDebits = () => {
             "http://localhost:4000/webhooks/truelayer/retrieve?dataType=directDebits"
           );
           if (response.status === 200) {
-            const data = await response.json();
+            const responseData = await response.json();
+            console.log("object responseData", responseData);
+
+            // Check if accountData exists in the response
+            // if (responseData.accountData) {
+            //   const accountData = responseData.accountData;
+
+            // Check if selectedAccountId exists in accountData
+            //  if (responseData.hasOwnProperty.call(selectedAccountId)) {
+            const data = responseData[selectedAccountId];
+            console.log("responseData[selectedAccId] data", data);
+
+            // Check if data is an array and has elements
             if (Array.isArray(data) && data.length > 0) {
               setUserBankData((prevData) => ({
                 ...prevData,
-                directDebits: data,
+                directDebits: {
+                  ...prevData.directDebits,
+                  [selectedAccountId]: data, // Update the directDebits data in the context
+                },
               }));
               setDirectDebits(data);
               setFetchStatus("success");
               clearInterval(intervalId); // Stop polling after successful fetch
             }
+            //}
+            //}
           }
         } catch (error) {
           console.error("Error fetching data from webhook:", error);

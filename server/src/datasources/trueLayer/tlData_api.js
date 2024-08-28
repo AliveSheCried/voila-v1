@@ -42,7 +42,7 @@ export class TLDataAPI extends RESTDataSource {
     const taskId = response.task_id;
 
     // Store the association between task_id and dataApiType
-    storeTaskMetadata(taskId, dataApiType);
+    storeTaskMetadata(taskId, dataApiType, id);
 
     return response;
   }
@@ -57,7 +57,7 @@ export class TLDataAPI extends RESTDataSource {
     const taskId = response.task_id;
 
     // Store the association between task_id and dataApiType
-    storeTaskMetadata(taskId, dataApiType);
+    storeTaskMetadata(taskId, dataApiType, id);
 
     return response;
   }

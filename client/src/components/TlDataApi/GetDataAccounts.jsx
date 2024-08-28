@@ -36,7 +36,6 @@ const GetDataAccounts = () => {
     }
   }, [getDataAccounts, userBankData, dataToken]);
 
-  // Poll the server for data retrieved by the webhook
   useEffect(() => {
     if (fetchStatus === "processing") {
       const intervalId = setInterval(async () => {
@@ -45,13 +44,16 @@ const GetDataAccounts = () => {
             "http://localhost:4000/webhooks/truelayer/retrieve?dataType=bankAccounts"
           );
           if (response.status === 200) {
-            const data = await response.json();
-            if (Array.isArray(data) && data.length > 0) {
+            const responseData = await response.json();
+            console.log("object responseData", responseData);
+            const { allAccounts } = responseData; // Extract the data array
+            // console.log("Accounts", data);
+            if (Array.isArray(allAccounts) && allAccounts.length > 0) {
               setUserBankData((prevData) => ({
                 ...prevData,
-                bankAccounts: data,
+                bankAccounts: allAccounts, // Update the state with the data array
               }));
-              setAccounts(data);
+              setAccounts(allAccounts);
               setFetchStatus("success");
               clearInterval(intervalId); // Stop polling after successful fetch
             }
