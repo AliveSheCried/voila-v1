@@ -14,9 +14,14 @@ export const updateUserDataStore = (taskId, accountId, data) => {
   // Use "allAccounts" as a special key when accountId is null or undefined
   const key = accountId || "allAccounts";
 
-  // if (!userBankDataStore[taskId].accountData[key]) {
-  //   userBankDataStore[taskId].accountData[key] = [];
-  // }
+  if (!userBankDataStore[taskId].accountData[key]) {
+    userBankDataStore[taskId].accountData[key] = [];
+  }
 
-  userBankDataStore[taskId].accountData[key].push(...data);
+  userBankDataStore[taskId].accountData[key] = data; // Replace existing data with new data
+};
+
+// function to clear the userBankDataStore after the data has been retrieved
+export const clearUserDataStore = (taskId) => {
+  delete userBankDataStore[taskId];
 };

@@ -27,7 +27,7 @@ const GetDataAccounts = () => {
 
   // If !userBankData.bankAccounts.length && dataToken fetch the data
   useEffect(() => {
-    if (!userBankData.bankAccounts.length && dataToken) {
+    if (!userBankData.bankAccounts.length && dataToken.accessToken) {
       getDataAccounts();
       setFetchStatus("processing");
     } else if (userBankData.bankAccounts.length) {
@@ -45,7 +45,7 @@ const GetDataAccounts = () => {
           );
           if (response.status === 200) {
             const responseData = await response.json();
-            console.log("object responseData", responseData);
+
             const { allAccounts } = responseData; // Extract the data array
             // console.log("Accounts", data);
             if (Array.isArray(allAccounts) && allAccounts.length > 0) {
@@ -74,7 +74,7 @@ const GetDataAccounts = () => {
     (currentPage + 1) * ITEMS_PER_PAGE
   );
 
-  if (!dataToken) {
+  if (!dataToken.accessToken) {
     return <Start type={"DataRoutes"} title={"User's bank accounts"} />;
   }
 

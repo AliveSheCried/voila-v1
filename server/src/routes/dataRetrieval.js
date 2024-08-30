@@ -1,4 +1,7 @@
-import { userBankDataStore } from "../helpers/webhookDataHelper.js";
+import {
+  clearUserDataStore,
+  userBankDataStore,
+} from "../helpers/webhookDataHelper.js";
 
 export const retrieveDataHandler = (dataType) => async (req, res) => {
   try {
@@ -8,12 +11,13 @@ export const retrieveDataHandler = (dataType) => async (req, res) => {
     for (const taskId in userBankDataStore) {
       if (userBankDataStore.hasOwnProperty(taskId)) {
         const userData = userBankDataStore[taskId];
-        // console.log("userData", userData);
+
         // Check if the type matches the dataType
         if (userData.type === dataType) {
           const { accountData } = userData;
           res.status(200).send(accountData);
           dataFound = true;
+          clearUserDataStore(taskId); // Clear the data after retrieval
           break;
         }
       }

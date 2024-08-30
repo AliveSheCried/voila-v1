@@ -47,14 +47,14 @@ const GetDataDirectDebits = () => {
             const responseData = await response.json();
             console.log("object responseData", responseData);
 
-            // Check if accountData exists in the response
-            // if (responseData.accountData) {
-            //   const accountData = responseData.accountData;
-
-            // Check if selectedAccountId exists in accountData
-            //  if (responseData.hasOwnProperty.call(selectedAccountId)) {
             const data = responseData[selectedAccountId];
-            console.log("responseData[selectedAccId] data", data);
+
+            //if data is an empty array, stop polling, set fetchStatus to success & set directDebits to an empty array
+            if (Array.isArray(data) && data.length === 0) {
+              setFetchStatus("success");
+              setDirectDebits([]);
+              clearInterval(intervalId);
+            }
 
             // Check if data is an array and has elements
             if (Array.isArray(data) && data.length > 0) {
@@ -69,8 +69,6 @@ const GetDataDirectDebits = () => {
               setFetchStatus("success");
               clearInterval(intervalId); // Stop polling after successful fetch
             }
-            //}
-            //}
           }
         } catch (error) {
           console.error("Error fetching data from webhook:", error);
@@ -83,10 +81,13 @@ const GetDataDirectDebits = () => {
     }
   }, [fetchStatus, setUserBankData]);
 
-  const accountsList = userBankData.bankAccounts.map((account) => ({
-    id: account.account_id,
-    number: account.account_number.number,
-  }));
+  let accountsList = [];
+  if (userBankData.bankAccounts.length) {
+    accountsList = userBankData.bankAccounts.map((account) => ({
+      id: account.account_id,
+      number: account.account_number.number,
+    }));
+  }
 
   const handleAccountChange = (event) => {
     const selectedAccountNumber = event.target.value;
@@ -94,10 +95,9 @@ const GetDataDirectDebits = () => {
       (account) => account.number === selectedAccountNumber
     );
     setSelectedAccountId(selectedAccount ? selectedAccount.id : "");
-    console.log("Selected Account ID:", selectedAccountId);
   };
 
-  if (!dataToken || !userBankData.bankAccounts.length) {
+  if (!dataToken.accessToken || !userBankData.bankAccounts.length) {
     return <Start type={"DataRoutes"} title={"Account's direct debits"} />;
   }
 
