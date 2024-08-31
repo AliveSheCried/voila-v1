@@ -24,7 +24,7 @@ const bankAccountDirectDebits = async (_, { id }, { token, dataSources }) => {
       __typename: "InitialStatus",
       status: "Processing",
       message:
-        "The request has been initiated. You will receive the results once they are processed.",
+        "The request to return direct debits has been initiated. You will receive the results once they are processed.",
     };
   } catch (error) {
     console.log(error);
@@ -35,21 +35,22 @@ const bankAccountDirectDebits = async (_, { id }, { token, dataSources }) => {
 
 // Retrieve account standing orders
 const bankAccountStandingOrders = async (_, { id }, { token, dataSources }) => {
+  tempUserDataToken = token;
   //try catch block to handle errors
   try {
-    const responseData =
-      await dataSources.tlDataAPI.getBankAccountStandingOrders(id, token);
-
-    //Check if data exists
-    if (!responseData.results || !Array.isArray(responseData.results)) {
-      throw new Error("No data found or data format not as expected!");
-    }
-
-    const standingOrders = responseData.results.map(
-      (standingOrders) => standingOrders
+    await dataSources.tlDataAPI.getBankAccountStandingOrders(
+      id,
+      token,
+      "standingOrders"
     );
 
-    return standingOrders;
+    // Since the process is asynchronous, return a message indicating that the data will be processed later
+    return {
+      __typename: "InitialStatus",
+      status: "Processing",
+      message:
+        "The request to return standing orders has been initiated. You will receive the results once they are processed.",
+    };
   } catch (error) {
     console.log(error);
     // Throw the error so that it can be caught and handled by Apollo Server
@@ -59,19 +60,22 @@ const bankAccountStandingOrders = async (_, { id }, { token, dataSources }) => {
 
 // Retrieve account balance
 const bankAccountBalance = async (_, { id }, { token, dataSources }) => {
+  tempUserDataToken = token;
   //try catch block to handle errors
   try {
-    const responseData = await dataSources.tlDataAPI.getBankAccountBalance(
+    await dataSources.tlDataAPI.getBankAccountBalance(
       id,
-      token
+      token,
+      "bankAccountBalance"
     );
 
-    //Check if data exists
-    if (!responseData.results) {
-      throw new Error("No data found for the ID provided!");
-    }
-
-    return responseData.results[0];
+    // Since the process is asynchronous, return a message indicating that the data will be processed later
+    return {
+      __typename: "InitialStatus",
+      status: "Processing",
+      message:
+        "The request to return the account balance has been initiated. You will receive the results once they are processed.",
+    };
   } catch (error) {
     console.log(error);
     // Throw the error so that it can be caught and handled by Apollo Server

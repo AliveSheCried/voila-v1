@@ -23,7 +23,7 @@ export const menuItems = [
         name: "Get - standing orders",
         icon: "south_west", //"chevron_right",
         level: 2,
-        path: "",
+        path: "/getDataStandingOrders",
         children: [],
       },
       {
@@ -34,10 +34,10 @@ export const menuItems = [
         children: [],
       },
       {
-        name: "Get - pending transactions",
-        icon: "more_horiz",
+        name: "Get - account balance",
+        icon: "savings",
         level: 2,
-        path: "",
+        path: "/getDataAccountBalance",
         children: [],
       },
     ],

@@ -40,6 +40,9 @@ union GetDirectDebitsResult = InitialStatus | DirectDebits
 "Union type for the result of getStandingOrders"
 union GetStandingOrdersResult = InitialStatus | StandingOrders
 
+"Union type for the result of getBankAccountBalance"
+union GetBankAccountBalanceResult = InitialStatus | BankAccountBalance
+
 "Array of bank accounts"
 type BankAccounts {
     accounts: [BankAccount!]!

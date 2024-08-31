@@ -9,8 +9,10 @@ import GetPayoutDetail from "../MerchantAccounts/GetPayoutDetail/GetPayoutDetail
 import GetTransactions from "../MerchantAccounts/GetTransactions/GetTransactions";
 
 //tl data api routes
+import GetBankDataAccountBalance from "../TlDataApi/GetBankDataAccountBalance";
 import GetDataAccounts from "../TlDataApi/GetDataAccounts";
 import GetDataDirectDebits from "../TlDataApi/GetDataDirectDebits";
+import GetDataStandingOrders from "../TlDataApi/GetDataStandingOrders";
 
 const Content = () => {
   return (
@@ -19,6 +21,15 @@ const Content = () => {
         <Routes>
           <Route path="getDataAccounts" element={<GetDataAccounts />} />
           <Route path="getDataDirectDebits" element={<GetDataDirectDebits />} />
+          <Route
+            path="getDataStandingOrders"
+            element={<GetDataStandingOrders />}
+          />
+          <Route
+            path="getDataAccountBalance"
+            element={<GetBankDataAccountBalance />}
+          />
+
           {/* <Route path="getMerchantAccount" element={<GetMerchantAccount />} /> */}
           <Route path="getMerchantAccounts" element={<GetMerchantAccounts />} />
           <Route path="getTransactions" element={<GetTransactions />} />

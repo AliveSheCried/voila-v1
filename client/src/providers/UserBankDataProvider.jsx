@@ -10,7 +10,7 @@ export const UserBankDataProvider = ({ children }) => {
     transactions: {},
     directDebits: {},
     standingOrders: {},
-    // Add other data types as needed
+    bankAccountBalance: {},
   });
 
   return (

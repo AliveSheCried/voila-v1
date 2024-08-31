@@ -4,7 +4,8 @@ const SelectUserAccount = ({
   accounts,
   selectedAccountId,
   onAccountChange,
-  onGetDirectDebits,
+  onGetData,
+  dataType,
 }) => {
   return (
     <>
@@ -24,9 +25,9 @@ const SelectUserAccount = ({
           className={`btn ${
             !selectedAccountId ? "btn--tertiary-inactive" : "btn--tertiary"
           }`}
-          onClick={onGetDirectDebits}
+          onClick={onGetData}
         >
-          Get Direct Debits
+          Get {dataType}
         </button>
       </div>
     </>
@@ -44,5 +45,6 @@ SelectUserAccount.propTypes = {
   ).isRequired,
   selectedAccountId: propTypes.string.isRequired,
   onAccountChange: propTypes.func.isRequired,
-  onGetDirectDebits: propTypes.func.isRequired,
+  onGetData: propTypes.func.isRequired,
+  dataType: propTypes.string.isRequired,
 };
