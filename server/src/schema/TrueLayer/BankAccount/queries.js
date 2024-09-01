@@ -11,7 +11,7 @@ bankAccount(id: ID!): BankAccount!
 bankAccountBalance(id: ID!): GetBankAccountBalanceResult!
 
 "Retrieve bank account transactions; date format is ISO 8601 Date and time format (YYYY-MM-DDTHH:mm:ss.sssZ)"
-bankAccountTransactions(id: ID!, fromDate: String, toDate: String): [BankAccountTransaction!]
+bankAccountTransactions(id: ID!, fromDate: String, toDate: String): GetBankAccountTransactionsResult!
 
 "Retrieve pending transactions for account"
 bankAccountPendingTransactions(id: ID!): [BankAccountTransaction!]

@@ -12,6 +12,8 @@ const GetBankAccountData = ({ query, dataType, renderData }) => {
   const [fetchStatus, setFetchStatus] = useState("Idle");
   const [selectedAccountId, setSelectedAccountId] = useState("");
   const [data, setData] = useState([]);
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
   const [getBankAccountData] = useLazyQuery(query, {
     context: {
       headers: {
@@ -22,8 +24,13 @@ const GetBankAccountData = ({ query, dataType, renderData }) => {
 
   const handleGetData = () => {
     if (!(selectedAccountId in userBankData[dataType])) {
+      const variables = { id: selectedAccountId };
+      if (dataType === "transactions") {
+        variables.fromDate = dateFrom;
+        variables.toDate = dateTo;
+      }
       getBankAccountData({
-        variables: { id: selectedAccountId },
+        variables,
       });
       setFetchStatus("processing");
     }
@@ -86,6 +93,14 @@ const GetBankAccountData = ({ query, dataType, renderData }) => {
     setSelectedAccountId(selectedAccount ? selectedAccount.id : "");
   };
 
+  const handleDateFromChange = (event) => {
+    setDateFrom(event.target.value);
+  };
+
+  const handleDateToChange = (event) => {
+    setDateTo(event.target.value);
+  };
+
   if (!dataToken.accessToken || !userBankData.bankAccounts.length) {
     return <Start type={"DataRoutes"} title={`Account's ${dataType}`} />;
   }
@@ -119,6 +134,10 @@ const GetBankAccountData = ({ query, dataType, renderData }) => {
               onAccountChange={handleAccountChange}
               onGetData={handleGetData}
               dataType={dataType}
+              dateFrom={dateFrom}
+              dateTo={dateTo}
+              onDateFromChange={handleDateFromChange}
+              onDateToChange={handleDateToChange}
             />
           </div>
         </div>

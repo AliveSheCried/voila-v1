@@ -13,6 +13,10 @@ export const dataWebhookHandler = () => async (req, res) => {
       throw new Error("Invalid webhook payload");
     }
 
+    console.log("object task_id", task_id);
+    console.log("object status", status);
+    console.log("object results_uri", results_uri);
+
     if (status === "Succeeded") {
       // Fetch the results using the token from temporary storage
       const resultsResponse = await axios.get(results_uri, {
@@ -23,6 +27,7 @@ export const dataWebhookHandler = () => async (req, res) => {
       });
 
       const results = resultsResponse.data.results;
+      console.log("object results", results);
 
       // Retrieve the stored metadata using task_id
       const storedData = userBankDataStore[task_id];

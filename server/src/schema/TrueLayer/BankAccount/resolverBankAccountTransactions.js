@@ -1,94 +1,33 @@
+// For the purpose of this demo, we will store the user data token in a local variable to be used in the webhook handler
+let tempUserDataToken = null;
+
 //Retrieve account transctions
 const bankAccountTransactions = async (
   _,
   { id, fromDate, toDate },
   { token, dataSources }
 ) => {
+  // Store the active token in temporary storage
+  tempUserDataToken = token;
+
   //try catch block to handle errors
   try {
-    //MongoDB code
-    //confirm connection to mongodb
-    const { dbClient } = global;
-    if (!dbClient) {
-      throw new Error("No database client");
-    }
-    //db variables
-    const myDb = dbClient.db("VoilaDev");
-    const myCollection = myDb.collection("ExternalAccountTransactions");
-
-    // Decode the fromDate and toDate values
-    const decodedFromDate = decodeURIComponent(fromDate);
-    const decodedToDate = decodeURIComponent(toDate);
-
     // Always fetch the transactions from TrueLayer API
-    const responseData = await dataSources.tlDataAPI.getBankAccountTransactions(
+    await dataSources.tlDataAPI.getBankAccountTransactions(
       id,
       token,
       fromDate,
-      toDate
+      toDate,
+      "transactions"
     );
 
-    if (!responseData.results) {
-      throw new Error(
-        `No transactions for the date range ${decodedFromDate} to ${decodedToDate} found`
-      );
-    }
-
-    // Convert received data to schema array of transaction objects
-    const apiTransactions = responseData.results.map(
-      (transaction) => transaction
-    );
-
-    //check if transactions in date range exist in database
-    const dbTransactions = await myCollection
-      .find({
-        timestamp: {
-          $gte: decodedFromDate,
-          $lte: decodedToDate,
-        },
-      })
-      .toArray();
-
-    // Filter out transactions that are already in the database
-    const newTransactions = apiTransactions.filter(
-      (apiTransaction) =>
-        !dbTransactions.some(
-          (dbTransaction) =>
-            dbTransaction.transaction_id === apiTransaction.transaction_id
-        )
-    );
-
-    //check if new transactions exist
-    if (newTransactions.length === 0) {
-      return dbTransactions;
-    }
-
-    // If newTransactions do exist, update the database with new transactions from the API
-    try {
-      const result = await myCollection.insertMany(newTransactions);
-
-      //log the number of records inserted into the database and number of records in newTransactions for debugging
-      if (result.insertedCount !== newTransactions.length) {
-        console.log("Not all new transactions were inserted into the database");
-        console.log(
-          `Inserted ${result.insertedCount} records into the database`
-        );
-        console.log(`There were ${newTransactions.length} new transactions`);
-      } else {
-        console.log(
-          `Inserted ${result.insertedCount} records into the collection`
-        );
-      }
-    } catch (error) {
-      console.log(error);
-      throw new Error(
-        "An error occurred while inserting new transactions into the database."
-      );
-    }
-
-    const allTransactions = [...dbTransactions, ...newTransactions];
-
-    return allTransactions;
+    // Since the process is asynchronous, return a message indicating that the data will be processed later
+    return {
+      __typename: "InitialStatus",
+      status: "Processing",
+      message:
+        "The request to return transactions has been initiated. You will receive the results once they are processed.",
+    };
   } catch (error) {
     console.log(error);
     // Throw the error so that it can be caught and handled by Apollo Server

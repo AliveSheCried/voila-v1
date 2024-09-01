@@ -43,6 +43,9 @@ union GetStandingOrdersResult = InitialStatus | StandingOrders
 "Union type for the result of getBankAccountBalance"
 union GetBankAccountBalanceResult = InitialStatus | BankAccountBalance
 
+"Union type for the result of getBankAccountTransactions"
+union GetBankAccountTransactionsResult = InitialStatus | BankAccountTransactions
+
 "Array of bank accounts"
 type BankAccounts {
     accounts: [BankAccount!]!
@@ -65,6 +68,11 @@ type BankAccountBalance {
     current: Float!
     overdraft: Float!
     update_timestamp: String!
+}
+
+"Array of transactions against a bank account"
+type BankAccountTransactions {
+    transactions: [BankAccountTransaction!]!
 }
 
 "Transactions against a bank account"
@@ -109,6 +117,8 @@ type StandingOrder {
     final_payment_amount: Float!
     reference: String
 }
+
+
 
 "Balance of account at the time of transaction"
 type RunningBalance {

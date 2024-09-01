@@ -13,6 +13,7 @@ import GetBankDataAccountBalance from "../TlDataApi/GetBankDataAccountBalance";
 import GetDataAccounts from "../TlDataApi/GetDataAccounts";
 import GetDataDirectDebits from "../TlDataApi/GetDataDirectDebits";
 import GetDataStandingOrders from "../TlDataApi/GetDataStandingOrders";
+import GetDataTransactions from "../TlDataApi/GetDataTransactions";
 
 const Content = () => {
   return (
@@ -29,6 +30,7 @@ const Content = () => {
             path="getDataAccountBalance"
             element={<GetBankDataAccountBalance />}
           />
+          <Route path="getDataTransactions" element={<GetDataTransactions />} />
 
           {/* <Route path="getMerchantAccount" element={<GetMerchantAccount />} /> */}
           <Route path="getMerchantAccounts" element={<GetMerchantAccounts />} />

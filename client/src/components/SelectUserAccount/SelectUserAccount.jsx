@@ -6,6 +6,10 @@ const SelectUserAccount = ({
   onAccountChange,
   onGetData,
   dataType,
+  dateFrom,
+  dateTo,
+  onDateFromChange,
+  onDateToChange,
 }) => {
   return (
     <>
@@ -20,6 +24,35 @@ const SelectUserAccount = ({
           ))}
         </select>
       </div>
+      {dataType === "transactions" && (
+        <div className="merchant-account__search-container">
+          <div>
+            <div className="content__label">Date range - from & to</div>
+            <div className="input__merchant-account merchant-account__search-dates text-sm">
+              <div>
+                <div>
+                  <input
+                    type="date"
+                    id="dateFrom"
+                    value={dateFrom}
+                    onChange={onDateFromChange}
+                  />
+                </div>
+              </div>
+              <div>
+                <div>
+                  <input
+                    type="date"
+                    id="dateTo"
+                    value={dateTo}
+                    onChange={onDateToChange}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="absolute-right sp-top-sm">
         <button
           className={`btn ${
@@ -47,4 +80,8 @@ SelectUserAccount.propTypes = {
   onAccountChange: propTypes.func.isRequired,
   onGetData: propTypes.func.isRequired,
   dataType: propTypes.string.isRequired,
+  dateFrom: propTypes.string,
+  dateTo: propTypes.string,
+  onDateFromChange: propTypes.func,
+  onDateToChange: propTypes.func,
 };

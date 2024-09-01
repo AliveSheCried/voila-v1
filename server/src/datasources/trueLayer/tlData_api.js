@@ -77,16 +77,22 @@ export class TLDataAPI extends RESTDataSource {
     return response;
   }
 
-  async getBankAccountTransactions(id, token, fromDate, toDate) {
+  async getBankAccountTransactions(id, token, fromDate, toDate, dataApiType) {
     // Decode the fromDate and toDate values
     const decodedFromDate = decodeURIComponent(fromDate);
     const decodedToDate = decodeURIComponent(toDate);
 
-    return await handleAPIRequest(
+    const response = await handleAPIRequest(
       this,
-      `/data/v1/accounts/${id}/transactions?to=${decodedToDate}&from=${decodedFromDate}`,
+      `/data/v1/accounts/${id}/transactions?to=${decodedToDate}&from=${decodedFromDate}&async=true&webhook_uri=${this.webhookURL}`,
       token
     );
+    const taskId = response.task_id;
+
+    // Store the association between task_id and dataApiType
+    storeTaskMetadata(taskId, dataApiType, id);
+
+    return response;
   }
 
   async getBankAccountPendingTransactions(id, token) {

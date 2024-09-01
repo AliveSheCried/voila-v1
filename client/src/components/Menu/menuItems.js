@@ -30,7 +30,7 @@ export const menuItems = [
         name: "Get - transactions",
         icon: "sort", //"grade  ",
         level: 2,
-        path: "",
+        path: "/getDataTransactions",
         children: [],
       },
       {
