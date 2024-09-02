@@ -106,47 +106,76 @@ const GetBankAccountData = ({ query, dataType, renderData }) => {
   }
 
   if (fetchStatus === "processing") {
-    return <div>Data is being processed. Please wait...</div>;
+    return (
+      <div>
+        <div className="content__head">
+          <span className="content__arrow--yellow">&raquo;</span>
+          {dataType === "transactions"
+            ? ` Account's transactions`
+            : dataType === "directDebits"
+            ? ` Account's direct debits`
+            : dataType === "standingOrders"
+            ? ` Account's standing orders`
+            : dataType === "bankAccountBalance"
+            ? ` Account's balances`
+            : null}
+        </div>
+        <div>Data is being processed. Please wait...</div>
+      </div>
+    );
   }
 
   if (fetchStatus === "error") {
     return (
-      <div>There was an error fetching the data. Please try again later.</div>
+      <div>
+        <div className="content__head">
+          <span className="content__arrow--yellow">&raquo;</span>
+          {dataType === "transactions"
+            ? ` Account's transactions`
+            : dataType === "directDebits"
+            ? ` Account's direct debits`
+            : dataType === "standingOrders"
+            ? ` Account's standing orders`
+            : dataType === "bankAccountBalance"
+            ? ` Account's balances`
+            : null}
+        </div>
+        <div>There was an error fetching the data. Please try again later.</div>
+      </div>
     );
   }
 
   return (
     <>
-      <div className="token__container">
-        <div className="token__title">
-          <span
-            className={`material-symbols-outlined token__icon token__icon--bank`}
-          >
-            manage_search
-          </span>
-          {`${dataType} search`}
-        </div>
-        <div className="merchant-account__search-container">
-          <div>
-            <SelectUserAccount
-              accounts={accountsList}
-              selectedAccountId={selectedAccountId}
-              onAccountChange={handleAccountChange}
-              onGetData={handleGetData}
-              dataType={dataType}
-              dateFrom={dateFrom}
-              dateTo={dateTo}
-              onDateFromChange={handleDateFromChange}
-              onDateToChange={handleDateToChange}
-            />
-          </div>
-        </div>
+      <div className="content__head">
+        <span className="content__arrow--yellow">&raquo;</span>
+        {dataType === "transactions"
+          ? ` Account's transactions`
+          : dataType === "directDebits"
+          ? ` Account's direct debits`
+          : dataType === "standingOrders"
+          ? ` Account's standing orders`
+          : dataType === "bankAccountBalance"
+          ? ` Account's balances`
+          : null}
       </div>
+
+      <SelectUserAccount
+        accounts={accountsList}
+        selectedAccountId={selectedAccountId}
+        onAccountChange={handleAccountChange}
+        onGetData={handleGetData}
+        dataType={dataType}
+        dateFrom={dateFrom}
+        dateTo={dateTo}
+        onDateFromChange={handleDateFromChange}
+        onDateToChange={handleDateToChange}
+      />
 
       {data.length > 0 ? (
         <div className="data-account__container">{renderData(data)}</div>
       ) : (
-        <p>No accounts available</p>
+        <p></p>
       )}
     </>
   );

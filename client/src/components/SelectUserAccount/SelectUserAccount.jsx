@@ -12,20 +12,30 @@ const SelectUserAccount = ({
   onDateToChange,
 }) => {
   return (
-    <>
-      <div className="content__label">Select user account</div>
-      <div>
-        <select id="accountSelect" onChange={onAccountChange}>
-          <option value="">-- Select account --</option>
-          {accounts.map((account) => (
-            <option key={account.id} value={account.number}>
-              {account.number}
-            </option>
-          ))}
-        </select>
+    <div className="token__container">
+      <div className="token__title">
+        <span
+          className={`material-symbols-outlined token__icon token__icon--bank`}
+        >
+          manage_search
+        </span>
+        Select user account
       </div>
-      {dataType === "transactions" && (
-        <div className="merchant-account__search-container">
+      <div className="merchant-account__search-container">
+        <div>
+          <div className="content__label">Select account</div>
+          <div>
+            <select id="accountSelect" onChange={onAccountChange}>
+              <option value="">-- Select account --</option>
+              {accounts.map((account) => (
+                <option key={account.id} value={account.number}>
+                  {account.number}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        {dataType === "transactions" && (
           <div>
             <div className="content__label">Date range - from & to</div>
             <div className="input__merchant-account merchant-account__search-dates text-sm">
@@ -51,19 +61,20 @@ const SelectUserAccount = ({
               </div>
             </div>
           </div>
+        )}
+
+        <div className="btn__align-bottom">
+          <button
+            className={`btn ${
+              !selectedAccountId ? "btn--tertiary-inactive" : "btn--tertiary"
+            }`}
+            onClick={onGetData}
+          >
+            Get {dataType}
+          </button>
         </div>
-      )}
-      <div className="absolute-right sp-top-sm">
-        <button
-          className={`btn ${
-            !selectedAccountId ? "btn--tertiary-inactive" : "btn--tertiary"
-          }`}
-          onClick={onGetData}
-        >
-          Get {dataType}
-        </button>
       </div>
-    </>
+    </div>
   );
 };
 

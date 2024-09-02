@@ -79,17 +79,35 @@ const GetDataAccounts = () => {
   }
 
   if (fetchStatus === "processing") {
-    return <div>Data is being processed. Please wait...</div>;
+    return (
+      <div>
+        <div className="content__head">
+          <span className="content__arrow--yellow">&raquo;</span>
+          {` User's bank accounts`}
+        </div>
+        <div>Data is being processed. Please wait...</div>
+      </div>
+    );
   }
 
   if (fetchStatus === "error") {
     return (
-      <div>There was an error fetching the data. Please try again later.</div>
+      <div>
+        <div className="content__head">
+          <span className="content__arrow--yellow">&raquo;</span>
+          {` User's bank accounts`}
+        </div>
+        <div>There was an error fetching the data. Please try again later.</div>
+      </div>
     );
   }
 
   return (
     <div>
+      <div className="content__head">
+        <span className="content__arrow--yellow">&raquo;</span>
+        {` User's bank accounts`}
+      </div>
       <div className="data-account__container">
         {accounts.length > 0 ? (
           paginatedAccounts.map((account) => (
