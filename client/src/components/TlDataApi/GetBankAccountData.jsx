@@ -173,7 +173,7 @@ const GetBankAccountData = ({ query, dataType, renderData }) => {
       />
 
       {data.length > 0 ? (
-        <div className="data-account__container">{renderData(data)}</div>
+        <div className="data-ddSo__container  ">{renderData(data)}</div>
       ) : (
         <p></p>
       )}

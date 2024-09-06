@@ -780,7 +780,8 @@ select {
   justify-content: space-between;
 }
 
-.merchant-account tr:first-child th, .merchant-account--table tr:first-child th,
+.data-ddSo tr:first-child th, .merchant-account tr:first-child th, .merchant-account--table tr:first-child th,
+.data-ddSo tr:first-child td,
 .merchant-account tr:first-child td,
 .merchant-account--table tr:first-child td {
   padding-top: var(--spacing-sm);
@@ -934,6 +935,19 @@ select {
   justify-content: start;
   align-items: start;
   flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.data-ddSo {
+  border: 1px solid var(--color-grey-light-2);
+  border-radius: var(--br-small);
+  width: 60ch;
+}
+.data-ddSo__container {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  flex-direction: column;
   flex-wrap: wrap;
 }
 
@@ -1240,6 +1254,18 @@ table {
 
 .cell-width--md {
   width: 30%;
+}
+
+.dd-cell-width--name {
+  width: 15rem;
+}
+
+.dd-cell-width--amt {
+  width: 10rem;
+}
+
+.ss-cell-border {
+  border-left: 1px solid var(--color-grey-light-2);
 }
 
 .payout-status--fail {

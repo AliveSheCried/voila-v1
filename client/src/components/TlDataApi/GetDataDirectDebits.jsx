@@ -1,62 +1,50 @@
 import React from "react";
 import { GET_DATA_ACCOUNTS_DIRECT_DEBITS } from "../../graphql/queries/getDataAccountsDirectDebits";
+
 import GetBankAccountData from "./GetBankAccountData";
 
 const renderDirectDebits = (directDebits) => {
-  return directDebits.map((directDebit) => (
-    <div key={directDebit.direct_debit_id} className="data-account">
-      <div className="data-account__item">
-        <span className="data-account__label">Direct Debit ID:</span>
-        <span className="data-account__value">
-          {directDebit.direct_debit_id}
-        </span>
-      </div>
-      <div className="data-account__item">
-        <span className="data-account__label">Timestamp:</span>
-        <span className="data-account__value">{directDebit.timestamp}</span>
-      </div>
-      <div className="data-account__item">
-        <span className="data-account__label">Name:</span>
-        <span className="data-account__value">{directDebit.name}</span>
-      </div>
-      <div className="data-account__item">
-        <span className="data-account__label">Status:</span>
-        <span className="data-account__value">{directDebit.status}</span>
-      </div>
-      <div className="data-account__item">
-        <span className="data-account__label">Previous payment amount:</span>
-        <span className="data-account__value">
-          {directDebit.previous_payment_amount}
-        </span>
-      </div>
-      <div className="data-account__item">
-        <span className="data-account__label">Currency:</span>
-        <span className="data-account__value">{directDebit.currency}</span>
-      </div>
-      <div className="data-account__item">
-        <span className="data-account__label">
-          Provider transaction category:
-        </span>
-        <span className="data-account__value">
-          {directDebit.meta.provider_transaction_category}
-        </span>
-      </div>
-      <div className="data-account__item">
-        <span className="data-account__label">Provider account ID:</span>
-        <span className="data-account__value">
-          {directDebit.meta.provider_account_id}
-        </span>
-      </div>
-      <div className="data-account__item">
-        <span className="data-account__label">
-          Provider mandate identification:
-        </span>
-        <span className="data-account__value">
-          {directDebit.meta.provider_mandate_identification}
-        </span>
-      </div>
+  return (
+    <div className="merchant-account__container sp-bottom-sm">
+      <table className="merchant-account--table">
+        <thead>
+          <tr>
+            <th className="content__key--table">Name</th>
+            <th className="content__key--table">Curr</th>
+            <th className="content__key--table absolute-right">Amount</th>
+            <th className="content__key--table">Status</th>
+
+            {/* <th className="content__key--table">Timestamp</th> */}
+          </tr>
+        </thead>
+        <tbody>
+          {directDebits.map((directDebit) => (
+            <tr key={directDebit.direct_debit_id}>
+              <td className="content__value--table padding-right-lg dd-cell-width--name">
+                {directDebit.name}
+              </td>
+              <td className="content__value--table padding-right-lg">
+                {directDebit.currency}
+              </td>
+              <td className="content__value--white dd-cell-width--amt absolute-right">
+                <span className="content__value--white-highlight">
+                  {directDebit.previous_payment_amount}
+                </span>
+              </td>
+
+              <td className="content__value--table padding-right-lg">
+                {directDebit.status}
+              </td>
+              {/* <td className="content__value--table">
+              
+                  {/* {new Date(directDebit.timestamp).toISOString().split("T")[0]} 
+                </td> */}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
-  ));
+  );
 };
 
 const GetDataDirectDebits = () => {

@@ -333,3 +333,15 @@
         @include fbox($direction: row, $items: start, $content: start, $wrap: wrap);
     }
 }
+
+.data-ddSo {
+    @extend %first-child-spacing;
+    border: 1px solid var(--color-grey-light-2);
+    border-radius: var(--br-small);
+    width: 60ch;
+
+    &__container {
+        // min-height: 320px;
+        @include fbox($direction: column, $items: start, $content: start, $wrap: wrap);
+    }
+}

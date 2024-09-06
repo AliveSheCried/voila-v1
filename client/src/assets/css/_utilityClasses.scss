@@ -146,6 +146,18 @@
     width: 30%;
 }
 
+.dd-cell-width--name {
+    width: 15rem;
+}
+
+.dd-cell-width--amt {
+    width: 10rem;
+}
+
+.ss-cell-border {
+    border-left: 1px solid var(--color-grey-light-2);
+}
+
 // To be moved to separate file for payout status
 .payout-status--fail {
     background-color: var(--color-red-palette);

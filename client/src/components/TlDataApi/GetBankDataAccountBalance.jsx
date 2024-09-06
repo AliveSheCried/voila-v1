@@ -4,27 +4,33 @@ import GetBankAccountData from "./GetBankAccountData";
 
 const renderAccountBalance = (balances) => {
   return balances.map((balance, index) => (
-    <div key={index} className="data-account">
-      <div className="data-account__item">
-        <span className="data-account__label">Currency:</span>
-        <span className="data-account__value">{balance.currency}</span>
-      </div>
-      <div className="data-account__item">
-        <span className="data-account__label">Available:</span>
-        <span className="data-account__value">{balance.available}</span>
-      </div>
-      <div className="data-account__item">
-        <span className="data-account__label">Current:</span>
-        <span className="data-account__value">{balance.current}</span>
-      </div>
-      <div className="data-account__item">
-        <span className="data-account__label">Overdraft:</span>
-        <span className="data-account__value">{balance.overdraft}</span>
-      </div>
-      <div className="data-account__item">
-        <span className="data-account__label">Update Timestamp:</span>
-        <span className="data-account__value">{balance.update_timestamp}</span>
-      </div>
+    <div key={index} className="data-account__container">
+      <table className="merchant-account">
+        <tbody>
+          <tr>
+            <th className="content__key">Currency</th>
+            <td className="content__value">{balance.currency}</td>
+          </tr>
+          <tr>
+            <th className="content__key">Available</th>
+            <td className="content__value">{balance.available}</td>
+          </tr>
+          <tr>
+            <th className="content__key">Current</th>
+            <td className="content__value">{balance.current}</td>
+          </tr>
+          <tr>
+            <th className="content__key">Overdraft</th>
+            <td className="content__value">{balance.overdraft}</td>
+          </tr>
+          <tr>
+            <th className="content__key">Update Timestamp</th>
+            <td className="content__value">
+              {new Date(balance.update_timestamp).toISOString().split("T")[0]}
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   ));
 };
