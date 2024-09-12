@@ -15,11 +15,15 @@ import GetDataDirectDebits from "../TlDataApi/GetDataDirectDebits";
 import GetDataStandingOrders from "../TlDataApi/GetDataStandingOrders";
 import GetDataTransactions from "../TlDataApi/GetDataTransactions";
 
+//tl user created payment
+import Cart from "../Cart/Cart";
+
 const Content = () => {
   return (
     <main>
       <div className="main__content">
         <Routes>
+          {/* Data API routes */}
           <Route path="getDataAccounts" element={<GetDataAccounts />} />
           <Route path="getDataDirectDebits" element={<GetDataDirectDebits />} />
           <Route
@@ -32,12 +36,16 @@ const Content = () => {
           />
           <Route path="getDataTransactions" element={<GetDataTransactions />} />
 
+          {/* Merchant Account routes */}
           {/* <Route path="getMerchantAccount" element={<GetMerchantAccount />} /> */}
           <Route path="getMerchantAccounts" element={<GetMerchantAccounts />} />
           <Route path="getTransactions" element={<GetTransactions />} />
           <Route path="payout" element={<CreateMerchantPayment />} />
           <Route path="getPayoutDetails" element={<GetPayoutDetail />} />
+
+          {/* Other */}
           <Route path="/" element={<Start type={"home"} />} />
+          <Route path="cart" element={<Cart />} />
         </Routes>
       </div>
       <div className="main__right-panel">

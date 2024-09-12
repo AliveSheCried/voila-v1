@@ -1,0 +1,187 @@
+.checkout-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.user-details-form,
+.shopping-cart,
+.payment-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: #555;
+}
+
+.form-group input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.cart-title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.cart-items {
+    list-style-type: none;
+    padding: 0;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.item-name {
+    font-size: 16px;
+    color: #555;
+}
+
+.price-input {
+    width: 80px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.cart-total {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 20px 0;
+    text-align: right;
+    color: #333;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.next-button,
+.back-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.next-button:hover,
+.back-button:hover {
+    background-color: #0056b3;
+}
+
+.back-button {
+    background-color: #6c757d;
+}
+
+.back-button:hover {
+    background-color: #545b62;
+}
+
+.next-button svg {
+    margin-left: 10px;
+}
+
+.payment-option {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.payment-option.selected {
+    background-color: #e6f2ff;
+    border-color: #007bff;
+}
+
+.payment-option input[type="radio"] {
+    margin-right: 10px;
+}
+
+.payment-label {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: #333;
+}
+
+.payment-label svg {
+    margin-right: 10px;
+}
+
+.payment-description {
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+}
+
+@media (max-width: 480px) {
+    .checkout-container {
+        padding: 15px;
+    }
+
+    .form-title,
+    .cart-title {
+        font-size: 20px;
+    }
+
+    .item-name {
+        font-size: 14px;
+    }
+
+    .price-input {
+        width: 60px;
+    }
+
+    .cart-total {
+        font-size: 16px;
+    }
+
+    .next-button,
+    .back-button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}

@@ -85,4 +85,19 @@ export const menuItems = [
       },
     ],
   },
+  {
+    name: "USER CREATED PAYMENT",
+    icon: "",
+    level: 1,
+    path: "",
+    children: [
+      {
+        name: "Shopping cart",
+        icon: "shopping_cart",
+        level: 2,
+        path: "/cart",
+        children: [],
+      },
+    ],
+  },
 ];
