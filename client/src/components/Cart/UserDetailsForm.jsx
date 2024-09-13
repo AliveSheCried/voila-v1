@@ -1,11 +1,11 @@
 import { ArrowRight } from "lucide-react";
 import PropTypes from "prop-types";
+import useUserDetailsForm from "../../hooks/useUserDetailsForm";
 
-const UserDetailsForm = ({
-  userData,
-  handleUserDataChange,
-  handleNextClick,
-}) => {
+const UserDetailsForm = ({ handleNextClick }) => {
+  const { state, handleFieldChange } = useUserDetailsForm();
+  console.log("form state", state);
+
   return (
     <div className="user-details-form">
       <h2 className="form-title">Your Details</h2>
@@ -15,8 +15,8 @@ const UserDetailsForm = ({
           type="text"
           id="name"
           name="name"
-          value={userData.name}
-          onChange={handleUserDataChange}
+          value={state.name}
+          onChange={handleFieldChange}
           required
         />
       </div>
@@ -26,8 +26,8 @@ const UserDetailsForm = ({
           type="tel"
           id="phone"
           name="phone"
-          value={userData.phone}
-          onChange={handleUserDataChange}
+          value={state.phone}
+          onChange={handleFieldChange}
           required
         />
       </div>
@@ -37,8 +37,8 @@ const UserDetailsForm = ({
           type="date"
           id="date_of_birth"
           name="date_of_birth"
-          value={userData.date_of_birth}
-          onChange={handleUserDataChange}
+          value={state.date_of_birth}
+          onChange={handleFieldChange}
           required
         />
       </div>
@@ -48,8 +48,8 @@ const UserDetailsForm = ({
           type="text"
           id="address_line1"
           name="address.address_line1"
-          value={userData.address.address_line1}
-          onChange={handleUserDataChange}
+          value={state.address.address_line1}
+          onChange={handleFieldChange}
           required
         />
       </div>
@@ -59,8 +59,8 @@ const UserDetailsForm = ({
           type="text"
           id="city"
           name="address.city"
-          value={userData.address.city}
-          onChange={handleUserDataChange}
+          value={state.address.city}
+          onChange={handleFieldChange}
           required
         />
       </div>
@@ -70,8 +70,8 @@ const UserDetailsForm = ({
           type="text"
           id="state"
           name="address.state"
-          value={userData.address.state}
-          onChange={handleUserDataChange}
+          value={state.address.state}
+          onChange={handleFieldChange}
           required
         />
       </div>
@@ -81,8 +81,8 @@ const UserDetailsForm = ({
           type="text"
           id="zip"
           name="address.zip"
-          value={userData.address.zip}
-          onChange={handleUserDataChange}
+          value={state.address.zip}
+          onChange={handleFieldChange}
           required
         />
       </div>
@@ -92,12 +92,16 @@ const UserDetailsForm = ({
           type="text"
           id="country_code"
           name="address.country_code"
-          value={userData.address.country_code}
-          onChange={handleUserDataChange}
+          value={state.address.country_code}
+          onChange={handleFieldChange}
           required
         />
       </div>
-      <button className="next-button" onClick={handleNextClick}>
+      <button
+        className="next-button"
+        onClick={handleNextClick}
+        disabled={!state.formIsValid}
+      >
         Next <ArrowRight size={16} />
       </button>
     </div>
@@ -105,8 +109,6 @@ const UserDetailsForm = ({
 };
 
 UserDetailsForm.propTypes = {
-  userData: PropTypes.object,
-  handleUserDataChange: PropTypes.func,
   handleNextClick: PropTypes.func,
 };
 

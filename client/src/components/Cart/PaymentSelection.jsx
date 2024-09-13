@@ -1,11 +1,43 @@
+import { useMutation } from "@apollo/client";
 import { ArrowRight } from "lucide-react";
 import PropTypes from "prop-types";
+import { CREATE_PAYMENT } from "../../graphql/mutations/createUserPayment";
+import { useUser } from "../../providers/UserProvider";
 
 const PaymentSelection = ({
   selectedPayment,
   handlePaymentChange,
   handleBackClick,
 }) => {
+  const { user } = useUser();
+  const [createPayment] = useMutation(CREATE_PAYMENT);
+
+  const handleSubmit = async () => {
+    try {
+      await createPayment({
+        variables: {
+          amountInMinor: 1000, // Replace with actual amount
+          currency: "USD", // Replace with actual currency
+          merchantAccountId: "merchant_account_id", // Replace with actual merchant account ID
+          userId: user._id,
+          userName: user.user_id,
+          userEmail: user.user_id,
+          userPhone: "1234567890", // Replace with actual phone number
+          userDateOfBirth: "1990-01-01", // Replace with actual date of birth
+          userAddressLine1: "123 Main St", // Replace with actual address line 1
+          userCity: "City", // Replace with actual city
+          userState: "State", // Replace with actual state
+          userZip: "12345", // Replace with actual ZIP code
+          userCountryCode: "US", // Replace with actual country code
+        },
+      });
+      alert("Payment submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting payment:", error);
+      alert("Failed to submit payment.");
+    }
+  };
+
   return (
     <div className="payment-selection">
       <h2 className="form-title">Select Payment Method</h2>
@@ -58,11 +90,8 @@ const PaymentSelection = ({
         <button className="back-button" onClick={handleBackClick}>
           Back
         </button>
-        <button
-          className="next-button"
-          onClick={() => alert("Payment processing...")}
-        >
-          Next <ArrowRight size={16} />
+        <button className="next-button" onClick={handleSubmit}>
+          Submit <ArrowRight size={16} />
         </button>
       </div>
     </div>

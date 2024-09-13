@@ -22,7 +22,17 @@ export class TLPUserPaymentAPI extends RESTDataSource {
   async createUserPayment({
     amount_in_minor,
     currency,
-
+    merchant_account_id,
+    user_id,
+    user_name,
+    user_email,
+    user_phone,
+    user_date_of_birth,
+    user_address_line1,
+    user_city,
+    user_state,
+    user_zip,
+    user_country_code,
     token,
   }) {
     const kid = process.env.KID;
@@ -47,21 +57,21 @@ export class TLPUserPaymentAPI extends RESTDataSource {
         type: "bank_transfer",
         beneficiary: {
           type: "merchant_account",
-          merchant_account_id: "e1eff241-77d7-490d-aef4-d2701d68f90a",
+          merchant_account_id,
         },
       },
       user: {
-        id: "f61c0ec7-0f83-414e-8e5f-aace86e0ed35",
-        name: "Jonathan Sandbridge",
-        email: "john@sandbridge.com",
-        phone: "+447809123456",
-        date_of_birth: "1992-11-28",
+        id: user_id,
+        name: user_name,
+        email: user_email,
+        phone: user_phone,
+        date_of_birth: user_date_of_birth,
         address: {
-          address_line1: "40 Finsbury Square",
-          city: "London",
-          state: "London",
-          zip: "EC2a 1PX",
-          country_code: "GB",
+          address_line1: user_address_line1,
+          city: user_city,
+          state: user_state,
+          zip: user_zip,
+          country_code: user_country_code,
         },
       },
     };
