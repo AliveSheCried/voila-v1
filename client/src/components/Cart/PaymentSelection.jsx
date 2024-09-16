@@ -1,37 +1,50 @@
 import { useMutation } from "@apollo/client";
 import { ArrowRight } from "lucide-react";
 import PropTypes from "prop-types";
-import { CREATE_PAYMENT } from "../../graphql/mutations/createUserPayment";
-import { useUser } from "../../providers/UserProvider";
+import { CREATE_USER_PAYMENT } from "../../graphql/mutations/createUserPayment";
+import { useMerchantAccountDataToken } from "../../providers/MerchantAccountDataTokenProvider";
 
 const PaymentSelection = ({
   selectedPayment,
   handlePaymentChange,
   handleBackClick,
+  user,
+  total,
+  userDetails,
 }) => {
-  const { user } = useUser();
-  const [createPayment] = useMutation(CREATE_PAYMENT);
+  const [createUserPayment] = useMutation(CREATE_USER_PAYMENT);
+  const { token } = useMerchantAccountDataToken();
+  const body = {
+    amountInMinor: total * 100, // Convert total to minor currency unit
+    currency: "GBP", // Hardcoded currency for now
+    merchantAccountId: "e1eff241-77d7-490d-aef4-d2701d68f90a", // Replace with actual merchant account ID
+    userId: user._id,
+    userName: userDetails.name,
+    userEmail: user.user_id,
+    userPhone: userDetails.phone,
+    userDateOfBirth: userDetails.date_of_birth,
+    userAddressLine1: userDetails.address.address_line1,
+    userCity: userDetails.address.city,
+    userState: userDetails.address.state,
+    userZip: userDetails.address.zip,
+    userCountryCode: userDetails.address.country_code,
+  };
+
+  console.log("userDetails", userDetails);
+  console.log("request body", body);
 
   const handleSubmit = async () => {
     try {
-      await createPayment({
-        variables: {
-          amountInMinor: 1000, // Replace with actual amount
-          currency: "USD", // Replace with actual currency
-          merchantAccountId: "merchant_account_id", // Replace with actual merchant account ID
-          userId: user._id,
-          userName: user.user_id,
-          userEmail: user.user_id,
-          userPhone: "1234567890", // Replace with actual phone number
-          userDateOfBirth: "1990-01-01", // Replace with actual date of birth
-          userAddressLine1: "123 Main St", // Replace with actual address line 1
-          userCity: "City", // Replace with actual city
-          userState: "State", // Replace with actual state
-          userZip: "12345", // Replace with actual ZIP code
-          userCountryCode: "US", // Replace with actual country code
+      const response = await createUserPayment({
+        variables: body,
+        context: {
+          headers: {
+            authorization: `${token.accessToken}`,
+          },
         },
       });
-      alert("Payment submitted successfully!");
+
+      console.log("Payment submitted:", response);
     } catch (error) {
       console.error("Error submitting payment:", error);
       alert("Failed to submit payment.");
@@ -102,6 +115,9 @@ PaymentSelection.propTypes = {
   selectedPayment: PropTypes.string,
   handlePaymentChange: PropTypes.func,
   handleBackClick: PropTypes.func,
+  user: PropTypes.object,
+  total: PropTypes.number,
+  userDetails: PropTypes.object,
 };
 
 export default PaymentSelection;

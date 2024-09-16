@@ -8,6 +8,7 @@ import {
   TLDataAPI as tlDataAPI,
   TLMerchantAccountAPI as tlMerchantAccountAPI,
   TLPayoutAPI as tlPayoutAPI,
+  TLUserPaymentAPI as tlUserPaymentAPI,
 } from "./datasources/trueLayer/index.js";
 import { decrypt, encrypt } from "./helpers/encryptionHelper.js";
 import { handleAPIRequest } from "./helpers/handleAPIRequest.js";
@@ -59,6 +60,10 @@ export async function startApolloServer(app, httpServer, ngrokUrl) {
               token: req.headers.authorization || "",
             }),
             tlPayoutAPI: new tlPayoutAPI(handleAPIRequest, {
+              cache: server.cache,
+              token: req.headers.authorization || "",
+            }),
+            tlUserPaymentAPI: new tlUserPaymentAPI(handleAPIRequest, {
               cache: server.cache,
               token: req.headers.authorization || "",
             }),

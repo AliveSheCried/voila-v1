@@ -2,6 +2,7 @@ import { AuthToken } from "./TrueLayer/AuthToken/index.js";
 import { BankAccount } from "./TrueLayer/BankAccount/index.js";
 import { MerchantAccountPayout } from "./TrueLayer/MerchantAccountPayout/index.js";
 import { MerchantAccount } from "./TrueLayer/MerchantAccounts/index.js";
+import { UserPayment } from "./TrueLayer/Payments/index.js";
 
 const resolvers = {
   //interface __resolveType
@@ -41,11 +42,13 @@ const resolvers = {
     ...MerchantAccountPayout.resolvers.queries,
     ...MerchantAccount.resolvers.queries,
     ...BankAccount.resolvers.queries,
+    ...UserPayment.resolvers.queries,
   },
 
   Mutation: {
     ...MerchantAccountPayout.resolvers.mutations,
     ...AuthToken.resolvers.mutations,
+    ...UserPayment.resolvers.mutations,
   },
 };
 

@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import logger from "../../config/logger.js";
 import { handleAPIRequest as defaultHandleAPIRequest } from "../../helpers/handleAPIRequest.js";
 
-export class TLPUserPaymentAPI extends RESTDataSource {
+export class TLUserPaymentAPI extends RESTDataSource {
   constructor(handleAPIRequest = defaultHandleAPIRequest) {
     super();
     this.baseURL = "https://api.truelayer-sandbox.com/v3";
@@ -19,7 +19,7 @@ export class TLPUserPaymentAPI extends RESTDataSource {
   *************************
   */
 
-  async createUserPayment({
+  async createUserPayment(
     amount_in_minor,
     currency,
     merchant_account_id,
@@ -33,8 +33,8 @@ export class TLPUserPaymentAPI extends RESTDataSource {
     user_state,
     user_zip,
     user_country_code,
-    token,
-  }) {
+    token
+  ) {
     const kid = process.env.KID;
     if (!kid) throw new Error("Missing env var KID");
 
@@ -75,6 +75,8 @@ export class TLPUserPaymentAPI extends RESTDataSource {
         },
       },
     };
+
+    console.log("Body - datasource", body);
 
     const tlSignature = tlSigning.sign({
       kid,

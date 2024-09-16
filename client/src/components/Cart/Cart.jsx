@@ -1,9 +1,11 @@
 import { useState } from "react";
+import useUserDetailsForm from "../../hooks/useUserDetailsForm";
+import { useUser } from "../../providers/UserProvider";
 import PaymentSelection from "./PaymentSelection";
 import ShoppingCart from "./ShoppingCart";
 import UserDetailsForm from "./UserDetailsForm";
 
-export default function MainComponent() {
+export default function Cart() {
   const [step, setStep] = useState(1);
   const [selectedPayment, setSelectedPayment] = useState("bank");
   const [items, setItems] = useState([
@@ -11,6 +13,11 @@ export default function MainComponent() {
     { id: 2, name: "Widget 2", price: 35 },
     { id: 3, name: "Widget 3", price: 40 },
   ]);
+
+  const { user } = useUser();
+  const { state, handleFieldChange } = useUserDetailsForm();
+
+  const total = items.reduce((sum, item) => sum + item.price, 0);
 
   const handlePriceChange = (id, newPrice) => {
     setItems(
@@ -24,8 +31,6 @@ export default function MainComponent() {
     setSelectedPayment(method);
   };
 
-  const total = items.reduce((sum, item) => sum + item.price, 0);
-
   const handleNextClick = () => {
     setStep((prevStep) => prevStep + 1);
   };
@@ -36,7 +41,13 @@ export default function MainComponent() {
 
   return (
     <div className="checkout-container">
-      {step === 1 && <UserDetailsForm handleNextClick={handleNextClick} />}
+      {step === 1 && (
+        <UserDetailsForm
+          handleNextClick={handleNextClick}
+          state={state}
+          handleFieldChange={handleFieldChange}
+        />
+      )}
       {step === 2 && (
         <ShoppingCart
           items={items}
@@ -51,6 +62,9 @@ export default function MainComponent() {
           selectedPayment={selectedPayment}
           handlePaymentChange={handlePaymentChange}
           handleBackClick={handleBackClick}
+          user={user}
+          total={total}
+          userDetails={state}
         />
       )}
     </div>

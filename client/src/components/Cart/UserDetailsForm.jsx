@@ -1,9 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import PropTypes from "prop-types";
-import useUserDetailsForm from "../../hooks/useUserDetailsForm";
 
-const UserDetailsForm = ({ handleNextClick }) => {
-  const { state, handleFieldChange } = useUserDetailsForm();
+const UserDetailsForm = ({ handleNextClick, state, handleFieldChange }) => {
   console.log("form state", state);
 
   return (
@@ -110,6 +108,8 @@ const UserDetailsForm = ({ handleNextClick }) => {
 
 UserDetailsForm.propTypes = {
   handleNextClick: PropTypes.func,
+  state: PropTypes.object,
+  handleFieldChange: PropTypes.func,
 };
 
 export default UserDetailsForm;
