@@ -18,7 +18,7 @@ const PaymentSelection = ({
     amountInMinor: total * 100, // Convert total to minor currency unit
     currency: "GBP", // Hardcoded currency for now
     merchantAccountId: "e1eff241-77d7-490d-aef4-d2701d68f90a", // Replace with actual merchant account ID
-    userId: user._id,
+    userId: "a4315dfd-40b5-4b38-8289-1a0c22532c17",
     userName: userDetails.name,
     userEmail: user.user_id,
     userPhone: userDetails.phone,

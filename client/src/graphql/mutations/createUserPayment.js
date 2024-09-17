@@ -35,7 +35,9 @@ export const CREATE_USER_PAYMENT = gql`
       id
       status
       resource_token
-      user_id
+      user {
+        id
+      }
     }
   }
 `;

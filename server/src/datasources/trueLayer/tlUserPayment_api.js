@@ -64,7 +64,7 @@ export class TLUserPaymentAPI extends RESTDataSource {
         id: user_id,
         name: user_name,
         email: user_email,
-        phone: user_phone,
+        phone: `+${user_phone}`,
         date_of_birth: user_date_of_birth,
         address: {
           address_line1: user_address_line1,
@@ -76,13 +76,11 @@ export class TLUserPaymentAPI extends RESTDataSource {
       },
     };
 
-    console.log("Body - datasource", body);
-
     const tlSignature = tlSigning.sign({
       kid,
       privateKeyPem,
       method: "POST",
-      path: "/v3/payouts",
+      path: "/v3/payments",
       headers: {
         "Idempotency-Key": idKey,
       },
@@ -90,6 +88,7 @@ export class TLUserPaymentAPI extends RESTDataSource {
     });
 
     const options = {
+      accept: "application/json; charset=UTF-8",
       "Idempotency-Key": idKey,
       "Tl-Signature": tlSignature,
       "content-type": "application/json; charset=UTF-8",

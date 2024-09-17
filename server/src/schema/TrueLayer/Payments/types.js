@@ -14,13 +14,15 @@ const types = `
     scheme_id: String
   }
 
-  
+  type User {
+    id: String!
+  }
 
   type CreatePaymentResponse {
     id: String!
     status: String!
     resource_token: String!
-    user_id: String!
+    user: User!
   }  
 `;
 

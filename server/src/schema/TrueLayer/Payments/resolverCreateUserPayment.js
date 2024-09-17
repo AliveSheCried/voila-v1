@@ -17,16 +17,6 @@ const createUserPayment = async (
   },
   { token, dataSources, logger }
 ) => {
-  console.log(
-    "Input received in resolver:",
-    amount_in_minor,
-    currency,
-    merchant_account_id,
-    user_id,
-    user_name,
-    user_email
-  );
-
   try {
     const responseData = await dataSources.tlUserPaymentAPI.createUserPayment(
       amount_in_minor,
