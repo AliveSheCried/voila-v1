@@ -18,7 +18,7 @@ const PaymentSelection = ({
     amountInMinor: total * 100, // Convert total to minor currency unit
     currency: "GBP", // Hardcoded currency for now
     merchantAccountId: "e1eff241-77d7-490d-aef4-d2701d68f90a", // Replace with actual merchant account ID
-    userId: "a4315dfd-40b5-4b38-8289-1a0c22532c17",
+    userId: "a4315dfd-40b5-4b38-8289-1a0c22532c17", // Hardcoded user ID for now; no UUID generated for user
     userName: userDetails.name,
     userEmail: user.user_id,
     userPhone: userDetails.phone,
@@ -29,9 +29,6 @@ const PaymentSelection = ({
     userZip: userDetails.address.zip,
     userCountryCode: userDetails.address.country_code,
   };
-
-  console.log("userDetails", userDetails);
-  console.log("request body", body);
 
   const handleSubmit = async () => {
     try {
@@ -44,7 +41,7 @@ const PaymentSelection = ({
         },
       });
 
-      console.log("Payment submitted:", response);
+      console.log("Response for HPP URL", response);
     } catch (error) {
       console.error("Error submitting payment:", error);
       alert("Failed to submit payment.");

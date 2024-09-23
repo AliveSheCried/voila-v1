@@ -35,8 +35,21 @@ const createUserPayment = async (
       token
     );
 
-    console.log("user payment response:", responseData);
-    return responseData;
+    const { id, resource_token, status, user } = responseData;
+
+    // Build the HPP URL
+    const return_uri = encodeURIComponent("http://localhost:3000/redirect");
+    const hpp_url = `https://payment.truelayer-sandbox.com/payments?payment_id=${id}&resource_token=${resource_token}&return_uri=${return_uri}`;
+
+    console.log("HPP URL:", hpp_url);
+
+    return {
+      id,
+      resource_token,
+      status,
+      user,
+      hpp_url,
+    };
   } catch (error) {
     logger.error("Error in create User Payment:", error);
 

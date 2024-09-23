@@ -136,19 +136,3 @@ export class TLUserPaymentAPI extends RESTDataSource {
   //     }
   //   }
 }
-
-// const options = {
-//     method: 'POST',
-//     headers: {
-//       accept: 'application/json; charset=UTF-8',
-//       'Idempotency-Key': 'idempotencykey',
-//       'Tl-Signature': 'TL sign',
-//       'content-type': 'application/json; charset=UTF-8'
-//     },
-//     body: '{"currency":"GBP","payment_method":{"type":"bank_transfer","provider_selection":{"type":"user_selected","filter":{"countries":["GB"],"release_channel":"general_availability","customer_segments":["retail"]},"scheme_selection":{"type":"instant_only","allow_remitter_fee":false}},"beneficiary":{"type":"merchant_account","verification":{"type":"automated"},"merchant_account_id":"MERCHACCId","reference":"Widget001"},"retry":{"newKey":"New Value"}},"user":{"id":"userId","name":"Ryan Jakson","email":"ryan@email.com","political_exposure":"none"},"amount_in_minor":10001}'
-//   };
-
-//   fetch('https://api.truelayer-sandbox.com/v3/payments', options)
-//     .then(response => response.json())
-//     .then(response => console.log(response))
-//     .catch(err => console.error(err));

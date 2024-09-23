@@ -18,6 +18,9 @@ import GetDataTransactions from "../TlDataApi/GetDataTransactions";
 //tl user created payment
 import Cart from "../Cart/Cart";
 
+//redirect
+import Redirect from "../Redirect/Redirect";
+
 const Content = () => {
   return (
     <main>
@@ -46,6 +49,9 @@ const Content = () => {
           {/* Other */}
           <Route path="/" element={<Start type={"home"} />} />
           <Route path="cart" element={<Cart />} />
+
+          {/* Redirect */}
+          <Route path="redirect" element={<Redirect />} />
         </Routes>
       </div>
       <div className="main__right-panel">
