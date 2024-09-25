@@ -38,8 +38,8 @@ const createUserPayment = async (
     const { id, resource_token, status, user } = responseData;
 
     // Build the HPP URL
-    const return_uri = encodeURIComponent("http://localhost:3000/redirect");
-    const hpp_url = `https://payment.truelayer-sandbox.com/payments?payment_id=${id}&resource_token=${resource_token}&return_uri=${return_uri}`;
+    const redirect_uri = "http://127.0.0.1:5173/redirect";
+    const hpp_url = `https://payment.truelayer-sandbox.com/payments#payment_id=${id}&resource_token=${resource_token}&return_uri=${redirect_uri}`;
 
     console.log("HPP URL:", hpp_url);
 
